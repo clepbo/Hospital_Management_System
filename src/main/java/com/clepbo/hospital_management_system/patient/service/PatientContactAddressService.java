@@ -22,7 +22,11 @@ public class PatientContactAddressService implements IPatientContactAddress{
     private final IPatientAddressRepository addressRepository;
     private final IPatientBioRepository patientBioRepository;
     @Override
-    public ResponseEntity<CustomResponse> addPatientAddress(PatientAddressDTO addressDTO) {
+    public ResponseEntity<CustomResponse> addPatientAddress(Long patientId, PatientAddressDTO addressDTO) {
+        Optional<PatientBio> findPatient = patientBioRepository.findById(patientId);
+        if(!findPatient.isPresent()){
+            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_FOUND.name(), "Patient doesn't exist"));
+        }
         PatientContactAddress contactAddress = PatientContactAddress.builder()
                 .address(addressDTO.getAddress())
                 .nextOfKinAddress(addressDTO.getNextOfKinAddress())

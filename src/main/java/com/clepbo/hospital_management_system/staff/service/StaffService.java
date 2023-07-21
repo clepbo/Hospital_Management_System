@@ -130,13 +130,17 @@ public class StaffService implements IStaffService{
 
     @Override
     public ResponseEntity<CustomResponse> addStaffAddress(Long staffId, StaffAddressDTO request) {
-        if(staffId==null){
-            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.BAD_REQUEST.name(), "userId is required"));
+        Optional<Staff> staffOpt = staffRepository.findById(staffId);
+        if(!staffOpt.isPresent()){
+            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.BAD_REQUEST.name(), "Staff doesn't exist"));
+        }
+        if(staffId == null){
+            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.BAD_REQUEST.name(), "StaffID is required"));
         }
         if(request==null){
             return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.BAD_REQUEST.name(), "request body is required"));
         }
-        Optional<Staff> staffOpt = staffRepository.findById(staffId);
+
         StaffAddress staffAddress = StaffAddress.builder()
                 .city(request.getCity())
                 .street(request.getStreet())

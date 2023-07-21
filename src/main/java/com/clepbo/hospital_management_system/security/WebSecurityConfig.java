@@ -36,7 +36,11 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                                 .requestMatchers(UN_SECURED_URL).permitAll()
                                 .requestMatchers("/api/v1/staff/**").hasRole("ADMIN")
-                                .anyRequest().hasAnyAuthority("ROLE_ADMIN")
+                                .requestMatchers("/api/v1/seeADoctor/createRequest/**").hasAnyRole("PATIENT", "RECEPTIONIST")
+                                .requestMatchers("/api/v1/seeADoctor/**").hasAnyRole("ADMIN", "RECEPTIONIST", "DOCTOR")
+                                .requestMatchers("/api/v1/patient/address/**").hasRole("RECEPTIONIST")
+                                .requestMatchers("/api/v1/patient/deletePatientAddress/**").hasAnyRole("RECEPTIONIST", "ADMIN")
+                                .anyRequest().hasAnyAuthority("ROLE_ADMIN", "ROLE_RECEPTIONIST", "ROLE_PATIENT")
                         ).formLogin(withDefaults());
         return http.build();
     }

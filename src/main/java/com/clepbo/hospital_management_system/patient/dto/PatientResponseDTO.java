@@ -20,9 +20,11 @@ public class PatientResponseDTO {
     private Long id;
     private String firstname;
     private String lastname;
+    private String email;
     private String dateOfBirth;
     private String phoneNumber;
     private String gender;
+    private String role;
     private List<PatientContactAddress> contactAddress;
     private List<PatientMedicalHistory> medicalHistory;
     private List<PatientMedicalRecord> medicalRecord;

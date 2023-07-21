@@ -1,39 +1,30 @@
 package com.clepbo.hospital_management_system.patient.entity;
 
+import com.clepbo.hospital_management_system.appointment.entity.Status;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.NaturalId;
 
 import java.sql.Timestamp;
 import java.util.Calendar;
-import java.util.List;
 
 @Entity
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PatientBio {
+@Builder
+public class RequestToSeeADoctor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String firstname;
-    private String lastname;
-    @NaturalId(mutable = false)
-    private String email;
-    private String dateOfBirth;
-    private String phoneNumber;
-    private String gender;
-    private String role;
-    @OneToMany(mappedBy = "patientBio", orphanRemoval = true)
-    private List<PatientContactAddress> contactAddress;
-    @OneToMany(mappedBy = "patientBio", orphanRemoval = true)
-    private List<PatientMedicalHistory> medicalHistory;
-    @OneToMany(mappedBy = "patientBio", orphanRemoval = true)
-    private List<PatientMedicalRecord> medicalRecord;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "patient_Id")
+    private PatientBio patientBio;
+    private String reason;
+    @Enumerated(EnumType.STRING)
+    private Status status;
     private Timestamp createdAt;
     private Timestamp modifiedAt;
 

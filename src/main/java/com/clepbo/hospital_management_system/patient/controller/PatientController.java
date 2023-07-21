@@ -49,10 +49,10 @@ public class PatientController {
     }
 
     @Operation(summary = "Add a contact address to the patient Bio", description = "Provide necessary information about a patient contact address to add it to the database", tags = { "patient" })
-    @PostMapping("/address")
+    @PostMapping("/address{patientId}")
     @PreAuthorize("hasAuthority('ROLE_RECEPTIONIST')")
-    public ResponseEntity<CustomResponse> addPatientContactAddress(@RequestBody PatientAddressDTO addressDTO){
-        return contactAddress.addPatientAddress(addressDTO);
+    public ResponseEntity<CustomResponse> addPatientContactAddress(@PathVariable("patientId") Long patientId, @RequestBody PatientAddressDTO addressDTO){
+        return contactAddress.addPatientAddress(patientId, addressDTO);
     }
 
     @Operation(summary = "Read all patient's conatc address", description = "Provide a patients uniques Id to Read all their contact address", tags = { "patient" })

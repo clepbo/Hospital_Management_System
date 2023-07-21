@@ -44,9 +44,11 @@ public class PatientBioService implements IPatientBioService{
         PatientBio patientBio = PatientBio.builder()
                 .firstname(patientBioRequestDTO.firstname())
                 .lastname(patientBioRequestDTO.lastname())
+                .email(patientBioRequestDTO.email())
                 .gender(patientBioRequestDTO.gender())
                 .dateOfBirth(patientBioRequestDTO.dateOfBirth())
                 .phoneNumber(patientBioRequestDTO.phoneNumber())
+                .role("ROLE_PATIENT")
                 .build();
         patientBioRepository.save(patientBio);
         return ResponseEntity.ok(new CustomResponse(HttpStatus.CREATED.name(), "Patient Bio Created Successfully"));
@@ -60,6 +62,7 @@ public class PatientBioService implements IPatientBioService{
                         .id(patientBio.getId())
                         .firstname(patientBio.getFirstname())
                         .lastname(patientBio.getLastname())
+                        .email(patientBio.getEmail())
                         .gender(patientBio.getGender())
                         .phoneNumber(patientBio.getPhoneNumber())
                         .dateOfBirth(patientBio.getDateOfBirth())
@@ -84,6 +87,7 @@ public class PatientBioService implements IPatientBioService{
                     .id(patientBio.getId())
                     .firstname(patientBio.getFirstname())
                     .lastname(patientBio.getLastname())
+                    .email(patientBio.getEmail())
                     .gender(patientBio.getGender())
                     .dateOfBirth(patientBio.getDateOfBirth())
                     .phoneNumber(patientBio.getPhoneNumber())

@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 
 public interface IPatientContactAddress {
     //Patient Contact Address Service
-    ResponseEntity<CustomResponse> addPatientAddress(PatientAddressDTO addressDTO);
+    ResponseEntity<CustomResponse> addPatientAddress(Long patientId, PatientAddressDTO addressDTO);
     ResponseEntity<CustomResponse> findAddressByPatientId(Long patientId);
     ResponseEntity<CustomResponse> findAddressByAddressId(Long addressId);
     ResponseEntity<CustomResponse> updatePatientAddress(PatientAddressDTO patientAddressDTO, Long patientId, Long addressId);
