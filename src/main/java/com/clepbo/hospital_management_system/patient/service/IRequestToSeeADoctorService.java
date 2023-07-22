@@ -12,6 +12,7 @@ public interface IRequestToSeeADoctorService {
     ResponseEntity<CustomResponse> viewRequestById(Long requestId);
     ResponseEntity<CustomResponse> viewRequestByPatientId(String patientId) throws UnsupportedEncodingException;
     ResponseEntity<CustomResponse> viewRequestByStatus(String status);
+    ResponseEntity<CustomResponse> updateRequestStatus(Long requestId, RequestToSeeADoctorRequestDTO requestDTO, String status);
     ResponseEntity<CustomResponse> deleteRequest(Long id);
     ResponseEntity<CustomResponse> deleteAllPatientRequest(Long patientId);
 }

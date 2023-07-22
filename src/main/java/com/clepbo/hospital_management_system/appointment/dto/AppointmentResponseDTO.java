@@ -21,8 +21,10 @@ public class AppointmentResponseDTO {
     private Long id;
     private Date date;
     private Date time;
-    private Collection<PatientBio> patientBios;
-    private Collection<Staff> staff;
-    private Status status;
+    private String patientName;
+    private String doctorName;
+    private Long patientId;
+    private Long doctorId;
+    private String status;
     private String description;
 }

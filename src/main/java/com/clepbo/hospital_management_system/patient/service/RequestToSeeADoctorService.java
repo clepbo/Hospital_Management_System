@@ -10,6 +10,9 @@ import com.clepbo.hospital_management_system.patient.repository.IRequestToSeeADo
 import com.clepbo.hospital_management_system.staff.dto.CustomResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -17,9 +20,7 @@ import org.springframework.stereotype.Service;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
+import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -155,6 +156,24 @@ public class RequestToSeeADoctorService implements IRequestToSeeADoctorService{
             return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NO_CONTENT.name(), "List is empty"));
         }
         return ResponseEntity.ok(new CustomResponse(HttpStatus.OK.name(), getAllRequest, "Successful"));
+    }
+
+    @Override
+    public ResponseEntity<CustomResponse> updateRequestStatus(Long requestId, RequestToSeeADoctorRequestDTO requestDTO, String status) {
+        Optional<RequestToSeeADoctor> request = requestToSeeADoctorRepository.findById(requestId);
+        if(!request.isPresent()){
+            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_FOUND.name(), "Request not found"));
+        }
+
+        RequestToSeeADoctor requestToSeeADoctor = request.get();
+        for(Status statuses : Status.values()){
+            if(statuses.name().equals(status.toUpperCase())){
+                requestToSeeADoctor.setStatus(Status.valueOf(status.toUpperCase()));
+                requestToSeeADoctorRepository.save(requestToSeeADoctor);
+                return ResponseEntity.ok(new CustomResponse(HttpStatus.OK.name(), "Request status updated successfully"));
+            }
+        }
+        return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_ACCEPTABLE.name(), "Invalid status"));
     }
 
     @Override

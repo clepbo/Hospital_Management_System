@@ -6,5 +6,6 @@ public enum Status {
     CANCELLED,
     FIXED,
     ATTENDED_TO,
+    RESCHEDULED,
     ONGOING;
 }

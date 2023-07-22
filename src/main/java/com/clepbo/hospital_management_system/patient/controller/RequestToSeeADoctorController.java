@@ -70,6 +70,11 @@ public class RequestToSeeADoctorController {
         return seeADoctorService.viewRequestByStatus(status);
     }
 
+    @PutMapping("/request/{requestId}")
+    public ResponseEntity<CustomResponse> updateRequestStatus(@PathVariable("requestId") Long requestId, @RequestBody RequestToSeeADoctorRequestDTO requestDTO, @RequestParam String status){
+        return seeADoctorService.updateRequestStatus(requestId, requestDTO, status);
+    }
+
     @DeleteMapping("/request/{requestId}")
     @Operation(summary = "Delete request by Id", description = "Provide the request unique Id to delete the request", tags = {"Request To See A Doctor"})
     @PreAuthorize("hasAnyAuthority('ROLE_RECEPTIONIST', 'ROLE_ADMIN')")

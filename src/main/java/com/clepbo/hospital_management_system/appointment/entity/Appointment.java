@@ -2,6 +2,8 @@ package com.clepbo.hospital_management_system.appointment.entity;
 
 import com.clepbo.hospital_management_system.patient.entity.PatientBio;
 import com.clepbo.hospital_management_system.staff.entity.Staff;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,20 +21,23 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ApiModel(description = "Appointment")
 public class Appointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Temporal(TemporalType.DATE)
+    @ApiModelProperty(value = "Date of the appointment (format: yyyy-MM-dd)", example = "2023-07-31")
     private Date date;
     @Temporal(TemporalType.TIME)
+    @ApiModelProperty(value = "Time of the appointment (format: HH:mm:ss)", example = "14:30:00")
     private Date time;
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "patient_id")
-    private Collection<PatientBio> patientBios;
-    @ManyToMany(fetch = FetchType.EAGER)
+    private PatientBio patientBios;
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "staff_id")
-    private Collection<Staff> staff;
+    private Staff staff;
     @Enumerated(EnumType.STRING)
     private Status status;
     private String description;

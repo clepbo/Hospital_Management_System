@@ -101,14 +101,15 @@ public class PatientBioService implements IPatientBioService{
     @Override
     public ResponseEntity<CustomResponse> updatePatientBio(PatientBioRequestDTO patientBioRequestDTO, Long id) {
         Optional<PatientBio> findPatient = patientBioRepository.findById(id);
-        if(findPatient.isPresent()){
-            PatientBio updatedPatientBio = findPatient.get();
-
-            BeanUtils.copyProperties(patientBioRequestDTO, updatedPatientBio, getNullPropertyNames(patientBioRequestDTO));
-            patientBioRepository.save(updatedPatientBio);
+        if(!findPatient.isPresent()){
+            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_FOUND.name(), "Patient not found"));
 
         }
-        return null;
+        PatientBio updatedPatientBio = findPatient.get();
+
+        BeanUtils.copyProperties(patientBioRequestDTO, updatedPatientBio, getNullPropertyNames(patientBioRequestDTO));
+        patientBioRepository.save(updatedPatientBio);
+        return ResponseEntity.ok(new CustomResponse(HttpStatus.OK.name(), "Patient Bio Updated successfully"));
     }
 
     @Override
