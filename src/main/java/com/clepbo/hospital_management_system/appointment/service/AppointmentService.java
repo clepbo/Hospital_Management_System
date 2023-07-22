@@ -17,11 +17,11 @@ import com.clepbo.hospital_management_system.staff.repository.IStaffRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -42,8 +42,9 @@ public class AppointmentService implements IAppointmentService{
         Optional<PatientBio> findPatient = patientBioRepository.findById(patientId);
         List<Appointment> confirmStaffIsFree = appointmentRepository.findAppointmentsByStaff_Id(staffId);
         List<Appointment> confirmPatientIsFree = appointmentRepository.findAppointmentsByPatientBios_Id(patientId);
-        Date currentDate = new Date();
-        Date appointmentDateTime = combineDateAndTime(requestDTO.date(), requestDTO.time());
+
+        LocalDateTime currentDate = LocalDateTime.now();
+        LocalDateTime appointmentDateTime = combineDateAndTime(requestDTO.date(), requestDTO.time());
         if(!findStaff.isPresent()){
             return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_FOUND.name(), "Invalid StaffId " + staffId));
         }
@@ -63,8 +64,8 @@ public class AppointmentService implements IAppointmentService{
         }
 
         for(Appointment checkSchedule : confirmStaffIsFree){
-            Date staffAppointmentDateTime = combineDateAndTime(checkSchedule.getDate(), checkSchedule.getTime());
-            if(staffAppointmentDateTime.compareTo(appointmentDateTime) == 0
+            LocalDateTime staffAppointmentDateTime = combineDateAndTime(checkSchedule.getDate(), checkSchedule.getTime());
+            if(staffAppointmentDateTime.isEqual(appointmentDateTime)
                     && (checkSchedule.getStatus().name().equalsIgnoreCase("PENDING")
                     || checkSchedule.getStatus().name().equalsIgnoreCase("RESCHEDULED"))){
                 return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_ACCEPTABLE.name(), "Staff is not free for the scheduled time"));
@@ -72,8 +73,8 @@ public class AppointmentService implements IAppointmentService{
         }
 
         for(Appointment checkSchedule : confirmPatientIsFree){
-            Date patientAppointmentDateTime = combineDateAndTime(checkSchedule.getDate(), checkSchedule.getTime());
-            if(patientAppointmentDateTime.compareTo(appointmentDateTime) == 0
+            LocalDateTime patientAppointmentDateTime = combineDateAndTime(checkSchedule.getDate(), checkSchedule.getTime());
+            if(patientAppointmentDateTime.isEqual(appointmentDateTime)
                     && (checkSchedule.getStatus().name().equalsIgnoreCase("PENDING")
                     || checkSchedule.getStatus().name().equalsIgnoreCase("RESCHEDULED"))){
                 return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_ACCEPTABLE.name(), "Patient is not free for the scheduled time"));
@@ -215,7 +216,7 @@ public class AppointmentService implements IAppointmentService{
     }
 
     @Override
-    public ResponseEntity<CustomResponse> getAppointmentByDate(Date date) {
+    public ResponseEntity<CustomResponse> getAppointmentByDate(LocalDate date) {
         List<Appointment> findAppointmentByDate = appointmentRepository.findAppointmentsByDate(date);
         if(findAppointmentByDate.isEmpty()){
             return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NO_CONTENT.name(), "List is empty"));
@@ -236,10 +237,12 @@ public class AppointmentService implements IAppointmentService{
     }
 
     @Override
-    public ResponseEntity<CustomResponse> rescheduleAppointment(Long appointmentId, Date date, Date time) {
+    public ResponseEntity<CustomResponse> rescheduleAppointment(Long appointmentId, LocalDate date, LocalTime time) {
         Optional<Appointment> findAppointment = appointmentRepository.findById(appointmentId);
-        Date currentDate = new Date();
-        Date appointmentDateTime = combineDateAndTime(date, time);
+
+        LocalDateTime currentDate = LocalDateTime.now();
+        LocalDateTime appointmentDateTime = combineDateAndTime(date, time);
+
         if(!findAppointment.isPresent()){
             return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_FOUND.name(), "Appointment not found"));
         }
@@ -254,13 +257,13 @@ public class AppointmentService implements IAppointmentService{
         List<Appointment> confirmStaffIsFree = appointmentRepository.findAppointmentsByStaff_Id(rescheduledAppointment.getStaff().getId());
         List<Appointment> confirmPatientIsFree = appointmentRepository.findAppointmentsByPatientBios_Id(rescheduledAppointment.getPatientBios().getId());
 
-        if(currentDate.compareTo(appointmentDateTime) < 0){
+        if(currentDate.isBefore(appointmentDateTime)){
             return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_ACCEPTABLE.name(), "Invalid date or time"));
         }
 
         for(Appointment checkSchedule : confirmStaffIsFree){
-            Date staffAppointmentDateTime = combineDateAndTime(checkSchedule.getDate(), checkSchedule.getTime());
-            if(staffAppointmentDateTime.compareTo(appointmentDateTime) == 0
+            LocalDateTime staffAppointmentDateTime = combineDateAndTime(checkSchedule.getDate(), checkSchedule.getTime());
+            if(staffAppointmentDateTime.isEqual(appointmentDateTime)
                     && (checkSchedule.getStatus().name().equalsIgnoreCase("PENDING")
                     || checkSchedule.getStatus().name().equalsIgnoreCase("RESCHEDULED"))){
                 return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_ACCEPTABLE.name(), "Staff is not free for the scheduled time"));
@@ -268,8 +271,8 @@ public class AppointmentService implements IAppointmentService{
         }
 
         for(Appointment checkSchedule : confirmPatientIsFree){
-            Date patientAppointmentDateTime = combineDateAndTime(checkSchedule.getDate(), checkSchedule.getTime());
-            if(patientAppointmentDateTime.compareTo(appointmentDateTime) == 0
+            LocalDateTime patientAppointmentDateTime = combineDateAndTime(checkSchedule.getDate(), checkSchedule.getTime());
+            if(patientAppointmentDateTime.isEqual(appointmentDateTime)
                     && (checkSchedule.getStatus().name().equalsIgnoreCase("PENDING")
                     || checkSchedule.getStatus().name().equalsIgnoreCase("RESCHEDULED"))){
                 return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_ACCEPTABLE.name(), "Patient is not free for the scheduled time"));
@@ -293,7 +296,7 @@ public class AppointmentService implements IAppointmentService{
         }
         Appointment updatedStatus = findAppointment.get();
 
-        if(new Date().compareTo(updatedStatus.getDate()) > 0){
+        if(LocalDate.now().isAfter(updatedStatus.getDate())){
             updatedStatus.setStatus(Status.EXPIRED);
         }
         for(Status statuses : Status.values()){
@@ -309,8 +312,10 @@ public class AppointmentService implements IAppointmentService{
     @Override
     public ResponseEntity<CustomResponse> updateAppointment(Long appointmentId, AppointmentRequestDTO requestDTO) {
         Optional<Appointment> findAppointment = appointmentRepository.findById(appointmentId);
-        Date currentDate = new Date();
-        Date appointmentDateTime = combineDateAndTime(requestDTO.date(), requestDTO.time());
+
+        LocalDateTime currentDate = LocalDateTime.now();
+        LocalDateTime appointmentDateTime = combineDateAndTime(requestDTO.date(), requestDTO.time());
+
         if(!findAppointment.isPresent()){
             return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_FOUND.name(), "Appointment not found"));
         }
@@ -319,13 +324,13 @@ public class AppointmentService implements IAppointmentService{
         List<Appointment> confirmStaffIsFree = appointmentRepository.findAppointmentsByStaff_Id(updatedAppointment.getStaff().getId());
         List<Appointment> confirmPatientIsFree = appointmentRepository.findAppointmentsByPatientBios_Id(updatedAppointment.getPatientBios().getId());
 
-        if(currentDate.compareTo(appointmentDateTime) < 0){
+        if(currentDate.isBefore(appointmentDateTime)){
             return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_ACCEPTABLE.name(), "Invalid date or time"));
         }
 
         for(Appointment checkSchedule : confirmStaffIsFree){
-            Date staffAppointmentDateTime = combineDateAndTime(checkSchedule.getDate(), checkSchedule.getTime());
-            if(staffAppointmentDateTime.compareTo(appointmentDateTime) == 0
+            LocalDateTime staffAppointmentDateTime = combineDateAndTime(checkSchedule.getDate(), checkSchedule.getTime());
+            if(staffAppointmentDateTime.isEqual(appointmentDateTime)
                     && (checkSchedule.getStatus().name().equalsIgnoreCase("PENDING")
                     || checkSchedule.getStatus().name().equalsIgnoreCase("RESCHEDULED"))){
                 return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_ACCEPTABLE.name(), "Staff is not free for the scheduled time"));
@@ -333,8 +338,8 @@ public class AppointmentService implements IAppointmentService{
         }
 
         for(Appointment checkSchedule : confirmPatientIsFree){
-            Date patientAppointmentDateTime = combineDateAndTime(checkSchedule.getDate(), checkSchedule.getTime());
-            if(patientAppointmentDateTime.compareTo(appointmentDateTime) == 0
+            LocalDateTime patientAppointmentDateTime = combineDateAndTime(checkSchedule.getDate(), checkSchedule.getTime());
+            if(patientAppointmentDateTime.isEqual(appointmentDateTime)
                     && (checkSchedule.getStatus().name().equalsIgnoreCase("PENDING")
                     || checkSchedule.getStatus().name().equalsIgnoreCase("RESCHEDULED"))){
                 return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_ACCEPTABLE.name(), "Patient is not free for the scheduled time"));
@@ -355,19 +360,7 @@ public class AppointmentService implements IAppointmentService{
         return ResponseEntity.ok(new CustomResponse(HttpStatus.OK.name(), "Appointment deleted successfully"));
     }
 
-    private Date combineDateAndTime(Date date, Date time) {
-        Calendar calendarDate = Calendar.getInstance();
-        calendarDate.setTime(date);
-
-        Calendar calendarTime = Calendar.getInstance();
-        calendarTime.setTime(time);
-
-        // Set the time components (hour, minute, second, millisecond) from the time to the date
-        calendarDate.set(Calendar.HOUR_OF_DAY, calendarTime.get(Calendar.HOUR_OF_DAY));
-        calendarDate.set(Calendar.MINUTE, calendarTime.get(Calendar.MINUTE));
-        calendarDate.set(Calendar.SECOND, calendarTime.get(Calendar.SECOND));
-        calendarDate.set(Calendar.MILLISECOND, calendarTime.get(Calendar.MILLISECOND));
-
-        return calendarDate.getTime();
+    private LocalDateTime combineDateAndTime(LocalDate date, LocalTime time) {
+        return date.atTime(time);
     }
 }

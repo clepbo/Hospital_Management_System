@@ -4,8 +4,8 @@ import com.clepbo.hospital_management_system.appointment.dto.AppointmentRequestD
 import com.clepbo.hospital_management_system.staff.dto.CustomResponse;
 import org.springframework.http.ResponseEntity;
 
-import java.sql.Time;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 public interface IAppointmentService {
     ResponseEntity<CustomResponse> createAppointment(AppointmentRequestDTO requestDTO, Long staffId, Long patientId);
@@ -14,8 +14,8 @@ public interface IAppointmentService {
     ResponseEntity<CustomResponse> getAppointmentById(Long appointmentId);
     ResponseEntity<CustomResponse> getAppointmentByStaffId(Long staffId);
     ResponseEntity<CustomResponse> getAppointmentByPatientId(Long patientId);
-    ResponseEntity<CustomResponse> getAppointmentByDate(Date date);
-    ResponseEntity<CustomResponse> rescheduleAppointment(Long appointmentId, Date date, Date time);
+    ResponseEntity<CustomResponse> getAppointmentByDate(LocalDate date);
+    ResponseEntity<CustomResponse> rescheduleAppointment(Long appointmentId, LocalDate date, LocalTime time);
     ResponseEntity<CustomResponse> updateAppointmentStatus(Long appointmentId, String status);
     ResponseEntity<CustomResponse> updateAppointment(Long appointmentId, AppointmentRequestDTO requestDTO);
     ResponseEntity<CustomResponse> deleteAppointment(Long appointmentId);

@@ -3,6 +3,8 @@ package com.clepbo.hospital_management_system.appointment.controller;
 import com.clepbo.hospital_management_system.appointment.dto.AppointmentRequestDTO;
 import com.clepbo.hospital_management_system.appointment.service.IAppointmentService;
 import com.clepbo.hospital_management_system.staff.dto.CustomResponse;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @RestController
 @RequestMapping("/appointment")
@@ -23,6 +26,7 @@ public class AppointmentController {
     @PostMapping("/create")
     @Operation(summary = "Create New Appointment", description = "Provide the staff and patient unique Id to create an appointment ", tags = { "Appointment" })
     @PreAuthorize("hasAnyAuthority('ROLE_RECEPTIONIST', 'ROLE_ADMIN', 'ROLE_DOCTOR')")
+    @JsonDeserialize(using = LocalDateDeserializer.class)
     public ResponseEntity<CustomResponse> createAppointment(@RequestBody AppointmentRequestDTO requestDTO, @RequestParam Long staffId, @RequestParam Long patientId){
         return appointmentService.createAppointment(requestDTO, staffId, patientId);
     }
@@ -65,14 +69,14 @@ public class AppointmentController {
     @GetMapping("/appointmentDate/{date}")
     @Operation(summary = "Find appointment by date", description = "Provide a Unique date to find/fetch appointment in that date", tags = { "Appointment" })
     @PreAuthorize("hasAnyAuthority('ROLE_RECEPTIONIST', 'ROLE_ADMIN', 'ROLE_DOCTOR')")
-    public ResponseEntity<CustomResponse> getAppointmentByDate(@PathVariable("date") Date date){
+    public ResponseEntity<CustomResponse> getAppointmentByDate(@PathVariable("date") LocalDate date){
         return appointmentService.getAppointmentByDate(date);
     }
 
     @PutMapping("/reschedule/{appointmentId}")
     @Operation(summary = "Reschedule an Appointment", description = "Provide an appointment unique Id to reschedule the appointment", tags = { "Appointment" })
     @PreAuthorize("hasAnyAuthority('ROLE_RECEPTIONIST', 'ROLE_ADMIN', 'ROLE_DOCTOR')")
-    public ResponseEntity<CustomResponse> rescheduleAppointment(@PathVariable("appointmentId") Long appointmentId, @RequestParam Date date, @RequestParam Date time){
+    public ResponseEntity<CustomResponse> rescheduleAppointment(@PathVariable("appointmentId") Long appointmentId, @RequestParam LocalDate date, @RequestParam LocalTime time){
         return appointmentService.rescheduleAppointment(appointmentId, date, time);
     }
 

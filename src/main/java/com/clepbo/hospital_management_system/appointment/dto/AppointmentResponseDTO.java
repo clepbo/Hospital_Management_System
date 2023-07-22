@@ -9,8 +9,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Collection;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Data
 @NoArgsConstructor
@@ -19,8 +19,8 @@ import java.util.Date;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AppointmentResponseDTO {
     private Long id;
-    private Date date;
-    private Date time;
+    private LocalDate date;
+    private LocalTime time;
     private String patientName;
     private String doctorName;
     private Long patientId;
