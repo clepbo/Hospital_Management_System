@@ -8,8 +8,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public interface IAppointmentService {
-    ResponseEntity<CustomResponse> createAppointment(AppointmentRequestDTO requestDTO, Long staffId, Long patientId);
-    ResponseEntity<CustomResponse> createAppointmentByRequest(Long requestId, AppointmentRequestDTO requestDTO, Long staffId);
+    ResponseEntity<CustomResponse> createAppointment(AppointmentRequestDTO requestDTO);
+    ResponseEntity<CustomResponse> createAppointmentByRequest(Long requestId, AppointmentRequestDTO requestDTO);
     ResponseEntity<CustomResponse> getAllAppointment();
     ResponseEntity<CustomResponse> getAppointmentById(Long appointmentId);
     ResponseEntity<CustomResponse> getAppointmentByStaffId(Long staffId);
@@ -19,4 +19,5 @@ public interface IAppointmentService {
     ResponseEntity<CustomResponse> updateAppointmentStatus(Long appointmentId, String status);
     ResponseEntity<CustomResponse> updateAppointment(Long appointmentId, AppointmentRequestDTO requestDTO);
     ResponseEntity<CustomResponse> deleteAppointment(Long appointmentId);
+    public void expiredAppointment();
 }
