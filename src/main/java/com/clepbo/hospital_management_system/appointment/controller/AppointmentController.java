@@ -71,9 +71,9 @@ public class AppointmentController {
     }
 
     @PutMapping("/reschedule/{appointmentId}")
-    @Operation(summary = "Reschedule an Appointment", description = "Provide an appointment unique Id to reschedule the appointment", tags = { "Appointment" })
+    @Operation(summary = "Reschedule an Appointment", description = "Provide an appointment unique Id to reschedule the appointment. Set time value as (14:00:00) and Date value as (2023-08-31)", tags = { "Appointment" })
     @PreAuthorize("hasAnyAuthority('ROLE_RECEPTIONIST', 'ROLE_ADMIN', 'ROLE_DOCTOR')")
-    public ResponseEntity<CustomResponse> rescheduleAppointment(@PathVariable("appointmentId") Long appointmentId, @RequestParam LocalDate date, @RequestParam LocalTime time){
+    public ResponseEntity<CustomResponse> rescheduleAppointment(@PathVariable("appointmentId") Long appointmentId, @RequestParam LocalDate date, @RequestParam String time){
         return appointmentService.rescheduleAppointment(appointmentId, date, time);
     }
 

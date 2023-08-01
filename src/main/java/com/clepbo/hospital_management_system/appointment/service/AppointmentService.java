@@ -5,6 +5,8 @@ import com.clepbo.hospital_management_system.appointment.dto.AppointmentResponse
 import com.clepbo.hospital_management_system.appointment.entity.Appointment;
 import com.clepbo.hospital_management_system.appointment.entity.Status;
 import com.clepbo.hospital_management_system.appointment.repository.IAppointmentRepository;
+import com.clepbo.hospital_management_system.mailSender.dto.MailSender;
+import com.clepbo.hospital_management_system.mailSender.service.IMailService;
 import com.clepbo.hospital_management_system.patient.dto.RequestToSeeADoctorRequestDTO;
 import com.clepbo.hospital_management_system.patient.entity.PatientBio;
 import com.clepbo.hospital_management_system.patient.entity.RequestToSeeADoctor;
@@ -42,6 +44,7 @@ public class AppointmentService implements IAppointmentService{
     private final IStaffRepository staffRepository;
     private final IRequestToSeeADoctorRepository requestToSeeADoctorRepository;
     private final IRequestToSeeADoctorService requestToSeeADoctorService;
+    private final IMailService mailService;
 
     @Override
     public ResponseEntity<CustomResponse> createAppointment(AppointmentRequestDTO requestDTO) {
@@ -102,6 +105,28 @@ public class AppointmentService implements IAppointmentService{
                 .patientBios(patientBio)
                 .build();
         appointmentRepository.save(createAppointment);
+        mailService.sendMail(new MailSender(patientBio.getEmail(), "Appointment Notification",
+                "<p>Dear "+patientBio.getFirstname()+",</p>\n" +
+                        "    <p>We are pleased to confirm your upcoming appointment at Hospital Management System API. Our team is looking forward to providing you with excellent care and service.</p>\n" +
+                        "\n" +
+                        "    <h3>Appointment Details:</h3>\n" +
+                        "    <ul>\n" +
+                        "        <li><strong>Date:</strong> "+requestDTO.date()+"</li>\n" +
+                        "        <li><strong>Time:</strong> "+requestDTO.time()+"</li>\n" +
+                        "        <li><strong>Doctor:</strong> "+staff.getFirstName() + " "+ staff.getLastName()+"</li>\n" +
+                        "    </ul>\n" +
+                        "    <p>Please arrive at least 15 minutes before your scheduled appointment time to complete any necessary paperwork and check-in.</p>\n" +
+                        "    <p>If you need to reschedule or cancel your appointment, please let us know at least 24 hours in advance so that we can accommodate other patients.</p>\n" +
+                        "    <p>If you have any specific medical records or documents that you would like the doctor to review, please bring them along with you to the appointment.</p>\n" +
+                        "    <p>Should you have any questions or require further assistance, feel free to contact our patient support team at hms@service.support.</p>\n" +
+                        "    <p>We are committed to providing you with the best possible care and ensuring a smooth and comfortable experience during your visit.</p>\n" +
+                        "    <p>Thank you for choosing Hospital Management System API. We look forward to seeing you soon.</p>\n" +
+                        "\n" +
+                        "    <p>Best regards,</p>\n" +
+                        "    <p>Oni Israel Okikijesu<br>\n" +
+                        "    Software Developer<br>\n" +
+                        "    Hospital Management System API<br>\n" +
+                        "    hms@service.support</p>"));
         return ResponseEntity.ok(new CustomResponse(HttpStatus.CREATED.name(), "Appointment Created Successfully"));
     }
 
@@ -142,6 +167,10 @@ public class AppointmentService implements IAppointmentService{
         }
 
         RequestToSeeADoctor request = findRequest.get();
+        if(!request.getPatientBio().getId().equals(requestDTO.patientId())){
+            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_ACCEPTABLE.name(), "Invalid Patient Id"));
+        }
+
         RequestToSeeADoctorRequestDTO requestToSeeADoctorRequestDTO = new RequestToSeeADoctorRequestDTO(request.getReason(), request.getPatientBio().getEmail());
         Staff staff = findStaff.get();
         Appointment createAppointment = Appointment.builder()
@@ -152,6 +181,30 @@ public class AppointmentService implements IAppointmentService{
                 .staff(staff)
                 .patientBios(request.getPatientBio())
                 .build();
+
+        mailService.sendMail(new MailSender(request.getPatientBio().getEmail(), "Appointment Notification",
+                "<p>Dear "+request.getPatientBio().getFirstname()+",</p>\n" +
+                        "    <p>We are pleased to confirm your upcoming appointment at Hospital Management System API based on your request to see a doctor. Our team is looking forward to providing you with excellent care and service.</p>\n" +
+                        "\n" +
+                        "    <h3>Appointment Details:</h3>\n" +
+                        "    <ul>\n" +
+                        "        <li><strong>Date:</strong> "+requestDTO.date()+"</li>\n" +
+                        "        <li><strong>Time:</strong> "+requestDTO.time()+"</li>\n" +
+                        "        <li><strong>Doctor:</strong> "+staff.getFirstName() + " "+ staff.getLastName()+"</li>\n" +
+                        "    </ul>\n" +
+                        "    <p>Please arrive at least 15 minutes before your scheduled appointment time to complete any necessary paperwork and check-in.</p>\n" +
+                        "    <p>If you need to further reschedule or cancel your appointment, please let us know at least 24 hours in advance so that we can accommodate other patients.</p>\n" +
+                        "    <p>If you have any specific medical records or documents that you would like the doctor to review, please bring them along with you to the appointment.</p>\n" +
+                        "    <p>Should you have any questions or require further assistance, feel free to contact our patient support team at hms@service.support.</p>\n" +
+                        "    <p>We apologize for any inconvenience caused by the rescheduling and appreciate your understanding.</p>\n" +
+                        "    <p>Thank you for choosing Hospital Management System API. We look forward to seeing you soon.</p>\n" +
+                        "\n" +
+                        "    <p>Best regards,</p>\n" +
+                        "    <p>Oni Israel Okikijesu<br>\n" +
+                        "    Software Developer<br>\n" +
+                        "    Hospital Management System API<br>\n" +
+                        "    hms@service.support</p>"));
+
         appointmentRepository.save(createAppointment);
 
         requestToSeeADoctorService.updateRequestStatus(requestId, requestToSeeADoctorRequestDTO, Status.FIXED.name());
@@ -275,11 +328,11 @@ public class AppointmentService implements IAppointmentService{
     }
 
     @Override
-    public ResponseEntity<CustomResponse> rescheduleAppointment(Long appointmentId, LocalDate date, LocalTime time) {
+    public ResponseEntity<CustomResponse> rescheduleAppointment(Long appointmentId, LocalDate date, String time) {
         Optional<Appointment> findAppointment = appointmentRepository.findById(appointmentId);
 
         LocalDateTime currentDate = LocalDateTime.now();
-        LocalDateTime appointmentDateTime = combineDateAndTime(date, time);
+        LocalDateTime appointmentDateTime = combineDateAndTime(date, LocalTime.parse(time));
 
         if(!findAppointment.isPresent()){
             return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_FOUND.name(), "Appointment not found"));
@@ -319,9 +372,34 @@ public class AppointmentService implements IAppointmentService{
                 return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_ACCEPTABLE.name(), "Patient is not free for the scheduled time"));
             }
         }
+
         rescheduledAppointment.setDate(date);
-        rescheduledAppointment.setTime(time);
+        rescheduledAppointment.setTime(LocalTime.parse(time));
         rescheduledAppointment.setStatus(Status.RESCHEDULED);
+        // Assuming you have a PatientBio object named 'patientBio', a Staff object named 'staff', and an AppointmentRequestDTO named 'requestDTO'
+        mailService.sendMail(new MailSender(rescheduledAppointment.getPatientBios().getEmail(), "Rescheduled Appointment Notification",
+                "<p>Dear "+rescheduledAppointment.getPatientBios().getFirstname()+",</p>\n" +
+                        "    <p>We would like to inform you that your appointment has been rescheduled at Hospital Management System API. Our team is looking forward to providing you with excellent care and service on the new date and time.</p>\n" +
+                        "\n" +
+                        "    <h3>Updated Appointment Details:</h3>\n" +
+                        "    <ul>\n" +
+                        "        <li><strong>Date:</strong> "+date+"</li>\n" +
+                        "        <li><strong>Time:</strong> "+LocalTime.parse(time)+"</li>\n" +
+                        "        <li><strong>Doctor:</strong> "+rescheduledAppointment.getStaff().getFirstName() + " "+ rescheduledAppointment.getStaff().getLastName()+"</li>\n" +
+                        "    </ul>\n" +
+                        "    <p>Please arrive at least 15 minutes before your scheduled appointment time to complete any necessary paperwork and check-in.</p>\n" +
+                        "    <p>If you need to further reschedule or cancel your appointment, please let us know at least 24 hours in advance so that we can accommodate other patients.</p>\n" +
+                        "    <p>If you have any specific medical records or documents that you would like the doctor to review, please bring them along with you to the appointment.</p>\n" +
+                        "    <p>Should you have any questions or require further assistance, feel free to contact our patient support team at hms@service.support.</p>\n" +
+                        "    <p>We apologize for any inconvenience caused by the rescheduling and appreciate your understanding.</p>\n" +
+                        "    <p>Thank you for choosing Hospital Management System API. We look forward to seeing you soon.</p>\n" +
+                        "\n" +
+                        "    <p>Best regards,</p>\n" +
+                        "    <p>Oni Israel Okikijesu<br>\n" +
+                        "    Software Developer<br>\n" +
+                        "    Hospital Management System API<br>\n" +
+                        "    hms@service.support</p>"));
+
         appointmentRepository.save(rescheduledAppointment);
         return ResponseEntity.ok(new CustomResponse(HttpStatus.OK.name(), "Appointment Rescheduled Successfully"));
     }

@@ -15,7 +15,7 @@ public interface IAppointmentService {
     ResponseEntity<CustomResponse> getAppointmentByStaffId(Long staffId);
     ResponseEntity<CustomResponse> getAppointmentByPatientId(Long patientId);
     ResponseEntity<CustomResponse> getAppointmentByDate(LocalDate date);
-    ResponseEntity<CustomResponse> rescheduleAppointment(Long appointmentId, LocalDate date, LocalTime time);
+    ResponseEntity<CustomResponse> rescheduleAppointment(Long appointmentId, LocalDate date, String time);
     ResponseEntity<CustomResponse> updateAppointmentStatus(Long appointmentId, String status);
     ResponseEntity<CustomResponse> updateAppointment(Long appointmentId, AppointmentRequestDTO requestDTO);
     ResponseEntity<CustomResponse> deleteAppointment(Long appointmentId);
