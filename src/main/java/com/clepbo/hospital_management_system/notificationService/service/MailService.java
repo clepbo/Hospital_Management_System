@@ -1,6 +1,6 @@
-package com.clepbo.hospital_management_system.mailSender.service;
+package com.clepbo.hospital_management_system.notificationService.service;
 
-import com.clepbo.hospital_management_system.mailSender.dto.MailSender;
+import com.clepbo.hospital_management_system.notificationService.dto.MailSender;
 import jakarta.mail.Message;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;

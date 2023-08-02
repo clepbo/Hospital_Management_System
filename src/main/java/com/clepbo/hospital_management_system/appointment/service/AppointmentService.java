@@ -5,8 +5,8 @@ import com.clepbo.hospital_management_system.appointment.dto.AppointmentResponse
 import com.clepbo.hospital_management_system.appointment.entity.Appointment;
 import com.clepbo.hospital_management_system.appointment.entity.Status;
 import com.clepbo.hospital_management_system.appointment.repository.IAppointmentRepository;
-import com.clepbo.hospital_management_system.mailSender.dto.MailSender;
-import com.clepbo.hospital_management_system.mailSender.service.IMailService;
+import com.clepbo.hospital_management_system.notificationService.dto.MailSender;
+import com.clepbo.hospital_management_system.notificationService.service.IMailService;
 import com.clepbo.hospital_management_system.patient.dto.RequestToSeeADoctorRequestDTO;
 import com.clepbo.hospital_management_system.patient.entity.PatientBio;
 import com.clepbo.hospital_management_system.patient.entity.RequestToSeeADoctor;
@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -496,6 +497,43 @@ public class AppointmentService implements IAppointmentService{
                         || !appointment.getStatus().name().equals("CANCELLED") || !appointment.getStatus().name().equals("ATTENDED_TO"))){
                     appointment.setStatus(Status.EXPIRED);
                     appointmentRepository.save(appointment);
+                }
+            }
+        }
+    }
+
+    @Override
+    @Scheduled(cron = "0 0 * * * *")
+    public void notifyPatient(){
+        List<Appointment> appointments = appointmentRepository.findAll();
+        if(!appointments.isEmpty()){
+            for(Appointment checkAppointment : appointments){
+                LocalDateTime currentDate = LocalDateTime.now();
+                LocalDateTime appointmentDateTime = combineDateAndTime(checkAppointment.getDate(), checkAppointment.getTime());
+                long hoursDifference = ChronoUnit.HOURS.between(currentDate, appointmentDateTime);
+                if(hoursDifference == 24){
+                    mailService.sendMail(new MailSender(checkAppointment.getPatientBios().getEmail(), "Appointment Reminder",
+                            "<p>Dear "+checkAppointment.getPatientBios().getFirstname()+",</p>\n" +
+                                    "    <p>This is a friendly reminder about your upcoming appointment at Hospital Management System API. Our team is looking forward to providing you with excellent care and service.</p>\n" +
+                                    "\n" +
+                                    "    <h3>Appointment Details:</h3>\n" +
+                                    "    <ul>\n" +
+                                    "        <li><strong>Date:</strong> "+checkAppointment.getDate()+"</li>\n" +
+                                    "        <li><strong>Time:</strong> "+checkAppointment.getTime()+"</li>\n" +
+                                    "        <li><strong>Doctor:</strong> "+checkAppointment.getStaff().getFirstName() + " "+ checkAppointment.getStaff().getLastName()+"</li>\n" +
+                                    "    </ul>\n" +
+                                    "    <p>Please arrive at least 15 minutes before your scheduled appointment time to complete any necessary paperwork and check-in.</p>\n" +
+                                    "    <p>If you need to reschedule or cancel your appointment, please let us know at least 24 hours in advance so that we can accommodate other patients.</p>\n" +
+                                    "    <p>If you have any specific medical records or documents that you would like the doctor to review, please bring them along with you to the appointment.</p>\n" +
+                                    "    <p>Should you have any questions or require further assistance, feel free to contact our patient support team at hms@service.support.</p>\n" +
+                                    "    <p>We are committed to providing you with the best possible care and ensuring a smooth and comfortable experience during your visit.</p>\n" +
+                                    "    <p>Thank you for choosing Hospital Management System API. We look forward to seeing you soon.</p>\n" +
+                                    "\n" +
+                                    "    <p>Best regards,</p>\n" +
+                                    "    <p>Oni Israel Okikijesu<br>\n" +
+                                    "    Software Developer<br>\n" +
+                                    "    Hospital Management System API<br>\n" +
+                                    "    hms@service.support</p>"));
                 }
             }
         }

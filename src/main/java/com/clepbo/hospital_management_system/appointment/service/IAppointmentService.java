@@ -20,4 +20,5 @@ public interface IAppointmentService {
     ResponseEntity<CustomResponse> updateAppointment(Long appointmentId, AppointmentRequestDTO requestDTO);
     ResponseEntity<CustomResponse> deleteAppointment(Long appointmentId);
     public void expiredAppointment();
+    public void notifyPatient();
 }

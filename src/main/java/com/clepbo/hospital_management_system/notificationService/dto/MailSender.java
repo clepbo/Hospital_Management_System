@@ -1,4 +1,4 @@
-package com.clepbo.hospital_management_system.mailSender.dto;
+package com.clepbo.hospital_management_system.notificationService.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
