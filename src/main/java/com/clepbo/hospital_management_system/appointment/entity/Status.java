@@ -7,5 +7,7 @@ public enum Status {
     FIXED,
     ATTENDED_TO,
     RESCHEDULED,
-    ONGOING;
+    ONGOING,
+    COMPLETED,
+    FAILED;
 }

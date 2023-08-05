@@ -78,7 +78,7 @@ public class AppointmentController {
     }
 
     @PutMapping("/updateStatus/{appointmentId}")
-    @Operation(summary = "Update an appointment", description = "Provide an appointment unique Id to update the appointment status", tags = { "Appointment" })
+    @Operation(summary = "Update an appointment's status", description = "Provide an appointment unique Id to update the appointment status", tags = { "Appointment" })
     @PreAuthorize("hasAnyAuthority('ROLE_RECEPTIONIST', 'ROLE_ADMIN', 'ROLE_DOCTOR')")
     public ResponseEntity<CustomResponse> updateAppointmentStatus(@PathVariable("appointmentId") Long appointmentId, @RequestParam String status){
         return appointmentService.updateAppointmentStatus(appointmentId, status);

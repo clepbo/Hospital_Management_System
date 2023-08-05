@@ -1,5 +1,7 @@
 package com.clepbo.hospital_management_system.patient.entity;
 
+import com.clepbo.hospital_management_system.appointment.entity.Status;
+import com.clepbo.hospital_management_system.staff.entity.Staff;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,27 +9,34 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.Calendar;
 
 @Entity
 @Data
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class PatientMedicalRecord {
+@NoArgsConstructor
+@Builder
+public class LabTest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String bloodGroup;
-    private String genotype;
-    private String allergies;
-    private String bloodPressure;
-    private String heartRate;
-    private String respiratoryRate;
-    private String terminalIllness;
+    private String testName;
+    private String description;
+    private String testResult;
+    private String recommendations;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "patient_id")
     private PatientBio patientBio;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "staff_id")
+    private Staff carriedOutBy;
+
+    @Enumerated(EnumType.STRING)
+    private Status testStatus;
+    private LocalDate testDate;
     private Timestamp createdAt;
     private Timestamp modifiedAt;
 

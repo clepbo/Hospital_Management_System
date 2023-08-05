@@ -105,6 +105,7 @@ public class PatientBioService implements IPatientBioService{
             return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_FOUND.name(), "Patient not found"));
 
         }
+
         PatientBio updatedPatientBio = findPatient.get();
 
         BeanUtils.copyProperties(patientBioRequestDTO, updatedPatientBio, getNullPropertyNames(patientBioRequestDTO));

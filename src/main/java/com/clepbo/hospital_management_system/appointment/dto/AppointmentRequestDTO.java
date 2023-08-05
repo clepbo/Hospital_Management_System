@@ -11,9 +11,6 @@ public record AppointmentRequestDTO(
         @ApiModelProperty(value = "Date of the appointment (format: yyyy-MM-dd)", example = "2023-07-31")
         @JsonFormat(pattern = "yyyy-MM-dd")
         LocalDate date,
-
-//        @ApiModelProperty(value = "Time of the appointment (format: HH:mm:ss)", example = "14:30:00")
-//        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
         String time,
         String patientId,
         String staffId,
