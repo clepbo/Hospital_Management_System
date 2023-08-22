@@ -13,6 +13,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -71,8 +75,9 @@ public class RequestToSeeADoctorService implements IRequestToSeeADoctorService{
     }
 
     @Override
-    public ResponseEntity<CustomResponse> getAllRequest() {
-        List<RequestToSeeADoctor> request = requestToSeeADoctorRepository.findAll();
+    public ResponseEntity<CustomResponse> getAllRequest(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("patientBio_firstname").ascending());
+        Page<RequestToSeeADoctor> request = requestToSeeADoctorRepository.findAll(pageable);
         List<RequestToSeeADoctorResponseDTO> getAllRequest = request.stream()
                 .map(requestToSeeADoctor -> RequestToSeeADoctorResponseDTO.builder()
                         .dateRequested(requestToSeeADoctor.getCreatedAt())
@@ -106,7 +111,8 @@ public class RequestToSeeADoctorService implements IRequestToSeeADoctorService{
     }
 
     @Override
-    public ResponseEntity<CustomResponse> viewRequestByPatientId(String patientId) throws UnsupportedEncodingException {
+    public ResponseEntity<CustomResponse> viewRequestByPatientId(String patientId, int page, int size) throws UnsupportedEncodingException {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").ascending());
         Optional<PatientBio> findPatientById = null;
 
         if(Pattern.matches(emailRegex, patientId) || StringUtils.isNotBlank(patientId)){
@@ -124,7 +130,7 @@ public class RequestToSeeADoctorService implements IRequestToSeeADoctorService{
 
         PatientBio getPatient = findPatientById.get();
 
-        List<RequestToSeeADoctor> findPatientRequest = requestToSeeADoctorRepository.findRequestToSeeADoctorByPatientBio_Id(getPatient.getId());
+        Page<RequestToSeeADoctor> findPatientRequest = requestToSeeADoctorRepository.findRequestToSeeADoctorByPatientBio_Id(getPatient.getId(), pageable);
         List<RequestToSeeADoctorResponseDTO> patientRequests = findPatientRequest.stream()
                 .map(requestToSeeADoctor -> RequestToSeeADoctorResponseDTO.builder()
                         .dateRequested(requestToSeeADoctor.getCreatedAt())
@@ -139,9 +145,10 @@ public class RequestToSeeADoctorService implements IRequestToSeeADoctorService{
     }
 
     @Override
-    public ResponseEntity<CustomResponse> viewRequestByStatus(String status) {
+    public ResponseEntity<CustomResponse> viewRequestByStatus(String status, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("status").ascending());
         Status statusValue = Status.valueOf(status.toUpperCase());
-        List<RequestToSeeADoctor> findRequestByStatus = requestToSeeADoctorRepository.findRequestToSeeADoctorByStatus(statusValue);
+        Page<RequestToSeeADoctor> findRequestByStatus = requestToSeeADoctorRepository.findRequestToSeeADoctorByStatus(statusValue, pageable);
         List<RequestToSeeADoctorResponseDTO> getAllRequest = findRequestByStatus.stream()
                 .map(requestToSeeADoctor -> RequestToSeeADoctorResponseDTO.builder()
                         .dateRequested(requestToSeeADoctor.getCreatedAt())

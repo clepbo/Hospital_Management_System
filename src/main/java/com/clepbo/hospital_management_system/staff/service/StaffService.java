@@ -9,6 +9,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -67,17 +71,14 @@ public class StaffService implements IStaffService{
     }
 
     @Override
-    public ResponseEntity<CustomResponse> getAllStaff() {
-        List<Staff> staffs = staffRepository.findAll();
+    public ResponseEntity<CustomResponse> getAllStaff(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("firstName").ascending());
+        Page<Staff> staffs = staffRepository.findAll(pageable);
         List<StaffResponseDto> responseDtoList = staffs.stream()
-                .map(staff -> StaffResponseDto.builder()
-                        .id(staff.getId())
-                        .firstName(staff.getFirstName())
-                        .lastName(staff.getLastName())
-                        .email(staff.getEmail())
-                        .roles(staff.getRoles())
-                        .build())
+                .map(this::mapToStaffResponse)
                 .collect(Collectors.toList());
+
+
 
         CustomResponse customResponse = CustomResponse.builder()
                 .status(HttpStatus.OK.name())
@@ -85,6 +86,16 @@ public class StaffService implements IStaffService{
                 .data(responseDtoList.isEmpty() ? null : responseDtoList)
                 .build();
         return ResponseEntity.ok(customResponse);
+    }
+
+    private StaffResponseDto mapToStaffResponse(Staff staff) {
+        return StaffResponseDto.builder()
+                .id(staff.getId())
+                .email(staff.getEmail())
+                .firstName(staff.getFirstName())
+                .lastName(staff.getLastName())
+                .roles(staff.getRoles())
+                .build();
     }
 
     @Override

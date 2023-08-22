@@ -38,8 +38,9 @@ public class AppointmentController {
     @GetMapping("/")
     @Operation(summary = "View all Appointment", description = "View all Appointment", tags = { "Appointment" })
     @PreAuthorize("hasAnyAuthority('ROLE_RECEPTIONIST', 'ROLE_ADMIN', 'ROLE_DOCTOR')")
-    public ResponseEntity<CustomResponse> getAllAppointment(){
-        return appointmentService.getAllAppointment();
+    public ResponseEntity<CustomResponse> getAllAppointment(@RequestParam(defaultValue = "0") int page,
+                                                            @RequestParam(defaultValue = "10") int size){
+        return appointmentService.getAllAppointment(page, size);
     }
 
     @GetMapping("/{appointmentId}")
@@ -52,22 +53,28 @@ public class AppointmentController {
     @GetMapping("/staffAppointment/{staffId}")
     @Operation(summary = "Find appointment with staffId", description = "Provide a staff unique Id to find/fetch the staff's appointments", tags = { "Appointment" })
     @PreAuthorize("hasAnyAuthority('ROLE_RECEPTIONIST', 'ROLE_ADMIN', 'ROLE_DOCTOR')")
-    public ResponseEntity<CustomResponse> getAppointmentByStaffId(@PathVariable("staffId") Long staffId){
-        return appointmentService.getAppointmentByStaffId(staffId);
+    public ResponseEntity<CustomResponse> getAppointmentByStaffId(@PathVariable("staffId") Long staffId,
+                                                                  @RequestParam(defaultValue = "0") int page,
+                                                                  @RequestParam(defaultValue = "10") int size){
+        return appointmentService.getAppointmentByStaffId(staffId, page, size);
     }
 
     @GetMapping("/patientAppointment/{patientId}")
     @Operation(summary = "Find appointment with patientId", description = "Provide a patient's unique Id to find/fetch the patients appointments", tags = { "Appointment" })
     @PreAuthorize("hasAnyAuthority('ROLE_RECEPTIONIST', 'ROLE_ADMIN', 'ROLE_DOCTOR')")
-    public ResponseEntity<CustomResponse> getAppointmentByPatientId(@PathVariable("patientId") Long patientId){
-        return appointmentService.getAppointmentByPatientId(patientId);
+    public ResponseEntity<CustomResponse> getAppointmentByPatientId(@PathVariable("patientId") Long patientId,
+                                                                    @RequestParam(defaultValue = "0") int page,
+                                                                    @RequestParam(defaultValue = "10") int size){
+        return appointmentService.getAppointmentByPatientId(patientId, page, size);
     }
 
     @GetMapping("/appointmentDate/{date}")
     @Operation(summary = "Find appointment by date", description = "Provide a Unique date to find/fetch appointment in that date. Date format should be (2023-07-31)", tags = { "Appointment" })
     @PreAuthorize("hasAnyAuthority('ROLE_RECEPTIONIST', 'ROLE_ADMIN', 'ROLE_DOCTOR')")
-    public ResponseEntity<CustomResponse> getAppointmentByDate(@PathVariable("date") LocalDate date){
-        return appointmentService.getAppointmentByDate(date);
+    public ResponseEntity<CustomResponse> getAppointmentByDate(@PathVariable("date") LocalDate date,
+                                                               @RequestParam(defaultValue = "0") int page,
+                                                               @RequestParam(defaultValue = "10") int size){
+        return appointmentService.getAppointmentByDate(date, page,size);
     }
 
     @PutMapping("/reschedule/{appointmentId}")

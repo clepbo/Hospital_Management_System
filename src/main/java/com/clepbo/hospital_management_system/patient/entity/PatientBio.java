@@ -1,6 +1,8 @@
 package com.clepbo.hospital_management_system.patient.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,14 +22,24 @@ public class PatientBio {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotBlank(message = "Firstname Required")
+    @NotNull
     private String firstname;
+
+    @NotBlank(message = "Lastname Required")
+    @NotNull
     private String lastname;
+
+    @NotBlank(message = "Email Required")
+    @NotNull
     @NaturalId(mutable = false)
     private String email;
+
     private String dateOfBirth;
     private String phoneNumber;
     private String gender;
     private String role;
+
     @OneToMany(mappedBy = "patientBio", orphanRemoval = true)
     private List<PatientContactAddress> contactAddress;
     @OneToMany(mappedBy = "patientBio", orphanRemoval = true)

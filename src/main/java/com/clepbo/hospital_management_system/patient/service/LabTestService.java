@@ -14,6 +14,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -73,23 +77,15 @@ public class LabTestService implements ILabTestService{
     }
 
     @Override
-    public ResponseEntity<CustomResponse> getAllLabTest() {
-        List<LabTest> getAllTest = labTestRepository.findAll();
+    public ResponseEntity<CustomResponse> getAllLabTest(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("testName").ascending());
+        Page<LabTest> getAllTest = labTestRepository.findAll(pageable);
         if(getAllTest.isEmpty()){
             return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NO_CONTENT.name(), "List is empty, No Test available"));
         }
 
         List<LabTestResponseDTO> responseDTOS = getAllTest.stream()
-                .map(labTest -> LabTestResponseDTO.builder()
-                        .testName(labTest.getTestName())
-                        .testDate(labTest.getTestDate())
-                        .testResult(labTest.getTestResult())
-                        .testStatus(String.valueOf(labTest.getTestStatus()))
-                        .carriedOutBy(labTest.getCarriedOutBy().getFirstName() +" "+ labTest.getCarriedOutBy().getLastName())
-                        .patientName(labTest.getPatientBio().getFirstname() +" "+ labTest.getPatientBio().getLastname())
-                        .recommendations(labTest.getRecommendations())
-                        .description(labTest.getDescription())
-                        .build())
+                .map(this::mapToLabTestResponse)
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(new CustomResponse(HttpStatus.OK.name(), responseDTOS, "Successful"));
@@ -98,7 +94,7 @@ public class LabTestService implements ILabTestService{
     @Override
     public ResponseEntity<CustomResponse> findTestById(Long id) {
         Optional<LabTest> findTest = labTestRepository.findById(id);
-        if(!findTest.isPresent()){
+        if(findTest.isEmpty()){
             return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_FOUND.name(), "Test not found"));
         }
 
@@ -118,111 +114,71 @@ public class LabTestService implements ILabTestService{
     }
 
     @Override
-    public ResponseEntity<CustomResponse> findTestByTestName(String testName) {
-        List<LabTest> findTest = labTestRepository.findLabTestByTestNameContaining(testName);
+    public ResponseEntity<CustomResponse> findTestByTestName(String testName, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("testName").ascending());
+        Page<LabTest> findTest = labTestRepository.findLabTestByTestNameContaining(testName, pageable);
         if(findTest.isEmpty()){
             return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NO_CONTENT.name(), "No test found"));
         }
 
         List<LabTestResponseDTO> responseDTOS = findTest.stream()
-                .map(labTest -> LabTestResponseDTO.builder()
-                        .testName(labTest.getTestName())
-                        .testDate(labTest.getTestDate())
-                        .testResult(labTest.getTestResult())
-                        .testStatus(String.valueOf(labTest.getTestStatus()))
-                        .carriedOutBy(labTest.getCarriedOutBy().getFirstName() +" "+ labTest.getCarriedOutBy().getLastName())
-                        .patientName(labTest.getPatientBio().getFirstname() +" "+ labTest.getPatientBio().getLastname())
-                        .recommendations(labTest.getRecommendations())
-                        .description(labTest.getDescription())
-                        .build())
+                .map(this::mapToLabTestResponse)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(new CustomResponse(HttpStatus.OK.name(), responseDTOS, "Successful"));
     }
 
     @Override
-    public ResponseEntity<CustomResponse> findTestByPatientId(Long patientId) {
-        List<LabTest> findTest = labTestRepository.findLabTestByPatientBio_Id(patientId);
+    public ResponseEntity<CustomResponse> findTestByPatientId(Long patientId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("testName").ascending());
+        Page<LabTest> findTest = labTestRepository.findLabTestByPatientBio_Id(patientId, pageable);
         if(findTest.isEmpty()){
             return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NO_CONTENT.name(), "No test found"));
         }
 
         List<LabTestResponseDTO> responseDTOS = findTest.stream()
-                .map(labTest -> LabTestResponseDTO.builder()
-                        .testName(labTest.getTestName())
-                        .testDate(labTest.getTestDate())
-                        .testResult(labTest.getTestResult())
-                        .testStatus(String.valueOf(labTest.getTestStatus()))
-                        .carriedOutBy(labTest.getCarriedOutBy().getFirstName() +" "+ labTest.getCarriedOutBy().getLastName())
-                        .patientName(labTest.getPatientBio().getFirstname() +" "+ labTest.getPatientBio().getLastname())
-                        .recommendations(labTest.getRecommendations())
-                        .description(labTest.getDescription())
-                        .build())
+                .map(this::mapToLabTestResponse)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(new CustomResponse(HttpStatus.OK.name(), responseDTOS, "Successful"));
     }
 
     @Override
-    public ResponseEntity<CustomResponse> findTestByStatus(Status status) {
-        List<LabTest> findTest = labTestRepository.findLabTestByTestStatus(status);
+    public ResponseEntity<CustomResponse> findTestByStatus(Status status, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("testName").ascending());
+        Page<LabTest> findTest = labTestRepository.findLabTestByTestStatus(status, pageable);
         if(findTest.isEmpty()){
             return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NO_CONTENT.name(), "No test found"));
         }
 
         List<LabTestResponseDTO> responseDTOS = findTest.stream()
-                .map(labTest -> LabTestResponseDTO.builder()
-                        .testName(labTest.getTestName())
-                        .testDate(labTest.getTestDate())
-                        .testResult(labTest.getTestResult())
-                        .testStatus(String.valueOf(labTest.getTestStatus()))
-                        .carriedOutBy(labTest.getCarriedOutBy().getFirstName() +" "+ labTest.getCarriedOutBy().getLastName())
-                        .patientName(labTest.getPatientBio().getFirstname() +" "+ labTest.getPatientBio().getLastname())
-                        .recommendations(labTest.getRecommendations())
-                        .description(labTest.getDescription())
-                        .build())
+                .map(this::mapToLabTestResponse)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(new CustomResponse(HttpStatus.OK.name(), responseDTOS, "Successful"));
     }
 
     @Override
-    public ResponseEntity<CustomResponse> findTestByStaffId(Long staffId) {
-        List<LabTest> findTest = labTestRepository.findLabTestByCarriedOutBy_Id(staffId);
+    public ResponseEntity<CustomResponse> findTestByStaffId(Long staffId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("testName").ascending());
+        Page<LabTest> findTest = labTestRepository.findLabTestByCarriedOutBy_Id(staffId, pageable);
         if(findTest.isEmpty()){
             return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NO_CONTENT.name(), "No test found"));
         }
 
         List<LabTestResponseDTO> responseDTOS = findTest.stream()
-                .map(labTest -> LabTestResponseDTO.builder()
-                        .testName(labTest.getTestName())
-                        .testDate(labTest.getTestDate())
-                        .testResult(labTest.getTestResult())
-                        .testStatus(String.valueOf(labTest.getTestStatus()))
-                        .carriedOutBy(labTest.getCarriedOutBy().getFirstName() +" "+ labTest.getCarriedOutBy().getLastName())
-                        .patientName(labTest.getPatientBio().getFirstname() +" "+ labTest.getPatientBio().getLastname())
-                        .recommendations(labTest.getRecommendations())
-                        .description(labTest.getDescription())
-                        .build())
+                .map(this::mapToLabTestResponse)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(new CustomResponse(HttpStatus.OK.name(), responseDTOS, "Successful"));
     }
 
     @Override
-    public ResponseEntity<CustomResponse> findTestByDate(LocalDate testDate) {
-        List<LabTest> findTest = labTestRepository.findLabTestByTestDate(testDate);
+    public ResponseEntity<CustomResponse> findTestByDate(LocalDate testDate, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("testDate").descending());
+        Page<LabTest> findTest = labTestRepository.findLabTestByTestDate(testDate, pageable);
         if(findTest.isEmpty()){
             return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NO_CONTENT.name(), "No test found"));
         }
 
         List<LabTestResponseDTO> responseDTOS = findTest.stream()
-                .map(labTest -> LabTestResponseDTO.builder()
-                        .testName(labTest.getTestName())
-                        .testDate(labTest.getTestDate())
-                        .testResult(labTest.getTestResult())
-                        .testStatus(String.valueOf(labTest.getTestStatus()))
-                        .carriedOutBy(labTest.getCarriedOutBy().getFirstName() +" "+ labTest.getCarriedOutBy().getLastName())
-                        .patientName(labTest.getPatientBio().getFirstname() +" "+ labTest.getPatientBio().getLastname())
-                        .recommendations(labTest.getRecommendations())
-                        .description(labTest.getDescription())
-                        .build())
+                .map(this::mapToLabTestResponse)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(new CustomResponse(HttpStatus.OK.name(), responseDTOS, "Successful"));
     }
@@ -278,5 +234,18 @@ public class LabTestService implements ILabTestService{
         }
         String[] result = new String[emptyNames.size()];
         return emptyNames.toArray(result);
+    }
+
+    public LabTestResponseDTO mapToLabTestResponse(LabTest labTest){
+        return LabTestResponseDTO.builder()
+                .testName(labTest.getTestName())
+                .testDate(labTest.getTestDate())
+                .testResult(labTest.getTestResult())
+                .testStatus(String.valueOf(labTest.getTestStatus()))
+                .carriedOutBy(labTest.getCarriedOutBy().getFirstName() +" "+ labTest.getCarriedOutBy().getLastName())
+                .patientName(labTest.getPatientBio().getFirstname() +" "+ labTest.getPatientBio().getLastname())
+                .recommendations(labTest.getRecommendations())
+                .description(labTest.getDescription())
+                .build();
     }
 }

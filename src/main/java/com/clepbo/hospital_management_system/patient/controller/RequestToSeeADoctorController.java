@@ -40,8 +40,9 @@ public class RequestToSeeADoctorController {
     @GetMapping
     @Operation(summary = "Get All Request", description = "Fetch all requests made to see a doctor", tags = {"Request To See A Doctor"})
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_DOCTOR', 'ROLE_RECEPTIONIST')")
-    public ResponseEntity<CustomResponse> getAllRequest(){
-        return seeADoctorService.getAllRequest();
+    public ResponseEntity<CustomResponse> getAllRequest(@RequestParam(defaultValue = "0") int page,
+                                                        @RequestParam(defaultValue = "10") int size){
+        return seeADoctorService.getAllRequest(page, size);
     }
 
     @Operation(summary = "Get request by Id", description = "Provide the request unique Id to view the request", tags = {"Request To See A Doctor"})
@@ -54,20 +55,24 @@ public class RequestToSeeADoctorController {
     @GetMapping("/patient/{patientId}")
     @Operation(summary = "View Patient's Requests", description = "Provide the patient's uniques Id or email to patient's requests", tags = {"Request To See A Doctor"})
     @PreAuthorize("hasAnyAuthority('ROLE_PATIENT', 'ROLE_RECEPTIONIST', 'ROLE_ADMIN')")
-    public ResponseEntity<CustomResponse> getRequestByPatientId(@PathVariable("patientId") String patientId) throws UnsupportedEncodingException {
+    public ResponseEntity<CustomResponse> getRequestByPatientId(@PathVariable("patientId") String patientId,
+                                                                @RequestParam(defaultValue = "0") int page,
+                                                                @RequestParam(defaultValue = "10") int size) throws UnsupportedEncodingException {
         if(Pattern.matches(emailRegex, patientId)){
             String encodedEmail = URLEncoder.encode(patientId, "UTF-8");
-            return seeADoctorService.viewRequestByPatientId(encodedEmail);
+            return seeADoctorService.viewRequestByPatientId(encodedEmail, page, size);
         }else{
-            return seeADoctorService.viewRequestByPatientId(patientId);
+            return seeADoctorService.viewRequestByPatientId(patientId, page, size);
         }
     }
 
     @GetMapping("/requestStatus/{status}")
     @Operation(summary = "Get request by status", description = "Provide a request status to view requests with such status", tags = {"Request To See A Doctor"})
     @PreAuthorize("hasAnyAuthority('ROLE_PATIENT', 'ROLE_RECEPTIONIST', 'ROLE_ADMIN', 'ROLE_DOCTOR')")
-    public ResponseEntity<CustomResponse> getRequestByStatus(@PathVariable("status") String status){
-        return seeADoctorService.viewRequestByStatus(status);
+    public ResponseEntity<CustomResponse> getRequestByStatus(@PathVariable("status") String status,
+                                                             @RequestParam(defaultValue = "0") int page,
+                                                             @RequestParam(defaultValue = "10") int size){
+        return seeADoctorService.viewRequestByStatus(status, page, size);
     }
 
     @PutMapping("/request/{requestId}")

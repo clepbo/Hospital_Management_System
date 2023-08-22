@@ -25,8 +25,16 @@ public class WebSecurityConfig {
     private final CustomUserDetailsService customUserDetailsService;
     private final PasswordEncoder passwordEncoder;
     private static final String[] UN_SECURED_URL = {
-            "/api/v1/staff/create",
-            "/swagger-ui.html/"
+            "/api/v1/labTest/**",
+            "/swagger-ui.html/",
+            "/v2/api-docs",
+            "/v3/api-docs/**",
+            "/swagger-resources",
+            "/swagger-resources/**",
+            "/configuration/ui",
+            "/configuration/security",
+            "/swagger-ui/**",
+            "/swagger-ui.html"
     };
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -41,7 +49,7 @@ public class WebSecurityConfig {
                                 .requestMatchers("/api/v1/patient/address/**").hasRole("RECEPTIONIST")
                                 .requestMatchers("/api/v1/patient/deletePatientAddress/**").hasAnyRole("RECEPTIONIST", "ADMIN")
                                 .anyRequest().hasAnyAuthority("ROLE_ADMIN", "ROLE_RECEPTIONIST", "ROLE_PATIENT")
-                        ).formLogin(withDefaults());
+                        ).httpBasic((basic) -> {});
         return http.build();
     }
 

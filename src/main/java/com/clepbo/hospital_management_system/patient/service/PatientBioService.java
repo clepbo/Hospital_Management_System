@@ -9,6 +9,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -17,6 +21,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,21 +30,35 @@ import java.util.stream.Collectors;
 public class PatientBioService implements IPatientBioService{
 
     private final IPatientBioRepository patientBioRepository;
+    private static final String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]+$";
+    private static final Pattern PATTERN = Pattern.compile(emailRegex);
     @Override
     public ResponseEntity<CustomResponse> createPatientBio(PatientBioRequestDTO patientBioRequestDTO) {
-        if(patientBioRequestDTO.firstname()==null){
+        if(patientBioRequestDTO.firstname()==null ||
+                patientBioRequestDTO.firstname().equalsIgnoreCase("string")){
             return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.BAD_REQUEST.name(), "Firstname cannot be empty"));
         }
-        if(patientBioRequestDTO.lastname()==null){
+        if(patientBioRequestDTO.lastname()==null ||
+                patientBioRequestDTO.lastname().equalsIgnoreCase("string")){
             return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.BAD_REQUEST.name(), "Lastname cannot be empty"));
         }
-        if(patientBioRequestDTO.gender()==null){
+        if(patientBioRequestDTO.email()==null ||
+                patientBioRequestDTO.email().equalsIgnoreCase("string")){
+            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.BAD_REQUEST.name(), "email is required"));
+        }
+        if(!isEmailValid(patientBioRequestDTO.email())){
+            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.BAD_REQUEST.name(), "provide correct email format"));
+        }
+        if(patientBioRequestDTO.gender()==null ||
+                patientBioRequestDTO.gender().equalsIgnoreCase("string")){
             return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.BAD_REQUEST.name(), "Gender cannot be empty"));
         }
-        if(patientBioRequestDTO.dateOfBirth()==null){
+        if(patientBioRequestDTO.dateOfBirth()==null ||
+                patientBioRequestDTO.dateOfBirth().equalsIgnoreCase("string")){
             return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.BAD_REQUEST.name(), "Date of Birth cannot be empty"));
         }
-        if(patientBioRequestDTO.phoneNumber()==null){
+        if(patientBioRequestDTO.phoneNumber()==null ||
+                patientBioRequestDTO.phoneNumber().equalsIgnoreCase("string")){
             return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.BAD_REQUEST.name(), "Phone Number cannot be empty"));
         }
         PatientBio patientBio = PatientBio.builder()
@@ -55,18 +75,11 @@ public class PatientBioService implements IPatientBioService{
     }
 
     @Override
-    public ResponseEntity<CustomResponse> getAllPatientRecord() {
-        List<PatientBio> getAllPatient = patientBioRepository.findAll();
+    public ResponseEntity<CustomResponse> getAllPatientRecord(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("firstname").ascending());
+        Page<PatientBio> getAllPatient = patientBioRepository.findAll(pageable);
         List<PatientResponseDTO> responseDTOS = getAllPatient.stream()
-                .map(patientBio -> PatientResponseDTO.builder()
-                        .id(patientBio.getId())
-                        .firstname(patientBio.getFirstname())
-                        .lastname(patientBio.getLastname())
-                        .email(patientBio.getEmail())
-                        .gender(patientBio.getGender())
-                        .phoneNumber(patientBio.getPhoneNumber())
-                        .dateOfBirth(patientBio.getDateOfBirth())
-                        .build())
+                .map(this::mapToPatientResponse)
                 .collect(Collectors.toList());
 
         CustomResponse customResponse = CustomResponse.builder()
@@ -131,5 +144,22 @@ public class PatientBioService implements IPatientBioService{
         }
         String[] result = new String[emptyNames.size()];
         return emptyNames.toArray(result);
+    }
+
+    public static boolean isEmailValid(String email){
+        Matcher matcher = PATTERN.matcher(email);
+        return matcher.matches();
+    }
+
+    public PatientResponseDTO mapToPatientResponse(PatientBio patientBio){
+        return PatientResponseDTO.builder()
+                .id(patientBio.getId())
+                .firstname(patientBio.getFirstname())
+                .lastname(patientBio.getLastname())
+                .email(patientBio.getEmail())
+                .gender(patientBio.getGender())
+                .phoneNumber(patientBio.getPhoneNumber())
+                .dateOfBirth(patientBio.getDateOfBirth())
+                .build();
     }
 }

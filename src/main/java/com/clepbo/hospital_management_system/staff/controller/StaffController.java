@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import static org.springframework.data.domain.Sort.Direction.DESC;
+
 @RestController
 @RequestMapping("api/v1/staff")
 @RequiredArgsConstructor
@@ -29,8 +31,9 @@ public class StaffController {
     @Operation(summary = "Fetch All staffs from the database", description = "Fetch All staffs from the database", tags = { "staff" })
     @GetMapping("/allStaff")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<CustomResponse> getAllStaff(){
-        return staffService.getAllStaff();
+    public ResponseEntity<CustomResponse> getAllStaff(@RequestParam(defaultValue = "0") int page,
+                                                      @RequestParam(defaultValue = "10") int size){
+        return staffService.getAllStaff(page, size);
     }
 
     @Operation(summary = "Get a Staff Record by Id", description = "Provide a unique Id for a staff to fetch their record", tags = { "staff" })

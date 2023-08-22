@@ -4,11 +4,12 @@ import com.clepbo.hospital_management_system.staff.dto.CustomResponse;
 import com.clepbo.hospital_management_system.staff.dto.StaffAddressDTO;
 import com.clepbo.hospital_management_system.staff.dto.StaffBioDataRequestDto;
 import com.clepbo.hospital_management_system.staff.dto.StaffRequestDto;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
 public interface IStaffService {
     ResponseEntity<CustomResponse> createNewStaff(StaffRequestDto request);
-    ResponseEntity<CustomResponse> getAllStaff();
+    ResponseEntity<CustomResponse> getAllStaff(int page, int size);
     ResponseEntity<CustomResponse> findStaffById(Long id);
     ResponseEntity<CustomResponse> updateStaff(StaffBioDataRequestDto requestDto, Long id);
     ResponseEntity<CustomResponse> deleteStaff(Long id);

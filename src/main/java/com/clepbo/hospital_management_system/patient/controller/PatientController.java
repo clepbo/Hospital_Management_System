@@ -37,8 +37,9 @@ public class PatientController {
     @Operation(summary = "Get all Patient Bio", description = "Get all Patient Bios", tags = { "patient" })
     @GetMapping("/")
     @PreAuthorize("hasAnyAuthority('ROLE_RECEPTIONIST', 'ROLE_ADMIN')")
-    public ResponseEntity<CustomResponse> getAllPatient(){
-        return patientBioService.getAllPatientRecord();
+    public ResponseEntity<CustomResponse> getAllPatient(@RequestParam(defaultValue = "0") int page,
+                                                        @RequestParam(defaultValue = "10") int size){
+        return patientBioService.getAllPatientRecord(page, size);
     }
 
     @Operation(summary = "Update Patient Bio", description = "Provide the patient Unique Id to Update Patient Bio", tags = { "patient" })

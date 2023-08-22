@@ -21,6 +21,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -213,8 +217,9 @@ public class AppointmentService implements IAppointmentService{
     }
 
     @Override
-    public ResponseEntity<CustomResponse> getAllAppointment() {
-        List<Appointment> getAllAppointment = appointmentRepository.findAll();
+    public ResponseEntity<CustomResponse> getAllAppointment(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("date").descending());
+        Page<Appointment> getAllAppointment = appointmentRepository.findAll(pageable);
         List<AppointmentResponseDTO> responseDTOS = getAllAppointment.stream()
                 .map(appointment -> AppointmentResponseDTO.builder()
                         .id(appointment.getId())
@@ -254,14 +259,15 @@ public class AppointmentService implements IAppointmentService{
     }
 
     @Override
-    public ResponseEntity<CustomResponse> getAppointmentByStaffId(Long staffId) {
+    public ResponseEntity<CustomResponse> getAppointmentByStaffId(Long staffId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("date").descending());
         Optional<Staff> findStaff = staffRepository.findById(staffId);
         if(!findStaff.isPresent()){
             return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_FOUND.name(), "Staff not found"));
         }
 
         Staff staff = findStaff.get();
-        List<Appointment> findStaffAppointment = appointmentRepository.findAppointmentsByStaff_Id(staff.getId());
+        Page<Appointment> findStaffAppointment = appointmentRepository.findAppointmentsByStaff_Id(staff.getId(), pageable);
         if(findStaffAppointment.isEmpty()){
             return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NO_CONTENT.name(), "List is empty"));
         }
@@ -281,14 +287,15 @@ public class AppointmentService implements IAppointmentService{
     }
 
     @Override
-    public ResponseEntity<CustomResponse> getAppointmentByPatientId(Long patientId) {
+    public ResponseEntity<CustomResponse> getAppointmentByPatientId(Long patientId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("date").descending());
         Optional<PatientBio> findPatient = patientBioRepository.findById(patientId);
         if(!findPatient.isPresent()){
             return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_FOUND.name(), "Patient not found"));
         }
 
         PatientBio patientBio = findPatient.get();
-        List<Appointment> findPatientAppointment = appointmentRepository.findAppointmentsByPatientBios_Id(patientBio.getId());
+        Page<Appointment> findPatientAppointment = appointmentRepository.findAppointmentsByPatientBios_Id(patientBio.getId(), pageable);
         if(findPatientAppointment.isEmpty()){
             return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NO_CONTENT.name(), "List is empty"));
         }
@@ -308,8 +315,9 @@ public class AppointmentService implements IAppointmentService{
     }
 
     @Override
-    public ResponseEntity<CustomResponse> getAppointmentByDate(LocalDate date) {
-        List<Appointment> findAppointmentByDate = appointmentRepository.findAppointmentsByDate(date);
+    public ResponseEntity<CustomResponse> getAppointmentByDate(LocalDate date, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("date").descending());
+        Page<Appointment> findAppointmentByDate = appointmentRepository.findAppointmentsByDate(date, pageable);
         if(findAppointmentByDate.isEmpty()){
             return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NO_CONTENT.name(), "List is empty"));
         }

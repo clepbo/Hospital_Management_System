@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 public interface IPatientBioService {
     //Patient Bio Service
     ResponseEntity<CustomResponse> createPatientBio(PatientBioRequestDTO patientBioRequestDTO);
-    ResponseEntity<CustomResponse> getAllPatientRecord();
+    ResponseEntity<CustomResponse> getAllPatientRecord(int page, int size);
     ResponseEntity<CustomResponse> findPatientBioById(Long id);
     ResponseEntity<CustomResponse> updatePatientBio(PatientBioRequestDTO patientBioRequestDTO, Long id);
     ResponseEntity<CustomResponse> deletePatient(Long id);
