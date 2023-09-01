@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import java.io.UnsupportedEncodingException;
 
 public interface IRequestToSeeADoctorService {
-    ResponseEntity<CustomResponse> createARequest(String patientId, RequestToSeeADoctorRequestDTO requestDTO) throws UnsupportedEncodingException;
+    ResponseEntity<CustomResponse> createARequest(RequestToSeeADoctorRequestDTO requestDTO) throws UnsupportedEncodingException;
     ResponseEntity<CustomResponse> getAllRequest(int page, int size);
     ResponseEntity<CustomResponse> viewRequestById(Long requestId);
     ResponseEntity<CustomResponse> viewRequestByPatientId(String patientId, int page, int size) throws UnsupportedEncodingException;

@@ -1,6 +1,7 @@
 package com.clepbo.hospital_management_system.notificationService.service;
 
 import com.clepbo.hospital_management_system.notificationService.dto.EmailNotificationDto;
+import com.clepbo.hospital_management_system.notificationService.dto.RequestNotification;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +26,6 @@ public class MailService implements IMailService{
     @Override
     public void notifyPatient(EmailNotificationDto notificationDto) {
         try{
-            String subject = "APPOINTMENT CONFIRMATION";
             String senderName = "Hospital Management System";
 
             // Read template content from the file
@@ -46,7 +46,7 @@ public class MailService implements IMailService{
             MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "UTF-8");
             messageHelper.setFrom(senderEmail, senderName);
             messageHelper.setTo(notificationDto.getRecipientEmail());
-            messageHelper.setSubject(subject);
+            messageHelper.setSubject(notificationDto.getSubject());
             messageHelper.setText(mailContent, true);
 
             javaMailSender.send(message);
@@ -61,7 +61,6 @@ public class MailService implements IMailService{
     @Override
     public void notifyDoctor(EmailNotificationDto notificationDto) {
         try{
-            String subject = "APPOINTMENT CONFIRMATION";
             String senderName = "Hospital Management System";
 
             // Read template content from the file
@@ -82,7 +81,7 @@ public class MailService implements IMailService{
             MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "UTF-8");
             messageHelper.setFrom(senderEmail, senderName);
             messageHelper.setTo(notificationDto.getRecipientEmail());
-            messageHelper.setSubject(subject);
+            messageHelper.setSubject(notificationDto.getSubject());
             messageHelper.setText(mailContent, true);
 
             javaMailSender.send(message);
@@ -93,6 +92,35 @@ public class MailService implements IMailService{
             throw new RuntimeException(e);
         }
 
+    }
+
+    @Override
+    public void patientRequest(RequestNotification requestNotification) {
+        try{
+            String senderName = "Hospital Management System";
+
+            // Read template content from the file
+            ClassPathResource templateResource = new ClassPathResource("templates/patient-request-notification-template.html");
+            String templateContent = new String(Files.readAllBytes(templateResource.getFile().toPath()));
+
+            // Replace placeholders in the template content with dynamic values
+            String mailContent = templateContent
+                    .replace("[[patientName]]", requestNotification.getPatientName());
+
+            MimeMessage message = javaMailSender.createMimeMessage();
+            MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "UTF-8");
+            messageHelper.setFrom(senderEmail, senderName);
+            messageHelper.setTo(requestNotification.getRecipientEmail());
+            messageHelper.setSubject(requestNotification.getSubject());
+            messageHelper.setText(mailContent, true);
+
+            javaMailSender.send(message);
+
+            log.info("Mail Sent Successfully");
+
+        }catch(Exception e){
+            throw new RuntimeException(e);
+        }
     }
 
 }

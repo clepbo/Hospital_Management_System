@@ -19,6 +19,7 @@ import com.clepbo.hospital_management_system.staff.entity.Staff;
 import com.clepbo.hospital_management_system.staff.repository.IStaffRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
@@ -40,6 +41,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AppointmentService implements IAppointmentService{
 
     private final IAppointmentRepository appointmentRepository;
@@ -110,9 +112,12 @@ public class AppointmentService implements IAppointmentService{
                 .build();
         appointmentRepository.save(createAppointment);
         String header = "Your reservation has been confirmed!";
+        String subject = "APPOINTMENT CONFIRMATION";
 
         //send mail to patient
-        mailService.notifyPatient(new EmailNotificationDto(patientBio.getEmail(),
+        mailService.notifyPatient(new EmailNotificationDto(
+                subject,
+                patientBio.getEmail(),
                 header,
                 createAppointment.getReservationCode(),
                 createAppointment.getDate().toString(),
@@ -122,7 +127,9 @@ public class AppointmentService implements IAppointmentService{
         ));
 
         //send mail to doctor
-        mailService.notifyDoctor(new EmailNotificationDto(staff.getEmail(),
+        mailService.notifyDoctor(new EmailNotificationDto(
+                subject,
+                staff.getEmail(),
                 header,
                 createAppointment.getReservationCode(),
                 createAppointment.getDate().toString(),
@@ -169,7 +176,7 @@ public class AppointmentService implements IAppointmentService{
         }
 
         RequestToSeeADoctor request = findRequest.get();
-        if(!request.getPatientBio().getId().equals(requestDTO.patientId())){
+        if(requestDTO.patientId().toString().equals(request.getPatientBio().getId())){
             return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_ACCEPTABLE.name(), "Invalid Patient Id"));
         }
 
@@ -191,9 +198,12 @@ public class AppointmentService implements IAppointmentService{
                 .build();
 
         String header = "Your reservation has been confirmed!";
+        String subject = "APPOINTMENT CONFIRMATION";
 
         //send main to patient
-        mailService.notifyPatient(new EmailNotificationDto(request.getPatientBio().getEmail(),
+        mailService.notifyPatient(new EmailNotificationDto(
+                subject,
+                request.getPatientBio().getEmail(),
                 header,
                 createAppointment.getReservationCode(),
                 createAppointment.getDate().toString(),
@@ -202,7 +212,9 @@ public class AppointmentService implements IAppointmentService{
                 request.getPatientBio().getFirstname() + " " + request.getPatientBio().getLastname()));
 
         //send mail to doctor
-        mailService.notifyDoctor(new EmailNotificationDto(staff.getEmail(),
+        mailService.notifyDoctor(new EmailNotificationDto(
+                subject,
+                staff.getEmail(),
                 header,
                 createAppointment.getReservationCode(),
                 createAppointment.getDate().toString(),
@@ -386,9 +398,12 @@ public class AppointmentService implements IAppointmentService{
         rescheduledAppointment.setTime(LocalTime.parse(time));
         rescheduledAppointment.setStatus(Status.RESCHEDULED);
         String header = "Your appointment has been rescheduled!";
+        String subject = "APPOINTMENT RESCHEDULED";
 
         //send mail to patient
-        mailService.notifyPatient(new EmailNotificationDto(rescheduledAppointment.getPatientBios().getEmail(),
+        mailService.notifyPatient(new EmailNotificationDto(
+                subject,
+                rescheduledAppointment.getPatientBios().getEmail(),
                 header,
                 rescheduledAppointment.getReservationCode(),
                 rescheduledAppointment.getDate().toString(),
@@ -398,7 +413,9 @@ public class AppointmentService implements IAppointmentService{
         ));
 
         //send mail to doctor
-        mailService.notifyDoctor(new EmailNotificationDto(rescheduledAppointment.getStaff().getEmail(),
+        mailService.notifyDoctor(new EmailNotificationDto(
+                subject,
+                rescheduledAppointment.getStaff().getEmail(),
                 header,
                 rescheduledAppointment.getReservationCode(),
                 rescheduledAppointment.getDate().toString(),
@@ -519,9 +536,12 @@ public class AppointmentService implements IAppointmentService{
                 long hoursDifference = ChronoUnit.HOURS.between(currentDate, appointmentDateTime);
                 if(hoursDifference == 24){
                     String header = "A friendly reminder!";
+                    String subject = "Don't Forget: Your Medical Appointment Tomorrow";
 
                     //send mail to patient
-                    mailService.notifyPatient(new EmailNotificationDto(checkAppointment.getPatientBios().getEmail(),
+                    mailService.notifyPatient(new EmailNotificationDto(
+                            subject,
+                            checkAppointment.getPatientBios().getEmail(),
                             header,
                             checkAppointment.getReservationCode(),
                             checkAppointment.getDate().toString(),
@@ -531,7 +551,9 @@ public class AppointmentService implements IAppointmentService{
                     ));
 
                     //send mail to doctor
-                    mailService.notifyDoctor(new EmailNotificationDto(checkAppointment.getStaff().getEmail(),
+                    mailService.notifyDoctor(new EmailNotificationDto(
+                            subject,
+                            checkAppointment.getStaff().getEmail(),
                             header,
                             checkAppointment.getReservationCode(),
                             checkAppointment.getDate().toString(),

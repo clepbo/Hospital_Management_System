@@ -1,6 +1,10 @@
 package com.clepbo.hospital_management_system.patient.service;
 
 import com.clepbo.hospital_management_system.appointment.entity.Status;
+import com.clepbo.hospital_management_system.notificationService.dto.EmailNotificationDto;
+import com.clepbo.hospital_management_system.notificationService.dto.RequestNotification;
+import com.clepbo.hospital_management_system.notificationService.service.IMailService;
+import com.clepbo.hospital_management_system.notificationService.service.MailService;
 import com.clepbo.hospital_management_system.patient.dto.RequestToSeeADoctorRequestDTO;
 import com.clepbo.hospital_management_system.patient.dto.RequestToSeeADoctorResponseDTO;
 import com.clepbo.hospital_management_system.patient.entity.PatientBio;
@@ -34,26 +38,11 @@ public class RequestToSeeADoctorService implements IRequestToSeeADoctorService{
 
     private final IPatientBioRepository patientBioRepository;
     private final IRequestToSeeADoctorRepository requestToSeeADoctorRepository;
+    private final IMailService mailService;
     private static final String emailRegex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
 
     @Override
-    public ResponseEntity<CustomResponse> createARequest(String patientId, RequestToSeeADoctorRequestDTO requestDTO) throws UnsupportedEncodingException {
-        Optional<PatientBio> findPatientById = null;
-
-        if(Pattern.matches(emailRegex, patientId) || StringUtils.isNotBlank(patientId)){
-            String decodedEmail = URLDecoder.decode(patientId, "UTF-8");
-            findPatientById = patientBioRepository.findPatientBioByEmail(decodedEmail);
-        }
-        if(StringUtils.isNumeric(patientId)){
-            Long longValue = Long.parseLong(patientId);
-            findPatientById = patientBioRepository.findById(longValue);
-        }
-
-        if(!findPatientById.isPresent()){
-            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_FOUND.name(), "Patient doesn't exist " + patientId));
-        }
-
-        PatientBio getPatient = findPatientById.get();
+    public ResponseEntity<CustomResponse> createARequest(RequestToSeeADoctorRequestDTO requestDTO) throws UnsupportedEncodingException {
         if(requestDTO.patientEmail() == null){
             return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NO_CONTENT.name(), "Email cannot be empty"));
         }
@@ -61,9 +50,20 @@ public class RequestToSeeADoctorService implements IRequestToSeeADoctorService{
             return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NO_CONTENT.name(), "Reason cannot be empty"));
         }
 
-        if(!findPatientById.get().getEmail().equals(requestDTO.patientEmail())){
-            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NO_CONTENT.name(), "Email is invalid"));
+        Optional<PatientBio> findPatientBioByEmail = findPatientBioByEmail = patientBioRepository.findPatientBioByEmail(requestDTO.patientEmail());
+
+        if(!findPatientBioByEmail.isPresent()){
+            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_FOUND.name(), "Patient doesn't exist " + requestDTO.patientEmail()));
         }
+
+        PatientBio getPatient = findPatientBioByEmail.get();
+
+
+        if(!findPatientBioByEmail.get().getEmail().equals(requestDTO.patientEmail())){
+            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.BAD_REQUEST.name(), "Email is invalid"));
+        }
+
+        PatientBio patientBio = findPatientBioByEmail.get();
 
         RequestToSeeADoctor requestToSeeADoctor = RequestToSeeADoctor.builder()
                 .patientBio(getPatient)
@@ -71,6 +71,16 @@ public class RequestToSeeADoctorService implements IRequestToSeeADoctorService{
                 .status(Status.PENDING)
                 .build();
         requestToSeeADoctorRepository.save(requestToSeeADoctor);
+
+        String subject = "RE: APPOINTMENT REQUEST";
+
+        //send mail to patient
+        mailService.patientRequest(new RequestNotification(
+                subject,
+                requestDTO.patientEmail(),
+                patientBio.getFirstname() + " " + patientBio.getLastname()
+        ));
+
         return ResponseEntity.ok(new CustomResponse(HttpStatus.CREATED.name(), requestToSeeADoctor, "Request Created Successfully"));
     }
 

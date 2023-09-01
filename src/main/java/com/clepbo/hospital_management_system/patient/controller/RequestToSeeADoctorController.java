@@ -25,16 +25,11 @@ public class RequestToSeeADoctorController {
     private final IRequestToSeeADoctorService seeADoctorService;
     private static final String emailRegex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
 
-    @PostMapping("/createRequest/{patientId}")
+    @PostMapping("/createRequest")
     @Operation(summary = "Create a Request to See a Doctor", description = "Provide the patient's uniques Id or email to allow the patient create a request to see a doctor", tags = {"Request To See A Doctor"})
-    @PreAuthorize("hasAnyAuthority('admin:create', 'doctor:create', 'receptionist:create')")
-    public ResponseEntity<CustomResponse> createARequest(@PathVariable("patientId") String patientId, @RequestBody RequestToSeeADoctorRequestDTO requestDTO) throws UnsupportedEncodingException {
-        if(Pattern.matches(emailRegex, patientId)){
-            String encodedEmail = URLEncoder.encode(patientId, "UTF-8");
-            return seeADoctorService.createARequest(encodedEmail, requestDTO);
-        }else{
-            return seeADoctorService.createARequest(patientId, requestDTO);
-        }
+    public ResponseEntity<CustomResponse> createARequest(@RequestBody RequestToSeeADoctorRequestDTO requestDTO) throws UnsupportedEncodingException {
+        return seeADoctorService.createARequest(requestDTO);
+
     }
 
     @GetMapping
