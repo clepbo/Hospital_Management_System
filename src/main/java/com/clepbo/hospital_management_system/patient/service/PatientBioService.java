@@ -5,6 +5,7 @@ import com.clepbo.hospital_management_system.patient.dto.PatientResponseDTO;
 import com.clepbo.hospital_management_system.patient.entity.PatientBio;
 import com.clepbo.hospital_management_system.patient.repository.IPatientBioRepository;
 import com.clepbo.hospital_management_system.staff.dto.CustomResponse;
+import com.clepbo.hospital_management_system.staff.entity.Roles;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
@@ -68,7 +69,7 @@ public class PatientBioService implements IPatientBioService{
                 .gender(patientBioRequestDTO.gender())
                 .dateOfBirth(patientBioRequestDTO.dateOfBirth())
                 .phoneNumber(patientBioRequestDTO.phoneNumber())
-                .role("ROLE_PATIENT")
+                .role(Roles.PATIENT)
                 .build();
         patientBioRepository.save(patientBio);
         return ResponseEntity.ok(new CustomResponse(HttpStatus.CREATED.name(), "Patient Bio Created Successfully"));

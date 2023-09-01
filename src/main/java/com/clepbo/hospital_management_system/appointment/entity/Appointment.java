@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.NaturalId;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
@@ -45,6 +46,9 @@ public class Appointment {
 
     @Enumerated(EnumType.STRING)
     private Status status;
+
+    @NaturalId
+    private String reservationCode;
 
     private String description;
     private Timestamp createdAt;

@@ -13,15 +13,14 @@ public class CustomUserDetails implements UserDetails {
 
     private final String username;
     private final String password;
-    private final Collection<GrantedAuthority> authorities;
+    private final Collection<SimpleGrantedAuthority> authorities;
 
     public CustomUserDetails (Staff staff){
         username = staff.getEmail();
         password = staff.getPassword();
-        authorities = Arrays.stream(staff.getRoles().split(","))
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
+        authorities = staff.getRoles().grantedAuthorities();
     }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;

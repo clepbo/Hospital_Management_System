@@ -18,15 +18,17 @@ import io.swagger.v3.oas.annotations.security.SecurityScheme;
                 description = "API for Hospital Management System",
                 title = "Hospital Management System",
                 version = "1.0"),
-        security = {@SecurityRequirement(name = "basicAuth")}
+        security = {
+                @SecurityRequirement(name = "JWTAuth")
+        }
 )
 @SecurityScheme(
-        name = "basicAuth",
-        description = "Basic Authentication",
+        name = "JWTAuth",
+        description = "JWT authentication",
         type = SecuritySchemeType.HTTP,
-        scheme = "Basic",
+        scheme = "bearer",
         in = SecuritySchemeIn.HEADER,
-        bearerFormat = "basic"
+        bearerFormat = "JWT"
 )
 public class OpenAPIConfig {
 }

@@ -9,7 +9,6 @@ import org.hibernate.annotations.NaturalId;
 
 import java.sql.Timestamp;
 import java.util.Calendar;
-import java.util.Collection;
 
 @Entity
 @Data
@@ -35,7 +34,8 @@ public class Staff {
     @Column(nullable = true)
     private String status;
     @Column(nullable = true)
-    private String roles;
+    @Enumerated(EnumType.STRING)
+    private Roles roles;
     @Column(nullable = true)
     private Double salary;
     private Timestamp createdAt;

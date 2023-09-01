@@ -19,6 +19,7 @@ import java.time.LocalTime;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AppointmentResponseDTO {
     private Long id;
+    private String reservationCode;
     private LocalDate date;
     private LocalTime time;
     private String patientName;

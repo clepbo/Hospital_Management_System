@@ -9,11 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class StaffResponseDto {
-    private Long id;
-    private String firstName;
-    private String lastName;
+public class StaffLoginRequestDTO {
     private String email;
-    private String roles;
-    private boolean isEnabled;
+    private String password;
 }

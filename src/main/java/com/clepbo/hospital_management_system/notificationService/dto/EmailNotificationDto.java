@@ -7,8 +7,13 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class MailSender {
+public class EmailNotificationDto {
     private String recipientEmail;
-    private String subject;
-    private String body;
+    private String header;
+    private String reservationCode;
+    private String appointmentDate;
+    private String appointmentTime;
+    private String doctor;
+    private String patient;
+
 }

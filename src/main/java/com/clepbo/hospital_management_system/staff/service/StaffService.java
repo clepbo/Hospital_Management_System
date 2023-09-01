@@ -1,11 +1,15 @@
 package com.clepbo.hospital_management_system.staff.service;
 
+import com.clepbo.hospital_management_system.security.CustomUserDetails;
+import com.clepbo.hospital_management_system.security.JwtService;
 import com.clepbo.hospital_management_system.staff.dto.*;
 import com.clepbo.hospital_management_system.staff.entity.Staff;
 import com.clepbo.hospital_management_system.staff.entity.StaffAddress;
 import com.clepbo.hospital_management_system.staff.repository.IStaffAddressRepository;
 import com.clepbo.hospital_management_system.staff.repository.IStaffRepository;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
@@ -15,6 +19,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -29,10 +35,13 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class StaffService implements IStaffService{
     private final IStaffRepository staffRepository;
     private final IStaffAddressRepository staffAddressRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
+    private final AuthenticationManager authenticationManager;
     private static final String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]+$";
     private static final Pattern PATTERN = Pattern.compile(emailRegex);
     @Override
@@ -67,7 +76,31 @@ public class StaffService implements IStaffService{
                 .isEnabled(false)
                 .build();
         staffRepository.save(staff);
-        return ResponseEntity.ok(new CustomResponse(HttpStatus.CREATED.name(), "Successfully created new staff"));
+
+        var accessToken = jwtService.generateToken(new CustomUserDetails(staff));
+
+        return ResponseEntity.ok(new CustomResponse(HttpStatus.CREATED.name(), accessToken, "Successfully created new staff"));
+    }
+
+    @Override
+    public ResponseEntity<CustomResponse> authenticateStaff(StaffLoginRequestDTO loginRequestDTO) {
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                loginRequestDTO.getEmail(),
+                loginRequestDTO.getPassword()
+        ));
+        Staff staff = staffRepository.findByEmail(loginRequestDTO.getEmail()).get();
+        var accessToken = jwtService.generateToken(new CustomUserDetails(staff));
+
+        StaffLoginResponseDTO responseDto = StaffLoginResponseDTO.builder()
+                .accessToken(accessToken)
+                .id(staff.getId())
+                .firstName(staff.getFirstName())
+                .lastName(staff.getLastName())
+                .email(staff.getEmail())
+                .roles(staff.getRoles().name())
+                .build();
+
+        return ResponseEntity.ok(new CustomResponse(HttpStatus.OK.name(), responseDto, "Login Successful"));
     }
 
     @Override
@@ -94,7 +127,7 @@ public class StaffService implements IStaffService{
                 .email(staff.getEmail())
                 .firstName(staff.getFirstName())
                 .lastName(staff.getLastName())
-                .roles(staff.getRoles())
+                .roles(staff.getRoles().name())
                 .build();
     }
 
@@ -247,6 +280,23 @@ public class StaffService implements IStaffService{
     public static boolean isEmailValid(String email){
        Matcher matcher = PATTERN.matcher(email);
         return matcher.matches();
+    }
+
+    @PostConstruct
+    public void init() {
+        StaffLoginRequestDTO loginRequestDTO = StaffLoginRequestDTO.builder()
+                .email("admin@login.com")
+                .password("admin")
+                .build();
+
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                loginRequestDTO.getEmail(),
+                loginRequestDTO.getPassword()
+        ));
+        Staff staff = staffRepository.findByEmail(loginRequestDTO.getEmail()).get();
+        var accessToken = jwtService.generateToken(new CustomUserDetails(staff));
+
+        log.info("\n\nADMIN_TOKEN: " + accessToken + "\n\n");
     }
 
 }

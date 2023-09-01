@@ -1,5 +1,6 @@
 package com.clepbo.hospital_management_system.patient.entity;
 
+import com.clepbo.hospital_management_system.staff.entity.Roles;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -38,7 +39,7 @@ public class PatientBio {
     private String dateOfBirth;
     private String phoneNumber;
     private String gender;
-    private String role;
+    private Roles role;
 
     @OneToMany(mappedBy = "patientBio", orphanRemoval = true)
     private List<PatientContactAddress> contactAddress;

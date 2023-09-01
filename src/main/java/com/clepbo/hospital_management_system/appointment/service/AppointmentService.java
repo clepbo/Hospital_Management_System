@@ -5,7 +5,7 @@ import com.clepbo.hospital_management_system.appointment.dto.AppointmentResponse
 import com.clepbo.hospital_management_system.appointment.entity.Appointment;
 import com.clepbo.hospital_management_system.appointment.entity.Status;
 import com.clepbo.hospital_management_system.appointment.repository.IAppointmentRepository;
-import com.clepbo.hospital_management_system.notificationService.dto.MailSender;
+import com.clepbo.hospital_management_system.notificationService.dto.EmailNotificationDto;
 import com.clepbo.hospital_management_system.notificationService.service.IMailService;
 import com.clepbo.hospital_management_system.patient.dto.RequestToSeeADoctorRequestDTO;
 import com.clepbo.hospital_management_system.patient.entity.PatientBio;
@@ -14,6 +14,7 @@ import com.clepbo.hospital_management_system.patient.repository.IPatientBioRepos
 import com.clepbo.hospital_management_system.patient.repository.IRequestToSeeADoctorRepository;
 import com.clepbo.hospital_management_system.patient.service.IRequestToSeeADoctorService;
 import com.clepbo.hospital_management_system.staff.dto.CustomResponse;
+import com.clepbo.hospital_management_system.staff.entity.Roles;
 import com.clepbo.hospital_management_system.staff.entity.Staff;
 import com.clepbo.hospital_management_system.staff.repository.IStaffRepository;
 import jakarta.annotation.PostConstruct;
@@ -34,10 +35,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -97,7 +95,7 @@ public class AppointmentService implements IAppointmentService{
 
         Staff staff = findStaff.get();
 
-        if(!staff.getRoles().equals("ROLE_DOCTOR")){
+        if(!staff.getRoles().equals(Roles.DOCTOR)){
             return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_ACCEPTABLE.name(), "Cannot book appointment with Staff " + staff.getId()));
         }
         PatientBio patientBio = findPatient.get();
@@ -108,30 +106,29 @@ public class AppointmentService implements IAppointmentService{
                 .status(Status.PENDING)
                 .staff(staff)
                 .patientBios(patientBio)
+                .reservationCode("#" + generateUniqueRandom())
                 .build();
         appointmentRepository.save(createAppointment);
-        mailService.sendMail(new MailSender(patientBio.getEmail(), "Appointment Notification",
-                "<p>Dear "+patientBio.getFirstname()+",</p>\n" +
-                        "    <p>We are pleased to confirm your upcoming appointment at Hospital Management System API. Our team is looking forward to providing you with excellent care and service.</p>\n" +
-                        "\n" +
-                        "    <h3>Appointment Details:</h3>\n" +
-                        "    <ul>\n" +
-                        "        <li><strong>Date:</strong> "+requestDTO.date()+"</li>\n" +
-                        "        <li><strong>Time:</strong> "+requestDTO.time()+"</li>\n" +
-                        "        <li><strong>Doctor:</strong> "+staff.getFirstName() + " "+ staff.getLastName()+"</li>\n" +
-                        "    </ul>\n" +
-                        "    <p>Please arrive at least 15 minutes before your scheduled appointment time to complete any necessary paperwork and check-in.</p>\n" +
-                        "    <p>If you need to reschedule or cancel your appointment, please let us know at least 24 hours in advance so that we can accommodate other patients.</p>\n" +
-                        "    <p>If you have any specific medical records or documents that you would like the doctor to review, please bring them along with you to the appointment.</p>\n" +
-                        "    <p>Should you have any questions or require further assistance, feel free to contact our patient support team at hms@service.support.</p>\n" +
-                        "    <p>We are committed to providing you with the best possible care and ensuring a smooth and comfortable experience during your visit.</p>\n" +
-                        "    <p>Thank you for choosing Hospital Management System API. We look forward to seeing you soon.</p>\n" +
-                        "\n" +
-                        "    <p>Best regards,</p>\n" +
-                        "    <p>Oni Israel Okikijesu<br>\n" +
-                        "    Software Developer<br>\n" +
-                        "    Hospital Management System API<br>\n" +
-                        "    hms@service.support</p>"));
+        String header = "Your reservation has been confirmed!";
+
+        //send mail to patient
+        mailService.notifyPatient(new EmailNotificationDto(patientBio.getEmail(),
+                header,
+                createAppointment.getReservationCode(),
+                createAppointment.getDate().toString(),
+                createAppointment.getTime().toString(),
+                "Dr. " + staff.getFirstName() + " " + staff.getLastName(),
+                patientBio.getFirstname()  + " " + patientBio.getLastname()
+        ));
+
+        //send mail to doctor
+        mailService.notifyDoctor(new EmailNotificationDto(staff.getEmail(),
+                header,
+                createAppointment.getReservationCode(),
+                createAppointment.getDate().toString(),
+                createAppointment.getTime().toString(),
+                "Dr. " + staff.getFirstName() + " " + staff.getLastName(),
+                patientBio.getFirstname() + " " + patientBio.getLastname()));
         return ResponseEntity.ok(new CustomResponse(HttpStatus.CREATED.name(), "Appointment Created Successfully"));
     }
 
@@ -178,6 +175,11 @@ public class AppointmentService implements IAppointmentService{
 
         RequestToSeeADoctorRequestDTO requestToSeeADoctorRequestDTO = new RequestToSeeADoctorRequestDTO(request.getReason(), request.getPatientBio().getEmail());
         Staff staff = findStaff.get();
+
+        if(!staff.getRoles().equals(Roles.DOCTOR)){
+            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_ACCEPTABLE.name(), "Cannot book appointment with Staff " + staff.getId()));
+        }
+
         Appointment createAppointment = Appointment.builder()
                 .date(requestDTO.date())
                 .time(LocalTime.parse(requestDTO.time()))
@@ -185,30 +187,28 @@ public class AppointmentService implements IAppointmentService{
                 .status(Status.PENDING)
                 .staff(staff)
                 .patientBios(request.getPatientBio())
+                .reservationCode("#" + generateUniqueRandom())
                 .build();
 
-        mailService.sendMail(new MailSender(request.getPatientBio().getEmail(), "Appointment Notification",
-                "<p>Dear "+request.getPatientBio().getFirstname()+",</p>\n" +
-                        "    <p>We are pleased to confirm your upcoming appointment at Hospital Management System API based on your request to see a doctor. Our team is looking forward to providing you with excellent care and service.</p>\n" +
-                        "\n" +
-                        "    <h3>Appointment Details:</h3>\n" +
-                        "    <ul>\n" +
-                        "        <li><strong>Date:</strong> "+requestDTO.date()+"</li>\n" +
-                        "        <li><strong>Time:</strong> "+requestDTO.time()+"</li>\n" +
-                        "        <li><strong>Doctor:</strong> "+staff.getFirstName() + " "+ staff.getLastName()+"</li>\n" +
-                        "    </ul>\n" +
-                        "    <p>Please arrive at least 15 minutes before your scheduled appointment time to complete any necessary paperwork and check-in.</p>\n" +
-                        "    <p>If you need to further reschedule or cancel your appointment, please let us know at least 24 hours in advance so that we can accommodate other patients.</p>\n" +
-                        "    <p>If you have any specific medical records or documents that you would like the doctor to review, please bring them along with you to the appointment.</p>\n" +
-                        "    <p>Should you have any questions or require further assistance, feel free to contact our patient support team at hms@service.support.</p>\n" +
-                        "    <p>We apologize for any inconvenience caused by the rescheduling and appreciate your understanding.</p>\n" +
-                        "    <p>Thank you for choosing Hospital Management System API. We look forward to seeing you soon.</p>\n" +
-                        "\n" +
-                        "    <p>Best regards,</p>\n" +
-                        "    <p>Oni Israel Okikijesu<br>\n" +
-                        "    Software Developer<br>\n" +
-                        "    Hospital Management System API<br>\n" +
-                        "    hms@service.support</p>"));
+        String header = "Your reservation has been confirmed!";
+
+        //send main to patient
+        mailService.notifyPatient(new EmailNotificationDto(request.getPatientBio().getEmail(),
+                header,
+                createAppointment.getReservationCode(),
+                createAppointment.getDate().toString(),
+                createAppointment.getTime().toString(),
+                "Dr. " + staff.getFirstName() + " " + staff.getLastName(),
+                request.getPatientBio().getFirstname() + " " + request.getPatientBio().getLastname()));
+
+        //send mail to doctor
+        mailService.notifyDoctor(new EmailNotificationDto(staff.getEmail(),
+                header,
+                createAppointment.getReservationCode(),
+                createAppointment.getDate().toString(),
+                createAppointment.getTime().toString(),
+                "Dr. " + staff.getFirstName() + " " + staff.getLastName(),
+                request.getPatientBio().getFirstname() + " " + request.getPatientBio().getLastname()));
 
         appointmentRepository.save(createAppointment);
 
@@ -385,29 +385,27 @@ public class AppointmentService implements IAppointmentService{
         rescheduledAppointment.setDate(date);
         rescheduledAppointment.setTime(LocalTime.parse(time));
         rescheduledAppointment.setStatus(Status.RESCHEDULED);
-        // Assuming you have a PatientBio object named 'patientBio', a Staff object named 'staff', and an AppointmentRequestDTO named 'requestDTO'
-        mailService.sendMail(new MailSender(rescheduledAppointment.getPatientBios().getEmail(), "Rescheduled Appointment Notification",
-                "<p>Dear "+rescheduledAppointment.getPatientBios().getFirstname()+",</p>\n" +
-                        "    <p>We would like to inform you that your appointment has been rescheduled at Hospital Management System API. Our team is looking forward to providing you with excellent care and service on the new date and time.</p>\n" +
-                        "\n" +
-                        "    <h3>Updated Appointment Details:</h3>\n" +
-                        "    <ul>\n" +
-                        "        <li><strong>Date:</strong> "+date+"</li>\n" +
-                        "        <li><strong>Time:</strong> "+LocalTime.parse(time)+"</li>\n" +
-                        "        <li><strong>Doctor:</strong> "+rescheduledAppointment.getStaff().getFirstName() + " "+ rescheduledAppointment.getStaff().getLastName()+"</li>\n" +
-                        "    </ul>\n" +
-                        "    <p>Please arrive at least 15 minutes before your scheduled appointment time to complete any necessary paperwork and check-in.</p>\n" +
-                        "    <p>If you need to further reschedule or cancel your appointment, please let us know at least 24 hours in advance so that we can accommodate other patients.</p>\n" +
-                        "    <p>If you have any specific medical records or documents that you would like the doctor to review, please bring them along with you to the appointment.</p>\n" +
-                        "    <p>Should you have any questions or require further assistance, feel free to contact our patient support team at hms@service.support.</p>\n" +
-                        "    <p>We apologize for any inconvenience caused by the rescheduling and appreciate your understanding.</p>\n" +
-                        "    <p>Thank you for choosing Hospital Management System API. We look forward to seeing you soon.</p>\n" +
-                        "\n" +
-                        "    <p>Best regards,</p>\n" +
-                        "    <p>Oni Israel Okikijesu<br>\n" +
-                        "    Software Developer<br>\n" +
-                        "    Hospital Management System API<br>\n" +
-                        "    hms@service.support</p>"));
+        String header = "Your appointment has been rescheduled!";
+
+        //send mail to patient
+        mailService.notifyPatient(new EmailNotificationDto(rescheduledAppointment.getPatientBios().getEmail(),
+                header,
+                rescheduledAppointment.getReservationCode(),
+                rescheduledAppointment.getDate().toString(),
+                rescheduledAppointment.getTime().toString(),
+                "Dr. " + rescheduledAppointment.getStaff().getFirstName() + " " + rescheduledAppointment.getStaff().getLastName(),
+                rescheduledAppointment.getPatientBios().getFirstname() + " " + rescheduledAppointment.getPatientBios().getLastname()
+        ));
+
+        //send mail to doctor
+        mailService.notifyDoctor(new EmailNotificationDto(rescheduledAppointment.getStaff().getEmail(),
+                header,
+                rescheduledAppointment.getReservationCode(),
+                rescheduledAppointment.getDate().toString(),
+                rescheduledAppointment.getTime().toString(),
+                "Dr. " + rescheduledAppointment.getStaff().getFirstName() + " " + rescheduledAppointment.getStaff().getLastName(),
+                rescheduledAppointment.getPatientBios().getFirstname() + " " + rescheduledAppointment.getPatientBios().getLastname()
+        ));
 
         appointmentRepository.save(rescheduledAppointment);
         return ResponseEntity.ok(new CustomResponse(HttpStatus.OK.name(), "Appointment Rescheduled Successfully"));
@@ -520,28 +518,27 @@ public class AppointmentService implements IAppointmentService{
                 LocalDateTime appointmentDateTime = combineDateAndTime(checkAppointment.getDate(), checkAppointment.getTime());
                 long hoursDifference = ChronoUnit.HOURS.between(currentDate, appointmentDateTime);
                 if(hoursDifference == 24){
-                    mailService.sendMail(new MailSender(checkAppointment.getPatientBios().getEmail(), "Appointment Reminder",
-                            "<p>Dear "+checkAppointment.getPatientBios().getFirstname()+",</p>\n" +
-                                    "    <p>This is a friendly reminder about your upcoming appointment at Hospital Management System API. Our team is looking forward to providing you with excellent care and service.</p>\n" +
-                                    "\n" +
-                                    "    <h3>Appointment Details:</h3>\n" +
-                                    "    <ul>\n" +
-                                    "        <li><strong>Date:</strong> "+checkAppointment.getDate()+"</li>\n" +
-                                    "        <li><strong>Time:</strong> "+checkAppointment.getTime()+"</li>\n" +
-                                    "        <li><strong>Doctor:</strong> "+checkAppointment.getStaff().getFirstName() + " "+ checkAppointment.getStaff().getLastName()+"</li>\n" +
-                                    "    </ul>\n" +
-                                    "    <p>Please arrive at least 15 minutes before your scheduled appointment time to complete any necessary paperwork and check-in.</p>\n" +
-                                    "    <p>If you need to reschedule or cancel your appointment, please let us know at least 24 hours in advance so that we can accommodate other patients.</p>\n" +
-                                    "    <p>If you have any specific medical records or documents that you would like the doctor to review, please bring them along with you to the appointment.</p>\n" +
-                                    "    <p>Should you have any questions or require further assistance, feel free to contact our patient support team at hms@service.support.</p>\n" +
-                                    "    <p>We are committed to providing you with the best possible care and ensuring a smooth and comfortable experience during your visit.</p>\n" +
-                                    "    <p>Thank you for choosing Hospital Management System API. We look forward to seeing you soon.</p>\n" +
-                                    "\n" +
-                                    "    <p>Best regards,</p>\n" +
-                                    "    <p>Oni Israel Okikijesu<br>\n" +
-                                    "    Software Developer<br>\n" +
-                                    "    Hospital Management System API<br>\n" +
-                                    "    hms@service.support</p>"));
+                    String header = "A friendly reminder!";
+
+                    //send mail to patient
+                    mailService.notifyPatient(new EmailNotificationDto(checkAppointment.getPatientBios().getEmail(),
+                            header,
+                            checkAppointment.getReservationCode(),
+                            checkAppointment.getDate().toString(),
+                            checkAppointment.getTime().toString(),
+                            "Dr. " + checkAppointment.getStaff().getFirstName() + " " + checkAppointment.getStaff().getLastName(),
+                            checkAppointment.getPatientBios().getFirstname() + " " + checkAppointment.getPatientBios().getLastname()
+                    ));
+
+                    //send mail to doctor
+                    mailService.notifyDoctor(new EmailNotificationDto(checkAppointment.getStaff().getEmail(),
+                            header,
+                            checkAppointment.getReservationCode(),
+                            checkAppointment.getDate().toString(),
+                            checkAppointment.getTime().toString(),
+                            "Dr. " + checkAppointment.getStaff().getFirstName() + " " + checkAppointment.getStaff().getLastName(),
+                            checkAppointment.getPatientBios().getFirstname() + " " + checkAppointment.getPatientBios().getLastname()
+                    ));
                 }
             }
         }
@@ -564,5 +561,18 @@ public class AppointmentService implements IAppointmentService{
         }
         String[] result = new String[emptyNames.size()];
         return emptyNames.toArray(result);
+    }
+
+    public static int generateUniqueRandom() {
+        Set<Integer> generatedNumbers = new HashSet<>();
+        Random random = new Random();
+
+        while (generatedNumbers.size() < 4) {
+            int randomNumber = random.nextInt(9000) + 1000; // Generate a number between 1000 and 9999
+            generatedNumbers.add(randomNumber);
+        }
+
+        int uniqueNumber = generatedNumbers.iterator().next();
+        return uniqueNumber;
     }
 }
