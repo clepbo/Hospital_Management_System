@@ -1,4 +1,6 @@
 # Hospital Management System
+![Hospital Management System](https://github.com/clepbo/Hospital_Management_System/assets/53521843/e4f3cc29-eee0-484a-afef-87c0264c4e9e)
+
 
 ## Project Overview
 
