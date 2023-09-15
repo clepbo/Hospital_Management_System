@@ -35,7 +35,7 @@ public class AppointmentController {
         return appointmentService.createAppointmentByRequest(requestId, requestDTO);
     }
 
-    @GetMapping("/")
+    @GetMapping("")
     @Operation(summary = "View all Appointment", description = "View all Appointment", tags = { "Appointment" })
     @PreAuthorize("hasAnyAuthority('admin:create', 'receptionist:create')")
     public ResponseEntity<CustomResponse> getAllAppointment(@RequestParam(defaultValue = "0") int page,

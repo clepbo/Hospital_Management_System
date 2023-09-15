@@ -32,6 +32,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -48,51 +49,28 @@ public class AppointmentService implements IAppointmentService{
     private final IPatientBioRepository patientBioRepository;
     private final IStaffRepository staffRepository;
     private final IRequestToSeeADoctorRepository requestToSeeADoctorRepository;
-    private final IRequestToSeeADoctorService requestToSeeADoctorService;
     private final IMailService mailService;
 
     @Override
     public ResponseEntity<CustomResponse> createAppointment(AppointmentRequestDTO requestDTO) {
+        if(!validateRequestFields(requestDTO)){
+            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.BAD_REQUEST.name(), "One or more field is empty or equals 'string'"));
+        }
+
         Optional<Staff> findStaff = staffRepository.findById(Long.valueOf(requestDTO.staffId()));
         Optional<PatientBio> findPatient = patientBioRepository.findById(Long.valueOf(requestDTO.patientId()));
-        List<Appointment> confirmStaffIsFree = appointmentRepository.findAppointmentsByStaff_Id(Long.valueOf(requestDTO.staffId()));
-        List<Appointment> confirmPatientIsFree = appointmentRepository.findAppointmentsByPatientBios_Id(Long.valueOf(requestDTO.patientId()));
 
-        LocalDateTime currentDate = LocalDateTime.now();
-        LocalDateTime appointmentDateTime = combineDateAndTime(requestDTO.date(), LocalTime.parse(requestDTO.time()));
-        if(!findStaff.isPresent()){
+        List<String> messages = new ArrayList<>();
+
+        if(findStaff.isEmpty()){
             return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_FOUND.name(), "Invalid StaffId " + requestDTO.staffId()));
         }
-        if(!findPatient.isPresent()){
+        if(findPatient.isEmpty()){
             return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_FOUND.name(), "Invalid PatientId " + requestDTO.patientId()));
         }
 
-        if(requestDTO.time() == null){
-            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NO_CONTENT.name(), "Time cannot be empty"));
-        }
-        if(requestDTO.date() == null){
-            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NO_CONTENT.name(), "Date cannot be empty"));
-        }
-        if(appointmentDateTime.isBefore(currentDate)){
-            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_ACCEPTABLE.name(), "Invalid date or time"));
-        }
-
-        for(Appointment checkSchedule : confirmStaffIsFree){
-            LocalDateTime staffAppointmentDateTime = combineDateAndTime(checkSchedule.getDate(), checkSchedule.getTime());
-            if(staffAppointmentDateTime.isEqual(appointmentDateTime)
-                    && (checkSchedule.getStatus().name().equalsIgnoreCase("PENDING")
-                    || checkSchedule.getStatus().name().equalsIgnoreCase("RESCHEDULED"))){
-                return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_ACCEPTABLE.name(), "Staff is not free for the scheduled time"));
-            }
-        }
-
-        for(Appointment checkSchedule : confirmPatientIsFree){
-            LocalDateTime patientAppointmentDateTime = combineDateAndTime(checkSchedule.getDate(), checkSchedule.getTime());
-            if(patientAppointmentDateTime.isEqual(appointmentDateTime)
-                    && (checkSchedule.getStatus().name().equalsIgnoreCase("PENDING")
-                    || checkSchedule.getStatus().name().equalsIgnoreCase("RESCHEDULED"))){
-                return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_ACCEPTABLE.name(), "Patient is not free for the scheduled time"));
-            }
+        if(!checkIfStaffAndPatientAreFree(requestDTO, messages)){
+            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_FOUND.name(), messages.toString()));
         }
 
         Staff staff = findStaff.get();
@@ -111,68 +89,32 @@ public class AppointmentService implements IAppointmentService{
                 .reservationCode("#" + generateUniqueRandom())
                 .build();
         appointmentRepository.save(createAppointment);
+
         String header = "Your reservation has been confirmed!";
         String subject = "APPOINTMENT CONFIRMATION";
+        sendNotification(createAppointment, patientBio, staff, header, subject);
 
-        //send mail to patient
-        mailService.notifyPatient(new EmailNotificationDto(
-                subject,
-                patientBio.getEmail(),
-                header,
-                createAppointment.getReservationCode(),
-                createAppointment.getDate().toString(),
-                createAppointment.getTime().toString(),
-                "Dr. " + staff.getFirstName() + " " + staff.getLastName(),
-                patientBio.getFirstname()  + " " + patientBio.getLastname()
-        ));
-
-        //send mail to doctor
-        mailService.notifyDoctor(new EmailNotificationDto(
-                subject,
-                staff.getEmail(),
-                header,
-                createAppointment.getReservationCode(),
-                createAppointment.getDate().toString(),
-                createAppointment.getTime().toString(),
-                "Dr. " + staff.getFirstName() + " " + staff.getLastName(),
-                patientBio.getFirstname() + " " + patientBio.getLastname()));
-        return ResponseEntity.ok(new CustomResponse(HttpStatus.CREATED.name(), "Appointment Created Successfully"));
+        return ResponseEntity.ok(new CustomResponse(HttpStatus.CREATED.name(), createAppointment, "Appointment Created Successfully"));
     }
 
     @Override
     public ResponseEntity<CustomResponse> createAppointmentByRequest(Long requestId, AppointmentRequestDTO requestDTO) {
+        if(!validateRequestFields(requestDTO)){
+            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.BAD_REQUEST.name(), "One or more field is empty or equals 'string'"));
+        }
+
         Optional<RequestToSeeADoctor> findRequest = requestToSeeADoctorRepository.findById(requestId);
         Optional<Staff> findStaff = staffRepository.findById(Long.valueOf(requestDTO.staffId()));
+        Optional<PatientBio> findPatient = patientBioRepository.findById(Long.valueOf(requestDTO.patientId()));
 
-        List<Appointment> confirmStaffIsFree = appointmentRepository.findAppointmentsByStaff_Id(Long.valueOf(requestDTO.staffId()));
-        List<Appointment> confirmPatientIsFree = appointmentRepository.findAppointmentsByPatientBios_Id(findRequest.get().getPatientBio().getId());
+        List<String> messages = new ArrayList<>();
 
-        LocalDateTime currentDate = LocalDateTime.now();
-        LocalDateTime appointmentDateTime = combineDateAndTime(requestDTO.date(), LocalTime.parse(requestDTO.time()));
-        if(!findRequest.isPresent()){
+        if(findRequest.isEmpty()){
             return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_FOUND.name(), "Request not found " + requestId));
         }
 
-        if(appointmentDateTime.isBefore(currentDate)){
-            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_ACCEPTABLE.name(), "Invalid date or time"));
-        }
-
-        for(Appointment checkSchedule : confirmStaffIsFree){
-            LocalDateTime staffAppointmentDateTime = combineDateAndTime(checkSchedule.getDate(), checkSchedule.getTime());
-            if(staffAppointmentDateTime.isEqual(appointmentDateTime)
-                    && (checkSchedule.getStatus().name().equalsIgnoreCase("PENDING")
-                    || checkSchedule.getStatus().name().equalsIgnoreCase("RESCHEDULED"))){
-                return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_ACCEPTABLE.name(), "Staff is not free for the scheduled time"));
-            }
-        }
-
-        for(Appointment checkSchedule : confirmPatientIsFree){
-            LocalDateTime patientAppointmentDateTime = combineDateAndTime(checkSchedule.getDate(), checkSchedule.getTime());
-            if(patientAppointmentDateTime.isEqual(appointmentDateTime)
-                    && (checkSchedule.getStatus().name().equalsIgnoreCase("PENDING")
-                    || checkSchedule.getStatus().name().equalsIgnoreCase("RESCHEDULED"))){
-                return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_ACCEPTABLE.name(), "Patient is not free for the scheduled time"));
-            }
+        if(!checkIfStaffAndPatientAreFree(requestDTO, messages)){
+            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_FOUND.name(), messages.toString()));
         }
 
         RequestToSeeADoctor request = findRequest.get();
@@ -180,8 +122,8 @@ public class AppointmentService implements IAppointmentService{
             return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_ACCEPTABLE.name(), "Invalid Patient Id"));
         }
 
-        RequestToSeeADoctorRequestDTO requestToSeeADoctorRequestDTO = new RequestToSeeADoctorRequestDTO(request.getReason(), request.getPatientBio().getEmail());
         Staff staff = findStaff.get();
+        PatientBio patientBio = findPatient.get();
 
         if(!staff.getRoles().equals(Roles.DOCTOR)){
             return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_ACCEPTABLE.name(), "Cannot book appointment with Staff " + staff.getId()));
@@ -200,32 +142,13 @@ public class AppointmentService implements IAppointmentService{
         String header = "Your reservation has been confirmed!";
         String subject = "APPOINTMENT CONFIRMATION";
 
-        //send main to patient
-        mailService.notifyPatient(new EmailNotificationDto(
-                subject,
-                request.getPatientBio().getEmail(),
-                header,
-                createAppointment.getReservationCode(),
-                createAppointment.getDate().toString(),
-                createAppointment.getTime().toString(),
-                "Dr. " + staff.getFirstName() + " " + staff.getLastName(),
-                request.getPatientBio().getFirstname() + " " + request.getPatientBio().getLastname()));
+        sendNotification(createAppointment, patientBio, staff, header, subject);
 
-        //send mail to doctor
-        mailService.notifyDoctor(new EmailNotificationDto(
-                subject,
-                staff.getEmail(),
-                header,
-                createAppointment.getReservationCode(),
-                createAppointment.getDate().toString(),
-                createAppointment.getTime().toString(),
-                "Dr. " + staff.getFirstName() + " " + staff.getLastName(),
-                request.getPatientBio().getFirstname() + " " + request.getPatientBio().getLastname()));
-
+        request.setStatus(Status.FIXED);
+        requestToSeeADoctorRepository.save(request);
         appointmentRepository.save(createAppointment);
 
-        requestToSeeADoctorService.updateRequestStatus(requestId, requestToSeeADoctorRequestDTO, Status.FIXED.name());
-        return ResponseEntity.ok(new CustomResponse(HttpStatus.CREATED.name(), "Appointment Created Successfully"));
+        return ResponseEntity.ok(new CustomResponse(HttpStatus.CREATED.name(), createAppointment, "Appointment Created Successfully"));
     }
 
     @Override
@@ -233,15 +156,7 @@ public class AppointmentService implements IAppointmentService{
         Pageable pageable = PageRequest.of(page, size, Sort.by("date").descending());
         Page<Appointment> getAllAppointment = appointmentRepository.findAll(pageable);
         List<AppointmentResponseDTO> responseDTOS = getAllAppointment.stream()
-                .map(appointment -> AppointmentResponseDTO.builder()
-                        .id(appointment.getId())
-                        .status(String.valueOf(appointment.getStatus()))
-                        .patientName(appointment.getPatientBios().getFirstname() +" "+ appointment.getPatientBios().getLastname())
-                        .doctorName(appointment.getStaff().getFirstName() +" "+ appointment.getStaff().getLastName())
-                        .date(appointment.getDate())
-                        .time(appointment.getTime())
-                        .description(appointment.getDescription())
-                        .build())
+                .map(this::mapToResponseDTO)
                 .collect(Collectors.toList());
 
         if(getAllAppointment.isEmpty()){
@@ -258,15 +173,7 @@ public class AppointmentService implements IAppointmentService{
         }
 
         Appointment appointment = findAppointment.get();
-        AppointmentResponseDTO responseDTO = AppointmentResponseDTO.builder()
-                .id(appointment.getId())
-                .date(appointment.getDate())
-                .time(appointment.getTime())
-                .doctorName(appointment.getStaff().getFirstName() +" "+ appointment.getStaff().getLastName())
-                .patientName(appointment.getPatientBios().getFirstname() +" "+ appointment.getPatientBios().getLastname())
-                .description(appointment.getDescription())
-                .status(String.valueOf(appointment.getStatus()))
-                .build();
+        AppointmentResponseDTO responseDTO = mapToResponseDTO(appointment);
         return ResponseEntity.ok(new CustomResponse(HttpStatus.FOUND.name(), responseDTO, "Successful"));
     }
 
@@ -285,15 +192,7 @@ public class AppointmentService implements IAppointmentService{
         }
 
         List<AppointmentResponseDTO> responseDTOS = findStaffAppointment.stream()
-                .map(appointment -> AppointmentResponseDTO.builder()
-                        .id(appointment.getId())
-                        .status(String.valueOf(appointment.getStatus()))
-                        .patientName(appointment.getPatientBios().getFirstname() +" "+ appointment.getPatientBios().getLastname())
-                        .doctorName(appointment.getStaff().getFirstName() +" "+ appointment.getStaff().getLastName())
-                        .date(appointment.getDate())
-                        .time(appointment.getTime())
-                        .description(appointment.getDescription())
-                        .build())
+                .map(this::mapToResponseDTO)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(new CustomResponse(HttpStatus.OK.name(), responseDTOS, "Successful"));
     }
@@ -313,15 +212,7 @@ public class AppointmentService implements IAppointmentService{
         }
 
         List<AppointmentResponseDTO> responseDTOS = findPatientAppointment.stream()
-                .map(appointment -> AppointmentResponseDTO.builder()
-                        .id(appointment.getId())
-                        .status(String.valueOf(appointment.getStatus()))
-                        .patientName(appointment.getPatientBios().getFirstname() +" "+ appointment.getPatientBios().getLastname())
-                        .doctorName(appointment.getStaff().getFirstName() +" "+ appointment.getStaff().getLastName())
-                        .date(appointment.getDate())
-                        .time(appointment.getTime())
-                        .description(appointment.getDescription())
-                        .build())
+                .map(this::mapToResponseDTO)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(new CustomResponse(HttpStatus.OK.name(), responseDTOS, "Successful"));
     }
@@ -335,15 +226,7 @@ public class AppointmentService implements IAppointmentService{
         }
 
         List<AppointmentResponseDTO> responseDTOS = findAppointmentByDate.stream()
-                .map(appointment -> AppointmentResponseDTO.builder()
-                        .id(appointment.getId())
-                        .status(String.valueOf(appointment.getStatus()))
-                        .patientName(appointment.getPatientBios().getFirstname() +" "+ appointment.getPatientBios().getLastname())
-                        .doctorName(appointment.getStaff().getFirstName() +" "+ appointment.getStaff().getLastName())
-                        .date(appointment.getDate())
-                        .time(appointment.getTime())
-                        .description(appointment.getDescription())
-                        .build())
+                .map(this::mapToResponseDTO)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(new CustomResponse(HttpStatus.OK.name(), responseDTOS, "Successful"));
     }
@@ -352,46 +235,27 @@ public class AppointmentService implements IAppointmentService{
     public ResponseEntity<CustomResponse> rescheduleAppointment(Long appointmentId, LocalDate date, String time) {
         Optional<Appointment> findAppointment = appointmentRepository.findById(appointmentId);
 
-        LocalDateTime currentDate = LocalDateTime.now();
-        LocalDateTime appointmentDateTime = combineDateAndTime(date, LocalTime.parse(time));
-
         if(!findAppointment.isPresent()){
             return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_FOUND.name(), "Appointment not found"));
         }
-        if(date == null){
-            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NO_CONTENT.name(), "Date cannot be empty"));
-        }
-        if(time == null){
-            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NO_CONTENT.name(), "Time cannot be empty"));
-        }
 
         Appointment rescheduledAppointment = findAppointment.get();
-        List<Appointment> confirmStaffIsFree = appointmentRepository.findAppointmentsByStaff_Id(rescheduledAppointment.getStaff().getId());
-        List<Appointment> confirmPatientIsFree = appointmentRepository.findAppointmentsByPatientBios_Id(rescheduledAppointment.getPatientBios().getId());
+        AppointmentRequestDTO requestDTO = AppointmentRequestDTO.builder()
+                .time(time)
+                .date(date)
+                .patientId(rescheduledAppointment.getPatientBios().getId().toString())
+                .staffId(rescheduledAppointment.getStaff().getId().toString())
+                .description(rescheduledAppointment.getDescription())
+                .build();
 
         if(rescheduledAppointment.getStatus().name().equals("ATTENDED_TO")){
             return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_ACCEPTABLE.name(), "Cannot reschedule this appointment"));
         }
-        if(appointmentDateTime.isBefore(currentDate)){
-            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_ACCEPTABLE.name(), "Invalid date or time"));
-        }
 
-        for(Appointment checkSchedule : confirmStaffIsFree){
-            LocalDateTime staffAppointmentDateTime = combineDateAndTime(checkSchedule.getDate(), checkSchedule.getTime());
-            if(staffAppointmentDateTime.isEqual(appointmentDateTime)
-                    && (checkSchedule.getStatus().name().equalsIgnoreCase("PENDING")
-                    || checkSchedule.getStatus().name().equalsIgnoreCase("RESCHEDULED"))){
-                return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_ACCEPTABLE.name(), "Staff is not free for the scheduled time"));
-            }
-        }
+        List<String> messages = new ArrayList<>();
 
-        for(Appointment checkSchedule : confirmPatientIsFree){
-            LocalDateTime patientAppointmentDateTime = combineDateAndTime(checkSchedule.getDate(), checkSchedule.getTime());
-            if(patientAppointmentDateTime.isEqual(appointmentDateTime)
-                    && (checkSchedule.getStatus().name().equalsIgnoreCase("PENDING")
-                    || checkSchedule.getStatus().name().equalsIgnoreCase("RESCHEDULED"))){
-                return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_ACCEPTABLE.name(), "Patient is not free for the scheduled time"));
-            }
+        if(!checkIfStaffAndPatientAreFree(requestDTO, messages)){
+            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_FOUND.name(), messages.toString()));
         }
 
         rescheduledAppointment.setDate(date);
@@ -400,32 +264,10 @@ public class AppointmentService implements IAppointmentService{
         String header = "Your appointment has been rescheduled!";
         String subject = "APPOINTMENT RESCHEDULED";
 
-        //send mail to patient
-        mailService.notifyPatient(new EmailNotificationDto(
-                subject,
-                rescheduledAppointment.getPatientBios().getEmail(),
-                header,
-                rescheduledAppointment.getReservationCode(),
-                rescheduledAppointment.getDate().toString(),
-                rescheduledAppointment.getTime().toString(),
-                "Dr. " + rescheduledAppointment.getStaff().getFirstName() + " " + rescheduledAppointment.getStaff().getLastName(),
-                rescheduledAppointment.getPatientBios().getFirstname() + " " + rescheduledAppointment.getPatientBios().getLastname()
-        ));
-
-        //send mail to doctor
-        mailService.notifyDoctor(new EmailNotificationDto(
-                subject,
-                rescheduledAppointment.getStaff().getEmail(),
-                header,
-                rescheduledAppointment.getReservationCode(),
-                rescheduledAppointment.getDate().toString(),
-                rescheduledAppointment.getTime().toString(),
-                "Dr. " + rescheduledAppointment.getStaff().getFirstName() + " " + rescheduledAppointment.getStaff().getLastName(),
-                rescheduledAppointment.getPatientBios().getFirstname() + " " + rescheduledAppointment.getPatientBios().getLastname()
-        ));
+        sendNotification(rescheduledAppointment, rescheduledAppointment.getPatientBios(), rescheduledAppointment.getStaff(), header, subject);
 
         appointmentRepository.save(rescheduledAppointment);
-        return ResponseEntity.ok(new CustomResponse(HttpStatus.OK.name(), "Appointment Rescheduled Successfully"));
+        return ResponseEntity.ok(new CustomResponse(HttpStatus.OK.name(), rescheduledAppointment, "Appointment Rescheduled Successfully"));
     }
 
     @Override
@@ -446,7 +288,7 @@ public class AppointmentService implements IAppointmentService{
             if(statuses.name().equals(status.toUpperCase())){
                 updatedStatus.setStatus(Status.valueOf(status.toUpperCase()));
                 appointmentRepository.save(updatedStatus);
-                return ResponseEntity.ok(new CustomResponse(HttpStatus.OK.name(), "Appointment status updated successfully"));
+                return ResponseEntity.ok(new CustomResponse(HttpStatus.OK.name(), updatedStatus, "Appointment status updated successfully"));
             }
         }
         return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_ACCEPTABLE.name(), "Invalid Status"));
@@ -456,44 +298,25 @@ public class AppointmentService implements IAppointmentService{
     public ResponseEntity<CustomResponse> updateAppointment(Long appointmentId, AppointmentRequestDTO requestDTO) {
         Optional<Appointment> findAppointment = appointmentRepository.findById(appointmentId);
 
-        LocalDateTime currentDate = LocalDateTime.now();
-        LocalDateTime appointmentDateTime = combineDateAndTime(requestDTO.date(), LocalTime.parse(requestDTO.time()));
+        List<String> messages = new ArrayList<>();
 
         if(!findAppointment.isPresent()){
             return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_FOUND.name(), "Appointment not found"));
         }
 
+        if(!checkIfStaffAndPatientAreFree(requestDTO, messages)){
+            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_FOUND.name(), messages.toString()));
+        }
+
         Appointment updatedAppointment = findAppointment.get();
-        List<Appointment> confirmStaffIsFree = appointmentRepository.findAppointmentsByStaff_Id(updatedAppointment.getStaff().getId());
-        List<Appointment> confirmPatientIsFree = appointmentRepository.findAppointmentsByPatientBios_Id(updatedAppointment.getPatientBios().getId());
 
-        if(appointmentDateTime.isBefore(currentDate)){
-            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_ACCEPTABLE.name(), "Invalid date or time"));
-        }
 
-        for(Appointment checkSchedule : confirmStaffIsFree){
-            LocalDateTime staffAppointmentDateTime = combineDateAndTime(checkSchedule.getDate(), checkSchedule.getTime());
-            if(staffAppointmentDateTime.isEqual(appointmentDateTime)
-                    && (checkSchedule.getStatus().name().equalsIgnoreCase("PENDING")
-                    || checkSchedule.getStatus().name().equalsIgnoreCase("RESCHEDULED"))){
-                return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_ACCEPTABLE.name(), "Staff is not free for the scheduled time"));
-            }
-        }
-
-        for(Appointment checkSchedule : confirmPatientIsFree){
-            LocalDateTime patientAppointmentDateTime = combineDateAndTime(checkSchedule.getDate(), checkSchedule.getTime());
-            if(patientAppointmentDateTime.isEqual(appointmentDateTime)
-                    && (checkSchedule.getStatus().name().equalsIgnoreCase("PENDING")
-                    || checkSchedule.getStatus().name().equalsIgnoreCase("RESCHEDULED"))){
-                return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_ACCEPTABLE.name(), "Patient is not free for the scheduled time"));
-            }
-        }
         updatedAppointment.setStatus(Status.RESCHEDULED);
         updatedAppointment.setTime(LocalTime.parse(requestDTO.time()));
 
         BeanUtils.copyProperties(requestDTO, updatedAppointment, getNullPropertyNames(requestDTO));
         appointmentRepository.save(updatedAppointment);
-        return ResponseEntity.ok(new CustomResponse(HttpStatus.OK.name(), "Appointment updated successfully"));
+        return ResponseEntity.ok(new CustomResponse(HttpStatus.OK.name(), updatedAppointment, "Appointment updated successfully"));
     }
 
     @Override
@@ -596,5 +419,113 @@ public class AppointmentService implements IAppointmentService{
 
         int uniqueNumber = generatedNumbers.iterator().next();
         return uniqueNumber;
+    }
+
+    public boolean checkIfStaffAndPatientAreFree(AppointmentRequestDTO requestDTO, List<String> messages){
+        List<Appointment> confirmStaffIsFree = appointmentRepository.findAppointmentsByStaff_Id(Long.valueOf(requestDTO.staffId()));
+        List<Appointment> confirmPatientIsFree = appointmentRepository.findAppointmentsByPatientBios_Id(Long.valueOf(requestDTO.patientId()));
+
+        LocalDateTime currentDate = LocalDateTime.now();
+        LocalDateTime appointmentDateTime = combineDateAndTime(requestDTO.date(), LocalTime.parse(requestDTO.time()));
+
+        if(requestDTO.time() == null){
+            messages.add("Time cannot be empty");
+            return false;
+        }
+
+        if(requestDTO.date() == null){
+            messages.add("Date cannot be empty");
+            return false;
+        }
+
+        if(appointmentDateTime.isBefore(currentDate)){
+            messages.add("Invalid date or time");
+            return false;
+        }
+
+        for(Appointment checkSchedule : confirmStaffIsFree){
+            LocalDateTime staffAppointmentDateTime = combineDateAndTime(checkSchedule.getDate(), checkSchedule.getTime());
+            if(staffAppointmentDateTime.isEqual(appointmentDateTime)
+                    && (checkSchedule.getStatus().name().equalsIgnoreCase("PENDING")
+                    || checkSchedule.getStatus().name().equalsIgnoreCase("RESCHEDULED"))){
+                messages.add("Staff is not free for the scheduled time");
+                return false;
+            }
+        }
+
+        for(Appointment checkSchedule : confirmPatientIsFree){
+            LocalDateTime patientAppointmentDateTime = combineDateAndTime(checkSchedule.getDate(), checkSchedule.getTime());
+            if(patientAppointmentDateTime.isEqual(appointmentDateTime)
+                    && (checkSchedule.getStatus().name().equalsIgnoreCase("PENDING")
+                    || checkSchedule.getStatus().name().equalsIgnoreCase("RESCHEDULED"))){
+                messages.add("Patient is not free for the scheduled time");
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public void sendNotification (Appointment appointment, PatientBio patientBio, Staff staff, String header, String subject){
+
+        //send mail to patient
+        mailService.notifyPatient(new EmailNotificationDto(
+                subject,
+                patientBio.getEmail(),
+                header,
+                appointment.getReservationCode(),
+                appointment.getDate().toString(),
+                appointment.getTime().toString(),
+                "Dr. " + staff.getFirstName() + " " + staff.getLastName(),
+                patientBio.getFirstname()  + " " + patientBio.getLastname()
+        ));
+
+        //send mail to doctor
+        mailService.notifyDoctor(new EmailNotificationDto(
+                subject,
+                staff.getEmail(),
+                header,
+                appointment.getReservationCode(),
+                appointment.getDate().toString(),
+                appointment.getTime().toString(),
+                "Dr. " + staff.getFirstName() + " " + staff.getLastName(),
+                patientBio.getFirstname() + " " + patientBio.getLastname()));
+    }
+
+    public AppointmentResponseDTO mapToResponseDTO(Appointment appointment){
+        return AppointmentResponseDTO.builder()
+                .id(appointment.getId())
+                .status(String.valueOf(appointment.getStatus()))
+                .patientName(appointment.getPatientBios().getFirstname() +" "+ appointment.getPatientBios().getLastname())
+                .doctorName(appointment.getStaff().getFirstName() +" "+ appointment.getStaff().getLastName())
+                .date(appointment.getDate())
+                .time(appointment.getTime())
+                .description(appointment.getDescription())
+                .build();
+    }
+
+    public static <T> boolean validateRequestFields(T requestDTO) {
+        if (requestDTO == null) {
+            return false; // Handle null input gracefully
+        }
+
+        // Get all fields in the request DTO class
+        Field[] fields = requestDTO.getClass().getDeclaredFields();
+
+        for (Field field : fields) {
+            try {
+                field.setAccessible(true);
+                Object fieldValue = field.get(requestDTO);
+
+                if ((fieldValue != null && fieldValue.toString().equals("string")) || Objects.equals(fieldValue, "")) {
+                    return false; // Found a field with value "String"
+                }
+            } catch (IllegalAccessException e) {
+                // Handle any exceptions if needed
+                e.printStackTrace();
+            }
+        }
+
+        return true; // All fields are valid
     }
 }

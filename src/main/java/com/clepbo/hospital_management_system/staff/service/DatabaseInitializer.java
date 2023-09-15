@@ -28,6 +28,8 @@ public class DatabaseInitializer implements CommandLineRunner {
         Optional<Staff> findAdmin = staffRepository.findByEmail("admin@login.com");
         if(!findAdmin.isPresent()){
             Staff staff = Staff.builder()
+                    .firstName("Admin")
+                    .lastName("Admin")
                     .email("admin@login.com")
                     .password(passwordEncoder.encode("admin"))
                     .roles(Roles.ADMIN)

@@ -1,5 +1,6 @@
 package com.clepbo.hospital_management_system.patient.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,6 +26,7 @@ public class PatientContactAddress {
     private String nextOfKinRelationship;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "patient_id")
+    @JsonBackReference
     private PatientBio patientBio;
     private Timestamp createdAt;
     private Timestamp modifiedAt;

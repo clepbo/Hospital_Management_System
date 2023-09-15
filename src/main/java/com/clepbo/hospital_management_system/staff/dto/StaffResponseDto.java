@@ -15,5 +15,10 @@ public class StaffResponseDto {
     private String lastName;
     private String email;
     private String roles;
+    private String gender;
+    private String dateOfBirth;
+    private String phoneNumber;
+    private String status;
+    private Double salary;
     private boolean isEnabled;
 }

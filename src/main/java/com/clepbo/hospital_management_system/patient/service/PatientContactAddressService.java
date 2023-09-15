@@ -1,18 +1,24 @@
 package com.clepbo.hospital_management_system.patient.service;
 
 import com.clepbo.hospital_management_system.patient.dto.PatientAddressDTO;
+import com.clepbo.hospital_management_system.patient.dto.PatientAddressResponseDTO;
 import com.clepbo.hospital_management_system.patient.entity.PatientBio;
 import com.clepbo.hospital_management_system.patient.entity.PatientContactAddress;
 import com.clepbo.hospital_management_system.patient.repository.IPatientAddressRepository;
 import com.clepbo.hospital_management_system.patient.repository.IPatientBioRepository;
 import com.clepbo.hospital_management_system.staff.dto.CustomResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,15 +33,19 @@ public class PatientContactAddressService implements IPatientContactAddress{
         if(!findPatient.isPresent()){
             return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_FOUND.name(), "Patient doesn't exist"));
         }
+
+        PatientBio patientBio = findPatient.get();
+
         PatientContactAddress contactAddress = PatientContactAddress.builder()
                 .address(addressDTO.getAddress())
                 .nextOfKinAddress(addressDTO.getNextOfKinAddress())
-                .nextOfKin(addressDTO.getNextOfKinAddress())
+                .nextOfKin(addressDTO.getNextOfKin())
                 .nextOfKinPhoneNumber(addressDTO.getNextOfKinPhoneNumber())
                 .nextOfKinRelationship(addressDTO.getNextOfKinRelationship())
+                .patientBio(patientBio)
                 .build();
         addressRepository.save(contactAddress);
-        return ResponseEntity.ok(new CustomResponse(HttpStatus.CREATED.name(), "Patient Address Successfully added"));
+        return ResponseEntity.ok(new CustomResponse(HttpStatus.CREATED.name(), contactAddress, "Patient Address Successfully added"));
     }
 
     @Override
@@ -43,16 +53,12 @@ public class PatientContactAddressService implements IPatientContactAddress{
         Optional<PatientBio> findPatient = patientBioRepository.findById(patientId);
         if(findPatient.isPresent()){
             List<PatientContactAddress> contactAddresses = addressRepository.findPatientContactAddressesByPatientBio_Id(patientId);
-            List<PatientAddressDTO> patientAddressDTOS = contactAddresses.stream()
-                    .map(contactAddress -> PatientAddressDTO.builder()
-                            .address(contactAddress.getAddress())
-                            .nextOfKinAddress(contactAddress.getNextOfKinAddress())
-                            .nextOfKinRelationship(contactAddress.getNextOfKinRelationship())
-                            .nextOfKinPhoneNumber(contactAddress.getNextOfKinPhoneNumber())
-                            .nextOfKin(contactAddress.getNextOfKinAddress())
-                            .build())
+
+            List<PatientAddressResponseDTO> responseDTOS = contactAddresses.stream()
+                    .map(this::mapToResponseDTO)
                     .collect(Collectors.toList());
-            return ResponseEntity.ok(new CustomResponse(HttpStatus.FOUND.name(), patientAddressDTOS, "Patient Addresses found"));
+
+            return ResponseEntity.ok(new CustomResponse(HttpStatus.FOUND.name(), responseDTOS, "Patient Addresses found"));
         }
         return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_FOUND.name(), "Address not found "));
     }
@@ -62,13 +68,7 @@ public class PatientContactAddressService implements IPatientContactAddress{
         Optional<PatientContactAddress> contactAddress = addressRepository.findById(addressId);
         if(contactAddress.isPresent()){
             PatientContactAddress getAddress = contactAddress.get();
-            PatientAddressDTO addressDTO = PatientAddressDTO.builder()
-                    .address(getAddress.getAddress())
-                    .nextOfKinAddress(getAddress.getNextOfKinAddress())
-                    .nextOfKinRelationship(getAddress.getNextOfKinRelationship())
-                    .nextOfKin(getAddress.getNextOfKin())
-                    .nextOfKinPhoneNumber(getAddress.getNextOfKinPhoneNumber())
-                    .build();
+            PatientAddressResponseDTO addressDTO = mapToResponseDTO(getAddress);
             return ResponseEntity.ok(new CustomResponse(HttpStatus.FOUND.name(), addressDTO, "Patient Address Found"));
         }
         return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_FOUND.name(), "Address not found " + addressId));
@@ -77,17 +77,21 @@ public class PatientContactAddressService implements IPatientContactAddress{
     @Override
     public ResponseEntity<CustomResponse> updatePatientAddress(PatientAddressDTO patientAddressDTO, Long patientId, Long addressId) {
         Optional<PatientBio> findPatient = patientBioRepository.findById(patientId);
-        if(findPatient.isPresent()){
-            Optional<PatientContactAddress> contactAddress = addressRepository.findById(addressId);
-            if(contactAddress.isPresent()){
-                PatientContactAddress updatedAddress = contactAddress.get();
-
-                addressRepository.save(updatedAddress);
-                return ResponseEntity.ok(new CustomResponse(HttpStatus.OK.name(), "Successfully Updated Patient Address"));
-            }
+        if(!findPatient.isPresent()) {
+            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_FOUND.name(), "Patient not found "));
+        }
+        Optional<PatientContactAddress> contactAddress = addressRepository.findById(addressId);
+        if(!contactAddress.isPresent()) {
             return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_FOUND.name(), "Address not found "));
         }
-        return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_FOUND.name(), "Patient not found "));
+
+        PatientContactAddress updatedAddress = contactAddress.get();
+        BeanUtils.copyProperties(patientAddressDTO, updatedAddress, getNullPropertyNames(patientAddressDTO));
+
+        addressRepository.save(updatedAddress);
+        return ResponseEntity.ok(new CustomResponse(HttpStatus.OK.name(), updatedAddress, "Successfully Updated Patient Address"));
+
+
     }
 
     @Override
@@ -112,4 +116,31 @@ public class PatientContactAddressService implements IPatientContactAddress{
         }
         return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_FOUND.name(), "Patient not found "));
     }
+
+    private static String[] getNullPropertyNames(Object source) {
+        final BeanWrapper src = new BeanWrapperImpl(source);
+        java.beans.PropertyDescriptor[] pds = src.getPropertyDescriptors();
+
+        Set<String> emptyNames = new HashSet<>();
+        for (java.beans.PropertyDescriptor pd : pds) {
+            Object srcValue = src.getPropertyValue(pd.getName());
+            if (srcValue == null) {
+                emptyNames.add(pd.getName());
+            }
+        }
+        String[] result = new String[emptyNames.size()];
+        return emptyNames.toArray(result);
+    }
+
+    public PatientAddressResponseDTO mapToResponseDTO(PatientContactAddress contactAddress){
+        return PatientAddressResponseDTO.builder()
+                .id(contactAddress.getId())
+                .address(contactAddress.getAddress())
+                .nextOfKin(contactAddress.getNextOfKin())
+                .nextOfKinRelationship(contactAddress.getNextOfKinRelationship())
+                .nextOfKinAddress(contactAddress.getNextOfKinAddress())
+                .nextOfKinPhoneNumber(contactAddress.getNextOfKinPhoneNumber())
+                .build();
+    }
+
 }

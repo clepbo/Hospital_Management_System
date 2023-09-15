@@ -3,6 +3,7 @@ package com.clepbo.hospital_management_system.patient.service;
 import com.clepbo.hospital_management_system.patient.dto.PatientBioRequestDTO;
 import com.clepbo.hospital_management_system.patient.dto.PatientResponseDTO;
 import com.clepbo.hospital_management_system.patient.entity.PatientBio;
+import com.clepbo.hospital_management_system.patient.entity.PatientContactAddress;
 import com.clepbo.hospital_management_system.patient.repository.IPatientBioRepository;
 import com.clepbo.hospital_management_system.staff.dto.CustomResponse;
 import com.clepbo.hospital_management_system.staff.entity.Roles;
@@ -16,12 +17,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.lang.reflect.Field;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -35,33 +35,18 @@ public class PatientBioService implements IPatientBioService{
     private static final Pattern PATTERN = Pattern.compile(emailRegex);
     @Override
     public ResponseEntity<CustomResponse> createPatientBio(PatientBioRequestDTO patientBioRequestDTO) {
-        if(patientBioRequestDTO.firstname()==null ||
-                patientBioRequestDTO.firstname().equalsIgnoreCase("string")){
-            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.BAD_REQUEST.name(), "Firstname cannot be empty"));
-        }
-        if(patientBioRequestDTO.lastname()==null ||
-                patientBioRequestDTO.lastname().equalsIgnoreCase("string")){
-            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.BAD_REQUEST.name(), "Lastname cannot be empty"));
-        }
-        if(patientBioRequestDTO.email()==null ||
-                patientBioRequestDTO.email().equalsIgnoreCase("string")){
-            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.BAD_REQUEST.name(), "email is required"));
-        }
         if(!isEmailValid(patientBioRequestDTO.email())){
             return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.BAD_REQUEST.name(), "provide correct email format"));
         }
-        if(patientBioRequestDTO.gender()==null ||
-                patientBioRequestDTO.gender().equalsIgnoreCase("string")){
-            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.BAD_REQUEST.name(), "Gender cannot be empty"));
+        if(!validateRequestFields(patientBioRequestDTO)){
+            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.BAD_REQUEST.name(), "One or more field is empty or equals 'string'"));
         }
-        if(patientBioRequestDTO.dateOfBirth()==null ||
-                patientBioRequestDTO.dateOfBirth().equalsIgnoreCase("string")){
-            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.BAD_REQUEST.name(), "Date of Birth cannot be empty"));
+
+        Optional<PatientBio> findPatient = patientBioRepository.findPatientBioByEmail(patientBioRequestDTO.email());
+        if(findPatient.isPresent()){
+            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.BAD_REQUEST.name(), "User/Email already exist"));
         }
-        if(patientBioRequestDTO.phoneNumber()==null ||
-                patientBioRequestDTO.phoneNumber().equalsIgnoreCase("string")){
-            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.BAD_REQUEST.name(), "Phone Number cannot be empty"));
-        }
+
         PatientBio patientBio = PatientBio.builder()
                 .firstname(patientBioRequestDTO.firstname())
                 .lastname(patientBioRequestDTO.lastname())
@@ -72,7 +57,7 @@ public class PatientBioService implements IPatientBioService{
                 .role(Roles.PATIENT)
                 .build();
         patientBioRepository.save(patientBio);
-        return ResponseEntity.ok(new CustomResponse(HttpStatus.CREATED.name(), "Patient Bio Created Successfully"));
+        return ResponseEntity.ok(new CustomResponse(HttpStatus.CREATED.name(), patientBio, "Patient Bio Created Successfully"));
     }
 
     @Override
@@ -95,21 +80,21 @@ public class PatientBioService implements IPatientBioService{
     @Override
     public ResponseEntity<CustomResponse> findPatientBioById(Long id) {
         Optional<PatientBio> patientBioOptional = patientBioRepository.findById(id);
-        if(patientBioOptional.isPresent()){
-            PatientBio patientBio = patientBioOptional.get();
-            PatientResponseDTO patientResponseDTO = PatientResponseDTO.builder()
-                    .id(patientBio.getId())
-                    .firstname(patientBio.getFirstname())
-                    .lastname(patientBio.getLastname())
-                    .email(patientBio.getEmail())
-                    .gender(patientBio.getGender())
-                    .dateOfBirth(patientBio.getDateOfBirth())
-                    .phoneNumber(patientBio.getPhoneNumber())
-                    .build();
-            return ResponseEntity.ok(new CustomResponse(HttpStatus.OK.name(), patientResponseDTO, "Successful"));
-
+        if(!patientBioOptional.isPresent()) {
+            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_FOUND.name(), "Patient not found"));
         }
-        return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_FOUND.name(), "Patient not found"));
+        PatientBio patientBio = patientBioOptional.get();
+        PatientResponseDTO patientResponseDTO = PatientResponseDTO.builder()
+                .id(patientBio.getId())
+                .firstname(patientBio.getFirstname())
+                .lastname(patientBio.getLastname())
+                .email(patientBio.getEmail())
+                .gender(patientBio.getGender())
+                .dateOfBirth(patientBio.getDateOfBirth())
+                .phoneNumber(patientBio.getPhoneNumber())
+                .contactAddress(patientBio.getContactAddress())
+                .build();
+        return ResponseEntity.ok(new CustomResponse(HttpStatus.OK.name(), patientResponseDTO, "Successful"));
     }
 
     @Override
@@ -124,7 +109,7 @@ public class PatientBioService implements IPatientBioService{
 
         BeanUtils.copyProperties(patientBioRequestDTO, updatedPatientBio, getNullPropertyNames(patientBioRequestDTO));
         patientBioRepository.save(updatedPatientBio);
-        return ResponseEntity.ok(new CustomResponse(HttpStatus.OK.name(), "Patient Bio Updated successfully"));
+        return ResponseEntity.ok(new CustomResponse(HttpStatus.OK.name(), updatedPatientBio, "Patient Bio Updated successfully"));
     }
 
     @Override
@@ -163,4 +148,30 @@ public class PatientBioService implements IPatientBioService{
                 .dateOfBirth(patientBio.getDateOfBirth())
                 .build();
     }
+
+    public static <T> boolean validateRequestFields(T requestDTO) {
+        if (requestDTO == null) {
+            return false; // Handle null input gracefully
+        }
+
+        // Get all fields in the request DTO class
+        Field[] fields = requestDTO.getClass().getDeclaredFields();
+
+        for (Field field : fields) {
+            try {
+                field.setAccessible(true);
+                Object fieldValue = field.get(requestDTO);
+
+                if ((fieldValue != null && fieldValue.toString().equals("string")) || Objects.equals(fieldValue, "")) {
+                    return false; // Found a field with value "String"
+                }
+            } catch (IllegalAccessException e) {
+                // Handle any exceptions if needed
+                e.printStackTrace();
+            }
+        }
+
+        return true; // All fields are valid
+    }
+
 }

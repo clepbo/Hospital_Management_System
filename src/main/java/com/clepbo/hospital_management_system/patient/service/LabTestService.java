@@ -73,7 +73,7 @@ public class LabTestService implements ILabTestService{
                 .testStatus(Status.valueOf(requestDTO.testStatus().toUpperCase()))
                 .build();
         labTestRepository.save(newLabTest);
-        return ResponseEntity.ok(new CustomResponse(HttpStatus.CREATED.name(), "Lab Test Created Successfully"));
+        return ResponseEntity.ok(new CustomResponse(HttpStatus.CREATED.name(), newLabTest,  "Lab Test Created Successfully"));
     }
 
     @Override
@@ -99,17 +99,7 @@ public class LabTestService implements ILabTestService{
         }
 
         LabTest test = findTest.get();
-        LabTestResponseDTO responseDTO = LabTestResponseDTO.builder()
-                .id(test.getId())
-                .testName(test.getTestName())
-                .testDate(test.getTestDate())
-                .testResult(test.getTestResult())
-                .testStatus(String.valueOf(test.getTestStatus()))
-                .recommendations(test.getRecommendations())
-                .description(test.getDescription())
-                .patientName(test.getPatientBio().getFirstname() +" "+ test.getPatientBio().getLastname())
-                .carriedOutBy(test.getCarriedOutBy().getFirstName() +" "+ test.getCarriedOutBy().getLastName())
-                .build();
+        LabTestResponseDTO responseDTO = mapToLabTestResponse(test);
         return ResponseEntity.ok(new CustomResponse(HttpStatus.FOUND.name(), responseDTO, "Successful"));
     }
 
@@ -193,7 +183,7 @@ public class LabTestService implements ILabTestService{
         BeanUtils.copyProperties(requestDTO, updatedTest, getNullPropertyNames(requestDTO));
         labTestRepository.save(updatedTest);
 
-        return ResponseEntity.ok(new CustomResponse(HttpStatus.ACCEPTED.name(), "LabTest Updated Successfully"));
+        return ResponseEntity.ok(new CustomResponse(HttpStatus.ACCEPTED.name(), updatedTest, "LabTest Updated Successfully"));
     }
 
     @Override
@@ -207,7 +197,7 @@ public class LabTestService implements ILabTestService{
         updateTestStatus.setTestStatus(Status.valueOf(status.toUpperCase()));
         labTestRepository.save(updateTestStatus);
 
-        return ResponseEntity.ok(new CustomResponse(HttpStatus.ACCEPTED.name(), "LabTest Updated Successfully"));
+        return ResponseEntity.ok(new CustomResponse(HttpStatus.ACCEPTED.name(), updateTestStatus, "LabTest Updated Successfully"));
     }
 
     @Override
@@ -238,6 +228,7 @@ public class LabTestService implements ILabTestService{
 
     public LabTestResponseDTO mapToLabTestResponse(LabTest labTest){
         return LabTestResponseDTO.builder()
+                .id(labTest.getId())
                 .testName(labTest.getTestName())
                 .testDate(labTest.getTestDate())
                 .testResult(labTest.getTestResult())

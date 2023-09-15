@@ -51,21 +51,21 @@ public class PatientController {
     }
 
     @Operation(summary = "Add a contact address to the patient Bio", description = "Provide necessary information about a patient contact address to add it to the database", tags = { "patient" })
-    @PostMapping("/address{patientId}")
+    @PostMapping("/address/{patientId}")
     @PreAuthorize("hasAnyAuthority('admin:create', 'receptionist:create')")
     public ResponseEntity<CustomResponse> addPatientContactAddress(@PathVariable("patientId") Long patientId, @RequestBody PatientAddressDTO addressDTO){
         return contactAddress.addPatientAddress(patientId, addressDTO);
     }
 
-    @Operation(summary = "Read all patient's conatc address", description = "Provide a patients uniques Id to Read all their contact address", tags = { "patient" })
+    @Operation(summary = "Read all patient's contact address", description = "Provide a patients uniques Id to Read all their contact address", tags = { "patient" })
     @GetMapping("/address/{patientId}")
-    @PreAuthorize("hasAuthority('admin:read', 'doctor:read', 'receptionist:read')")
+    @PreAuthorize("hasAnyAuthority('admin:read', 'receptionist:read', 'doctor:read')")
     public ResponseEntity<CustomResponse> getAllPatientAddress(@PathVariable("patientId") Long patientId){
         return contactAddress.findAddressByPatientId(patientId);
     }
 
     @Operation(summary = "Update Patient's contact address", description = "Provide the patient's uniques Id and the address unique Id to update the patient's contact address", tags = { "patient" })
-    @PutMapping("/address/edit/{patientid}")
+    @PutMapping("/address/{patientId}")
     @PreAuthorize("hasAnyAuthority('admin:update', 'receptionist:update')")
     public ResponseEntity<CustomResponse> updatePatientAddress(@PathVariable("patientId") Long patientId, @RequestBody PatientAddressDTO addressDTO, @RequestParam Long addressId){
         return contactAddress.updatePatientAddress(addressDTO, patientId, addressId);

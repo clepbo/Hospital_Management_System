@@ -26,6 +26,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Field;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.*;
@@ -43,14 +44,11 @@ public class RequestToSeeADoctorService implements IRequestToSeeADoctorService{
 
     @Override
     public ResponseEntity<CustomResponse> createARequest(RequestToSeeADoctorRequestDTO requestDTO) throws UnsupportedEncodingException {
-        if(requestDTO.patientEmail() == null){
-            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NO_CONTENT.name(), "Email cannot be empty"));
-        }
-        if(requestDTO.reason() == null){
-            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NO_CONTENT.name(), "Reason cannot be empty"));
+        if(!validateRequestFields(requestDTO)){
+            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.BAD_REQUEST.name(), "One or more field is empty or equals 'string'"));
         }
 
-        Optional<PatientBio> findPatientBioByEmail = findPatientBioByEmail = patientBioRepository.findPatientBioByEmail(requestDTO.patientEmail());
+        Optional<PatientBio> findPatientBioByEmail  = patientBioRepository.findPatientBioByEmail(requestDTO.patientEmail());
 
         if(!findPatientBioByEmail.isPresent()){
             return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_FOUND.name(), "Patient doesn't exist " + requestDTO.patientEmail()));
@@ -89,14 +87,7 @@ public class RequestToSeeADoctorService implements IRequestToSeeADoctorService{
         Pageable pageable = PageRequest.of(page, size, Sort.by("patientBio_firstname").ascending());
         Page<RequestToSeeADoctor> request = requestToSeeADoctorRepository.findAll(pageable);
         List<RequestToSeeADoctorResponseDTO> getAllRequest = request.stream()
-                .map(requestToSeeADoctor -> RequestToSeeADoctorResponseDTO.builder()
-                        .dateRequested(requestToSeeADoctor.getCreatedAt())
-                        .status(String.valueOf(requestToSeeADoctor.getStatus()))
-                        .reason(requestToSeeADoctor.getReason())
-                        .id(requestToSeeADoctor.getId())
-                        .patientEmail(requestToSeeADoctor.getPatientBio().getEmail())
-                        .patientName(requestToSeeADoctor.getPatientBio().getFirstname() +" "+requestToSeeADoctor.getPatientBio().getLastname())
-                        .build())
+                .map(this::mapToResponseDTO)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(new CustomResponse(HttpStatus.OK.name(), getAllRequest, "Successful"));
     }
@@ -109,14 +100,7 @@ public class RequestToSeeADoctorService implements IRequestToSeeADoctorService{
         }
 
         RequestToSeeADoctor requestToSeeADoctor = request.get();
-        RequestToSeeADoctorResponseDTO responseDTO = RequestToSeeADoctorResponseDTO.builder()
-                .id(requestToSeeADoctor.getId())
-                .patientEmail(requestToSeeADoctor.getPatientBio().getEmail())
-                .patientName(requestToSeeADoctor.getPatientBio().getFirstname() +" "+ requestToSeeADoctor.getPatientBio().getLastname())
-                .reason(requestToSeeADoctor.getReason())
-                .status(String.valueOf(requestToSeeADoctor.getStatus()))
-                .dateRequested(requestToSeeADoctor.getCreatedAt())
-                .build();
+        RequestToSeeADoctorResponseDTO responseDTO = mapToResponseDTO(requestToSeeADoctor);
         return ResponseEntity.ok(new CustomResponse(HttpStatus.FOUND.name(), responseDTO, "Request Found"));
     }
 
@@ -142,11 +126,7 @@ public class RequestToSeeADoctorService implements IRequestToSeeADoctorService{
 
         Page<RequestToSeeADoctor> findPatientRequest = requestToSeeADoctorRepository.findRequestToSeeADoctorByPatientBio_Id(getPatient.getId(), pageable);
         List<RequestToSeeADoctorResponseDTO> patientRequests = findPatientRequest.stream()
-                .map(requestToSeeADoctor -> RequestToSeeADoctorResponseDTO.builder()
-                        .dateRequested(requestToSeeADoctor.getCreatedAt())
-                        .reason(requestToSeeADoctor.getReason())
-                        .status(String.valueOf(requestToSeeADoctor.getStatus()))
-                        .build())
+                .map(this::mapToResponseDTO)
                 .collect(Collectors.toList());
         if(patientRequests.isEmpty()){
             return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NO_CONTENT.name(), "List is empty"));
@@ -160,37 +140,12 @@ public class RequestToSeeADoctorService implements IRequestToSeeADoctorService{
         Status statusValue = Status.valueOf(status.toUpperCase());
         Page<RequestToSeeADoctor> findRequestByStatus = requestToSeeADoctorRepository.findRequestToSeeADoctorByStatus(statusValue, pageable);
         List<RequestToSeeADoctorResponseDTO> getAllRequest = findRequestByStatus.stream()
-                .map(requestToSeeADoctor -> RequestToSeeADoctorResponseDTO.builder()
-                        .dateRequested(requestToSeeADoctor.getCreatedAt())
-                        .status(String.valueOf(requestToSeeADoctor.getStatus()))
-                        .reason(requestToSeeADoctor.getReason())
-                        .id(requestToSeeADoctor.getId())
-                        .patientEmail(requestToSeeADoctor.getPatientBio().getEmail())
-                        .patientName(requestToSeeADoctor.getPatientBio().getFirstname() +" "+requestToSeeADoctor.getPatientBio().getLastname())
-                        .build())
+                .map(this::mapToResponseDTO)
                 .collect(Collectors.toList());
         if(getAllRequest.isEmpty()){
             return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NO_CONTENT.name(), "List is empty"));
         }
         return ResponseEntity.ok(new CustomResponse(HttpStatus.OK.name(), getAllRequest, "Successful"));
-    }
-
-    @Override
-    public ResponseEntity<CustomResponse> updateRequestStatus(Long requestId, RequestToSeeADoctorRequestDTO requestDTO, String status) {
-        Optional<RequestToSeeADoctor> request = requestToSeeADoctorRepository.findById(requestId);
-        if(!request.isPresent()){
-            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_FOUND.name(), "Request not found"));
-        }
-
-        RequestToSeeADoctor requestToSeeADoctor = request.get();
-        for(Status statuses : Status.values()){
-            if(statuses.name().equals(status.toUpperCase())){
-                requestToSeeADoctor.setStatus(Status.valueOf(status.toUpperCase()));
-                requestToSeeADoctorRepository.save(requestToSeeADoctor);
-                return ResponseEntity.ok(new CustomResponse(HttpStatus.OK.name(), "Request status updated successfully"));
-            }
-        }
-        return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_ACCEPTABLE.name(), "Invalid status"));
     }
 
     @Override
@@ -217,5 +172,41 @@ public class RequestToSeeADoctorService implements IRequestToSeeADoctorService{
             requestToSeeADoctorRepository.deleteById(request.getId());
         }
         return ResponseEntity.ok(new CustomResponse(HttpStatus.OK.name(), "Patient Requests Deleted Successfully"));
+    }
+
+    public RequestToSeeADoctorResponseDTO mapToResponseDTO(RequestToSeeADoctor requestToSeeADoctor){
+        return RequestToSeeADoctorResponseDTO.builder()
+                .id(requestToSeeADoctor.getId())
+                .reason(requestToSeeADoctor.getReason())
+                .patientEmail(requestToSeeADoctor.getPatientBio().getEmail())
+                .patientName(requestToSeeADoctor.getPatientBio().getFirstname() + " " + requestToSeeADoctor.getPatientBio().getLastname())
+                .dateRequested(requestToSeeADoctor.getCreatedAt())
+                .status(requestToSeeADoctor.getStatus().toString())
+                .build();
+    }
+
+    public static <T> boolean validateRequestFields(T requestDTO) {
+        if (requestDTO == null) {
+            return false; // Handle null input gracefully
+        }
+
+        // Get all fields in the request DTO class
+        Field[] fields = requestDTO.getClass().getDeclaredFields();
+
+        for (Field field : fields) {
+            try {
+                field.setAccessible(true);
+                Object fieldValue = field.get(requestDTO);
+
+                if ((fieldValue != null && fieldValue.toString().equals("string")) || Objects.equals(fieldValue, "")) {
+                    return false; // Found a field with value "String"
+                }
+            } catch (IllegalAccessException e) {
+                // Handle any exceptions if needed
+                e.printStackTrace();
+            }
+        }
+
+        return true; // All fields are valid
     }
 }

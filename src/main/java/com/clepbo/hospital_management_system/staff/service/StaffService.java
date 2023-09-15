@@ -25,10 +25,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.lang.reflect.Field;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -46,25 +44,18 @@ public class StaffService implements IStaffService{
     private static final Pattern PATTERN = Pattern.compile(emailRegex);
     @Override
     public ResponseEntity<CustomResponse> createNewStaff(StaffRequestDto request) {
-        if(request.firstName()==null){
-            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.BAD_REQUEST.name(), "firstName is required"));
-        }
-        if(request.lastName()==null){
-            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.BAD_REQUEST.name(), "lastName is required"));
-        }
-        if(request.email()==null){
-            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.BAD_REQUEST.name(), "email is required"));
-        }
+
         if(!isEmailValid(request.email())){
             return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.BAD_REQUEST.name(), "provide correct email format"));
         }
-        if(request.password()==null){
-            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.BAD_REQUEST.name(), "password is required"));
+
+        if(!validateRequestFields(request)){
+            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.BAD_REQUEST.name(), "One or more field is empty or equals 'string'"));
         }
 
         Optional<Staff> existingStaff = staffRepository.findByEmail(request.email());
         if(existingStaff.isPresent()){
-            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.BAD_REQUEST.name(), "User with is email is taken."));
+            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.BAD_REQUEST.name(), "User already exist!"));
         }
 
         Staff staff = Staff.builder()
@@ -77,27 +68,35 @@ public class StaffService implements IStaffService{
                 .build();
         staffRepository.save(staff);
 
-        var accessToken = jwtService.generateToken(new CustomUserDetails(staff));
-
-        return ResponseEntity.ok(new CustomResponse(HttpStatus.CREATED.name(), accessToken, "Successfully created new staff"));
+        return ResponseEntity.ok(new CustomResponse(HttpStatus.CREATED.name(), mapToStaffResponse(staff), "Successfully created new staff"));
     }
 
     @Override
     public ResponseEntity<CustomResponse> authenticateStaff(StaffLoginRequestDTO loginRequestDTO) {
+        Optional<Staff> staffOptional = staffRepository.findByEmail(loginRequestDTO.getEmail());
+        if(staffOptional.isEmpty()){
+            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.BAD_REQUEST.name(), "Incorrect Username or email"));
+        }
+
+        if(!validateRequestFields(loginRequestDTO)){
+            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.BAD_REQUEST.name(), "One or more field is empty or equals 'string'"));
+        }
+        Staff staff = staffOptional.get();
+
+        if(!passwordEncoder.matches(loginRequestDTO.getPassword(), staff.getPassword())){
+            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.BAD_REQUEST.name(), "Incorrect Password!"));
+        }
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 loginRequestDTO.getEmail(),
                 loginRequestDTO.getPassword()
         ));
-        Staff staff = staffRepository.findByEmail(loginRequestDTO.getEmail()).get();
+
+
         var accessToken = jwtService.generateToken(new CustomUserDetails(staff));
 
         StaffLoginResponseDTO responseDto = StaffLoginResponseDTO.builder()
                 .accessToken(accessToken)
-                .id(staff.getId())
-                .firstName(staff.getFirstName())
-                .lastName(staff.getLastName())
-                .email(staff.getEmail())
-                .roles(staff.getRoles().name())
+                .responseDto(mapToStaffResponse(staff))
                 .build();
 
         return ResponseEntity.ok(new CustomResponse(HttpStatus.OK.name(), responseDto, "Login Successful"));
@@ -127,6 +126,12 @@ public class StaffService implements IStaffService{
                 .email(staff.getEmail())
                 .firstName(staff.getFirstName())
                 .lastName(staff.getLastName())
+                .gender(staff.getGender())
+                .dateOfBirth(staff.getDateOfBirth())
+                .phoneNumber(staff.getPhoneNumber())
+                .status(staff.getStatus())
+                .salary(staff.getSalary())
+                .isEnabled(staff.isEnabled())
                 .roles(staff.getRoles().name())
                 .build();
     }
@@ -136,15 +141,10 @@ public class StaffService implements IStaffService{
         Optional<Staff> getStaff = staffRepository.findById(id);
         if(getStaff.isPresent()){
             Staff staff = getStaff.get();
-            StaffResponseDto responseDto = StaffResponseDto.builder()
-                    .id(staff.getId())
-                    .firstName(staff.getFirstName())
-                    .lastName(staff.getLastName())
-                    .email(staff.getEmail())
-                    .build();
+            StaffResponseDto responseDto = mapToStaffResponse(staff);
             return ResponseEntity.ok(new CustomResponse(HttpStatus.OK.name(), responseDto, "Successful"));
         }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_FOUND.name(), "Invalid staffID/Staff doesn't exist"));
     }
 
     @Override
@@ -158,7 +158,7 @@ public class StaffService implements IStaffService{
         staffRepository.save(updatedStaff);
 
 
-        return ResponseEntity.ok(new CustomResponse(HttpStatus.ACCEPTED.name(), "Update Successful"));
+        return ResponseEntity.ok(new CustomResponse(HttpStatus.ACCEPTED.name(), mapToStaffResponse(updatedStaff), "Update Successful"));
     }
 
     @Override
@@ -175,14 +175,14 @@ public class StaffService implements IStaffService{
     @Override
     public ResponseEntity<CustomResponse> addStaffAddress(Long staffId, StaffAddressDTO request) {
         Optional<Staff> staffOpt = staffRepository.findById(staffId);
-        if(!staffOpt.isPresent()){
+        if(staffOpt.isEmpty()){
             return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.BAD_REQUEST.name(), "Staff doesn't exist"));
         }
         if(staffId == null){
             return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.BAD_REQUEST.name(), "StaffID is required"));
         }
-        if(request==null){
-            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.BAD_REQUEST.name(), "request body is required"));
+        if(!validateRequestFields(request)){
+            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.BAD_REQUEST.name(), "One or more field is empty or equals 'string'"));
         }
 
         StaffAddress staffAddress = StaffAddress.builder()
@@ -195,7 +195,7 @@ public class StaffService implements IStaffService{
                 .build();
         staffAddressRepository.save(staffAddress);
         if(staffAddress!=null){
-            return ResponseEntity.ok(new CustomResponse(HttpStatus.CREATED.name(), "Successfully added address"));
+            return ResponseEntity.ok(new CustomResponse(HttpStatus.CREATED.name(), staffAddress, "Successfully added address"));
         }
         return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.BAD_REQUEST.name(), "Could not add address"));
     }
@@ -208,8 +208,9 @@ public class StaffService implements IStaffService{
             if(staffAddressList.isEmpty()){
                 return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_FOUND.name(), "Staff Address is empty"));
             }
-            List<StaffAddressDTO> staffAddresses = staffAddressList.stream()
-                    .map(staffAddress -> StaffAddressDTO.builder()
+            List<StaffAddressResponseDTO> staffAddresses = staffAddressList.stream()
+                    .map(staffAddress -> StaffAddressResponseDTO.builder()
+                            .id(staffAddress.getId())
                             .street(staffAddress.getStreet())
                             .state(staffAddress.getState())
                             .city(staffAddress.getCity())
@@ -225,28 +226,36 @@ public class StaffService implements IStaffService{
     @Override
     public ResponseEntity<CustomResponse> updateStaffAddress(Long staffId, StaffAddressDTO addressDTO, Long addressId) {
         Optional<Staff> findStaffByStaffId = staffRepository.findById(staffId);
-        if(findStaffByStaffId.isPresent()){
-            Staff staffExist = findStaffByStaffId.get();
-            Optional<StaffAddress> findByAddressId = staffAddressRepository.findStaffAddressByIdAndStaff_Id(addressId, staffExist.getId());
-            if(findByAddressId.isPresent()){
-                StaffAddress updateAddress = findByAddressId.get();
-                BeanUtils.copyProperties(addressDTO, updateAddress, getNullPropertyNames(updateAddress));
-                staffAddressRepository.save(updateAddress);
-                return ResponseEntity.ok(new CustomResponse(HttpStatus.ACCEPTED.name(), updateAddress, "Address update Successful"));
-            }
+
+        if(!findStaffByStaffId.isPresent()){
+            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.BAD_REQUEST.name(), "Invalid staff Id"));
+        }
+
+        Optional<StaffAddress> findByAddressId = staffAddressRepository.findById(addressId);
+
+        if(!findByAddressId.isPresent()){
             return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.BAD_REQUEST.name(), "Invalid Address Id"));
         }
-        return ResponseEntity.notFound().build();
+
+        StaffAddress updateAddress = findByAddressId.get();
+        if(!updateAddress.getStaff().getId().equals(staffId)){
+            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.BAD_REQUEST.name(), "Invalid Address Id"));
+        }
+
+        BeanUtils.copyProperties(addressDTO, updateAddress, getNullPropertyNames(addressDTO));
+        staffAddressRepository.save(updateAddress);
+        return ResponseEntity.ok(new CustomResponse(HttpStatus.ACCEPTED.name(), updateAddress, "Address update Successful"));
     }
 
     @Override
     public ResponseEntity<CustomResponse> deleteStaffAddress(Long addressId) {
         Optional<StaffAddress> staffAddress = staffAddressRepository.findById(addressId);
-        if(staffAddress.isPresent()){
-            staffAddressRepository.deleteById(addressId);
-            return ResponseEntity.ok(new CustomResponse(HttpStatus.OK.name(), "Staff Address successfully deleted"));
+        if(!staffAddress.isPresent()){
+            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_FOUND.name(), "Staff Address doesn't exist"));
         }
-        return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_FOUND.name(), "Staff Address doesn't exist"));
+
+        staffAddressRepository.deleteById(addressId);
+        return ResponseEntity.ok(new CustomResponse(HttpStatus.OK.name(), "Staff Address successfully deleted"));
     }
 
     @Override
@@ -297,6 +306,31 @@ public class StaffService implements IStaffService{
         var accessToken = jwtService.generateToken(new CustomUserDetails(staff));
 
         log.info("\n\nADMIN_TOKEN: " + accessToken + "\n\n");
+    }
+
+    public static <T> boolean validateRequestFields(T requestDTO) {
+        if (requestDTO == null) {
+            return false; // Handle null input gracefully
+        }
+
+        // Get all fields in the request DTO class
+        Field[] fields = requestDTO.getClass().getDeclaredFields();
+
+        for (Field field : fields) {
+            try {
+                field.setAccessible(true);
+                Object fieldValue = field.get(requestDTO);
+
+                if ((fieldValue != null && fieldValue.toString().equals("string")) || Objects.equals(fieldValue, "")) {
+                    return false; // Found a field with value "String"
+                }
+            } catch (IllegalAccessException e) {
+                // Handle any exceptions if needed
+                e.printStackTrace();
+            }
+        }
+
+        return true; // All fields are valid
     }
 
 }
