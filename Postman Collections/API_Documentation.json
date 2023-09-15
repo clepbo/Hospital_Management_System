@@ -1,0 +1,5071 @@
+{
+	"info": {
+		"_postman_id": "1f4e5713-9d53-41a6-9fda-f20f9cb91891",
+		"name": "Hospital Management System",
+		"description": "The Hospital Management System API is a robust and flexible software interface designed to enhance the operational efficiency of healthcare institutions. It empowers hospitals, clinics, and medical facilities by providing seamless integration with a wide range of functions and features. Key components of this API include patient management, appointment scheduling, medical records digitization, and report generation. By streamlining administrative tasks and centralizing patient data, the Hospital Management System API not only simplifies the day-to-day operations of healthcare providers but also improves the overall quality of patient care. It represents a significant step toward modernizing healthcare delivery and ensuring that healthcare professionals can focus on what truly matters: the well-being of their patients.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "api",
+			"item": [
+				{
+					"name": "v1",
+					"item": [
+						{
+							"name": "staff",
+							"item": [
+								{
+									"name": "authenticate",
+									"id": "9d7b9c39-b81b-420b-90f8-c9bf1416d76b",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"email\":\"admin@login.com\",\r\n    \"password\":\"admin\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "localhost:8081/hms/api/v1/staff/authenticate",
+										"description": "This endpoint allows you to authenticate each staff using JWT security by providing the staff's email and password."
+									},
+									"response": [
+										{
+											"id": "056a1bf9-b260-4f07-9bd0-679b1febc968",
+											"name": "authenticate",
+											"originalRequest": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n    \"email\":\"admin@login.com\",\r\n    \"password\":\"admin\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": "localhost:8081/hms/api/v1/staff/authenticate"
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Mon, 04 Sep 2023 10:42:38 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"OK\",\n    \"data\": {\n        \"id\": 1,\n        \"firstName\": null,\n        \"lastName\": null,\n        \"email\": \"admin@login.com\",\n        \"roles\": \"ADMIN\",\n        \"accessToken\": \"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBsb2dpbi5jb20iLCJpYXQiOjE2OTM4MjQxNTgsImV4cCI6MTY5MzgyNTU5OH0.dLrfKWVr4-Hlf0S5RelpC0PBhZpovXUzVFX40sWgeeU\",\n        \"enabled\": false\n    },\n    \"message\": \"Login Successful\"\n}"
+										},
+										{
+											"id": "fa7e8fd7-c124-4614-be26-55080fcbc3bc",
+											"name": "Incorrect Username or Email response",
+											"originalRequest": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n    \"email\":\"admi@login.com\",\r\n    \"password\":\"admin\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": "localhost:8081/hms/api/v1/staff/authenticate"
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Thu, 14 Sep 2023 20:43:27 GMT"
+												},
+												{
+													"key": "Connection",
+													"value": "close"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"BAD_REQUEST\",\n    \"message\": \"Incorrect Username or email\"\n}"
+										},
+										{
+											"id": "692bef4d-3cb9-4bd4-aa04-c5ebbc980ca1",
+											"name": "Incorrect password response",
+											"originalRequest": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n    \"email\":\"admin@login.com\",\r\n    \"password\":\"admi\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": "localhost:8081/hms/api/v1/staff/authenticate"
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Thu, 14 Sep 2023 20:44:09 GMT"
+												},
+												{
+													"key": "Connection",
+													"value": "close"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"BAD_REQUEST\",\n    \"message\": \"Incorrect Password!\"\n}"
+										}
+									]
+								},
+								{
+									"name": "Add new staff",
+									"id": "b539e8f9-419f-404d-9c8d-0791f64fe5cb",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBsb2dpbi5jb20iLCJpYXQiOjE2OTQ3MjM1MzMsImV4cCI6MTY5NDcyNDk3M30.-R80xVNconjLSQpPDQi-8Sw1dNTInU1luSvvphwHfF0"
+											}
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"firstName\": \"Israel\",\r\n  \"lastName\": \"Oni\",\r\n  \"email\": \"oniokikijesu04@gmail.com\",\r\n  \"password\": \"pwd1\",\r\n  \"roles\": \"DOCTOR\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "localhost:8081/hms/api/v1/staff/create",
+										"description": "This endpoint allows you to add a new staff to the Hospital Management System Database. You will be prompted to provide necessary information about the staff before adding them to the database."
+									},
+									"response": [
+										{
+											"id": "267b176d-e2a9-42b9-a724-6afa5d545e04",
+											"name": "Add new staff",
+											"originalRequest": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n  \"firstName\": \"Israel\",\r\n  \"lastName\": \"Oni\",\r\n  \"email\": \"oniokikijesu04@gmail.com\",\r\n  \"password\": \"pwd1\",\r\n  \"roles\": \"DOCTOR\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": "localhost:8081/hms/api/v1/staff/create"
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Thu, 14 Sep 2023 20:33:02 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"CREATED\",\n    \"data\": {\n        \"id\": 11,\n        \"firstName\": \"Israel\",\n        \"lastName\": \"Oni\",\n        \"email\": \"oniokikijesu04@gmail.com\",\n        \"roles\": \"DOCTOR\",\n        \"gender\": null,\n        \"dateOfBirth\": null,\n        \"phoneNumber\": null,\n        \"status\": null,\n        \"salary\": null,\n        \"enabled\": false\n    },\n    \"message\": \"Successfully created new staff\"\n}"
+										},
+										{
+											"id": "2a2c0122-b1a9-42fb-bd1d-36da0d8c2fbf",
+											"name": "User already exist response",
+											"originalRequest": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n  \"firstName\": \"Israel\",\r\n  \"lastName\": \"Oni\",\r\n  \"email\": \"oniokikijesu04@gmail.com\",\r\n  \"password\": \"pwd1\",\r\n  \"roles\": \"DOCTOR\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": "localhost:8081/hms/api/v1/staff/create"
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Thu, 14 Sep 2023 20:47:30 GMT"
+												},
+												{
+													"key": "Connection",
+													"value": "close"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"BAD_REQUEST\",\n    \"message\": \"User already exist!\"\n}"
+										},
+										{
+											"id": "37936ab5-eb99-4245-8017-c9473a4cdaf1",
+											"name": "Empty field response",
+											"originalRequest": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n  \"firstName\": \"Nobody\",\r\n  \"lastName\": \"\",\r\n  \"email\": \"onii@gmail.com\",\r\n  \"password\": \"pwd1\",\r\n  \"roles\": \"DOCTOR\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": "localhost:8081/hms/api/v1/staff/create"
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Thu, 14 Sep 2023 21:55:10 GMT"
+												},
+												{
+													"key": "Connection",
+													"value": "close"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"BAD_REQUEST\",\n    \"message\": \"One or more field is empty or equals 'string'\"\n}"
+										}
+									]
+								},
+								{
+									"name": "Add Staff Address",
+									"id": "79510e25-f09e-4757-996f-9abe620fca35",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJvbmlva2lraWplc3UwNEBnbWFpbC5jb20iLCJpYXQiOjE2OTM4MjQ3NjgsImV4cCI6MTY5MzgyNjIwOH0.6lRajrzHvnNzhanBGQH5JXzjiBTlZkU8jsqVNoOKRxw"
+											}
+										},
+										"method": "POST",
+										"header": [
+											{
+												"key": "staffId",
+												"value": "8",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"street\": \"Phase 3, Zone 4\",\r\n  \"city\": \"Gwagwalada\",\r\n  \"state\": \"FCT\",\r\n  \"postalCode\": \"902101\",\r\n  \"country\": \"Nigeria\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8081/hms/api/v1/staff/address?staffId=8",
+											"host": [
+												"localhost"
+											],
+											"port": "8081",
+											"path": [
+												"hms",
+												"api",
+												"v1",
+												"staff",
+												"address"
+											],
+											"query": [
+												{
+													"key": "staffId",
+													"value": "8",
+													"type": "text"
+												}
+											]
+										},
+										"description": "This endpoint allows you to add multiple contact addresses for staff by providing the staff's unique ID and the contact address information."
+									},
+									"response": [
+										{
+											"id": "ee7dac7b-fa49-4c92-8990-4a5a73823ba7",
+											"name": "Add Staff Address",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "staffId",
+														"value": "8",
+														"type": "text"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n  \"street\": \"Phase 3, Zone 4\",\r\n  \"city\": \"Gwagwalada\",\r\n  \"state\": \"FCT\",\r\n  \"postalCode\": \"902101\",\r\n  \"country\": \"Nigeria\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "localhost:8081/hms/api/v1/staff/address?staffId=8",
+													"host": [
+														"localhost"
+													],
+													"port": "8081",
+													"path": [
+														"hms",
+														"api",
+														"v1",
+														"staff",
+														"address"
+													],
+													"query": [
+														{
+															"key": "staffId",
+															"value": "8"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Mon, 04 Sep 2023 10:58:49 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"CREATED\",\n    \"message\": \"Successfully added address\"\n}"
+										}
+									]
+								},
+								{
+									"name": "Fetch all Staff",
+									"id": "09760413-087f-46a6-9ec5-81839e6188ee",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBsb2dpbi5jb20iLCJpYXQiOjE2OTM4MjUyMDksImV4cCI6MTY5MzgyNjY0OX0.hnmmF9xo_fmnHWJD9xLl43iQeZC3pGqAEYMiKD5RAZM"
+											}
+										},
+										"method": "GET",
+										"header": [],
+										"url": "localhost:8081/hms/api/v1/staff/allStaff",
+										"description": "This endpoint returns the list of all staff present in the Hospital Management System. This list can only be accessed by an authorized staff, the ADMIN."
+									},
+									"response": [
+										{
+											"id": "2fe8b6cf-26fb-4592-8773-61d757032e17",
+											"name": "Fetch all Staff",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": "localhost:8081/hms/api/v1/staff/allStaff"
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Mon, 04 Sep 2023 11:01:25 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"OK\",\n    \"data\": [\n        {\n            \"id\": 1,\n            \"firstName\": null,\n            \"lastName\": null,\n            \"email\": \"admin@login.com\",\n            \"roles\": \"ADMIN\",\n            \"enabled\": false\n        },\n        {\n            \"id\": 3,\n            \"firstName\": \"Abigail\",\n            \"lastName\": \"Owolabi\",\n            \"email\": \"gella@gmail.com\",\n            \"roles\": \"DOCTOR\",\n            \"enabled\": false\n        },\n        {\n            \"id\": 5,\n            \"firstName\": \"Abigail\",\n            \"lastName\": \"Owolabi\",\n            \"email\": \"bethieleon@gmail.com\",\n            \"roles\": \"DOCTOR\",\n            \"enabled\": false\n        },\n        {\n            \"id\": 4,\n            \"firstName\": \"Abraham\",\n            \"lastName\": \"Peter\",\n            \"email\": \"petersab1111@gmail.com\",\n            \"roles\": \"DOCTOR\",\n            \"enabled\": false\n        },\n        {\n            \"id\": 8,\n            \"firstName\": \"Israel\",\n            \"lastName\": \"Oni\",\n            \"email\": \"oniokikijesu04@gmail.com\",\n            \"roles\": \"DOCTOR\",\n            \"enabled\": false\n        },\n        {\n            \"id\": 2,\n            \"firstName\": \"Miracle\",\n            \"lastName\": \"Samuel\",\n            \"email\": \"mimi@gmail.com\",\n            \"roles\": \"RECEPTIONIST\",\n            \"enabled\": false\n        }\n    ],\n    \"message\": \"Successful\"\n}"
+										}
+									]
+								},
+								{
+									"name": "Find Staff By Id",
+									"event": [
+										{
+											"listen": "prerequest",
+											"script": {
+												"id": "c1accfe3-bcab-4dba-a5b6-3606c2938714",
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"id": "76358d07-99d6-43df-b82b-9ae22c98218c",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBsb2dpbi5jb20iLCJpYXQiOjE2OTM4MjUyMDksImV4cCI6MTY5MzgyNjY0OX0.hnmmF9xo_fmnHWJD9xLl43iQeZC3pGqAEYMiKD5RAZM"
+											}
+										},
+										"method": "GET",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "localhost:8081/hms/api/v1/staff/8",
+										"description": "This endpoint returns the data of a single staff by providing the staff's unique ID."
+									},
+									"response": [
+										{
+											"id": "4af9fa1d-b635-4fa1-9aad-3d13d5b1313b",
+											"name": "Find Staff By Id",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": "localhost:8081/hms/api/v1/staff/8"
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Mon, 04 Sep 2023 11:06:19 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"OK\",\n    \"data\": {\n        \"id\": 8,\n        \"firstName\": \"Israel\",\n        \"lastName\": \"Oni\",\n        \"email\": \"oniokikijesu04@gmail.com\",\n        \"roles\": \"DOCTOR\",\n        \"enabled\": false\n    },\n    \"message\": \"Successful\"\n}"
+										},
+										{
+											"id": "8b959301-7743-4362-9b0b-5bfed2e9792c",
+											"name": "Invalid staffId response",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": "localhost:8081/hms/api/v1/staff/9"
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Thu, 14 Sep 2023 22:00:56 GMT"
+												},
+												{
+													"key": "Connection",
+													"value": "close"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"NOT_FOUND\",\n    \"message\": \"Invalid staffID/Staff doesn't exist\"\n}"
+										}
+									]
+								},
+								{
+									"name": "Fetch staff address by staffid",
+									"id": "5bc2d757-53e5-4c33-9c60-b334788f1de5",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBsb2dpbi5jb20iLCJpYXQiOjE2OTM4MjUyMDksImV4cCI6MTY5MzgyNjY0OX0.hnmmF9xo_fmnHWJD9xLl43iQeZC3pGqAEYMiKD5RAZM"
+											}
+										},
+										"method": "GET",
+										"header": [],
+										"url": "http://localhost:8081/hms/api/v1/staff/address/8",
+										"description": "This endpoint returns the list of addresses for a particular staff."
+									},
+									"response": [
+										{
+											"id": "0b5fcbea-ec38-4f34-892e-06a52137aa6c",
+											"name": "Fetch staff address by staffid",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": "http://localhost:8081/hms/api/v1/staff/address/8"
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Mon, 04 Sep 2023 11:09:12 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"FOUND\",\n    \"data\": [\n        {\n            \"street\": \"Phase 3, Zone 4\",\n            \"city\": \"Gwagwalada\",\n            \"state\": \"FCT\",\n            \"postalCode\": \"902101\",\n            \"country\": \"Nigeria\"\n        },\n        {\n            \"street\": \"Phase 3, Zone 4\",\n            \"city\": \"Gwagwalada\",\n            \"state\": \"FCT\",\n            \"postalCode\": \"902101\",\n            \"country\": \"Nigeria\"\n        }\n    ],\n    \"message\": \"Staff Address found\"\n}"
+										},
+										{
+											"id": "f4165f7f-5acb-41aa-9abf-d24303e1df6d",
+											"name": "Empty staff address response",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": "http://localhost:8081/hms/api/v1/staff/address/5"
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Thu, 14 Sep 2023 22:01:47 GMT"
+												},
+												{
+													"key": "Connection",
+													"value": "close"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"NOT_FOUND\",\n    \"message\": \"Staff Address is empty\"\n}"
+										}
+									]
+								},
+								{
+									"name": "Update Staff by StaffId",
+									"id": "1beddc89-5dbd-4ef8-9f38-1aee81e748d9",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBsb2dpbi5jb20iLCJpYXQiOjE2OTM4MjUyMDksImV4cCI6MTY5MzgyNjY0OX0.hnmmF9xo_fmnHWJD9xLl43iQeZC3pGqAEYMiKD5RAZM"
+											}
+										},
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"firstName\":\"Okikijesu\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "localhost:8081/hms/api/v1/staff/8",
+										"description": "This endpoint allows you to update a staff's data."
+									},
+									"response": [
+										{
+											"id": "7d0adb60-4795-4de6-91aa-c7a1d5fa7219",
+											"name": "Update Staff by StaffId",
+											"originalRequest": {
+												"method": "PUT",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n    \"firstName\":\"Okikijesu\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": "localhost:8081/hms/api/v1/staff/8"
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Mon, 04 Sep 2023 11:11:12 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"ACCEPTED\",\n    \"message\": \"Update Successful\"\n}"
+										}
+									]
+								},
+								{
+									"name": "Update Staff address",
+									"id": "aa564b60-9531-4229-98c2-8cc9c141513a",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBsb2dpbi5jb20iLCJpYXQiOjE2OTM4MjgzODMsImV4cCI6MTY5MzgyOTgyM30.Qv1ZcvPoxHFtAjAN-cLd28x-Urb-_r9U8yXdZHsx778"
+											}
+										},
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"postalCode\": \"902102\",\r\n  \"country\": \"Niger\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://localhost:8081/hms/api/v1/staff/address/8?addressId=2",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8081",
+											"path": [
+												"hms",
+												"api",
+												"v1",
+												"staff",
+												"address",
+												"8"
+											],
+											"query": [
+												{
+													"key": "addressId",
+													"value": "2"
+												}
+											]
+										},
+										"description": "This endpoint allows you to update a staff address information."
+									},
+									"response": [
+										{
+											"id": "7793f6d9-2594-4f13-a04b-850dc42a0477",
+											"name": "Update Staff address",
+											"originalRequest": {
+												"method": "PUT",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n  \"postalCode\": \"902102\",\r\n  \"country\": \"Niger\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "http://localhost:8081/hms/api/v1/staff/address/8?addressId=2",
+													"protocol": "http",
+													"host": [
+														"localhost"
+													],
+													"port": "8081",
+													"path": [
+														"hms",
+														"api",
+														"v1",
+														"staff",
+														"address",
+														"8"
+													],
+													"query": [
+														{
+															"key": "addressId",
+															"value": "2"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Mon, 04 Sep 2023 12:11:57 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"ACCEPTED\",\n    \"data\": {\n        \"id\": 2,\n        \"street\": \"Zone 4\",\n        \"city\": \"Abuja\",\n        \"state\": \"FCT\",\n        \"postalCode\": \"902102\",\n        \"country\": \"Niger\",\n        \"staff\": {\n            \"id\": 8,\n            \"firstName\": \"Okikijesu\",\n            \"lastName\": \"Oni\",\n            \"email\": \"oniokikijesu04@gmail.com\",\n            \"password\": \"$2a$10$PHLC6emgie/SzVvkB1jXc.IRNir7PxbMmoOe/LLM2utmDNi/ZQZuu\",\n            \"gender\": null,\n            \"dateOfBirth\": null,\n            \"phoneNumber\": null,\n            \"status\": null,\n            \"roles\": \"DOCTOR\",\n            \"salary\": null,\n            \"createdAt\": \"2023-09-04T10:47:30.993+00:00\",\n            \"modifiedAt\": \"2023-09-04T11:11:12.754+00:00\",\n            \"enabled\": false\n        }\n    },\n    \"message\": \"Address update Successful\"\n}"
+										}
+									]
+								},
+								{
+									"name": "Delete address by addressId",
+									"id": "206101f1-0535-4014-b432-3aef3827f63a",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBsb2dpbi5jb20iLCJpYXQiOjE2OTM4MzA2MjcsImV4cCI6MTY5MzgzMjA2N30.RG8IEPB9BGG9pmIuIrE3GjWTPXznBxxvIOZKXP37gzM"
+											}
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": "http://localhost:8081/hms/api/v1/staff/address/3",
+										"description": "This endpoint allows you to delete a staff's address by providing the address ID"
+									},
+									"response": [
+										{
+											"id": "5248351b-7fc2-479f-96f0-cc6464ee7278",
+											"name": "Delete address by addressId",
+											"originalRequest": {
+												"method": "DELETE",
+												"header": [],
+												"url": "http://localhost:8081/hms/api/v1/staff/address/3"
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Mon, 04 Sep 2023 12:38:14 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"OK\",\n    \"message\": \"Staff Address successfully deleted\"\n}"
+										},
+										{
+											"id": "64175788-fd6f-4984-9005-8ace1e6dd05b",
+											"name": "Address doesn't exist response",
+											"originalRequest": {
+												"method": "DELETE",
+												"header": [],
+												"url": "http://localhost:8081/hms/api/v1/staff/address/3"
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Thu, 14 Sep 2023 22:19:14 GMT"
+												},
+												{
+													"key": "Connection",
+													"value": "close"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"NOT_FOUND\",\n    \"message\": \"Staff Address doesn't exist\"\n}"
+										}
+									]
+								},
+								{
+									"name": "Delete all address by  satffId",
+									"id": "b020c347-d218-4164-a831-59a53e01e235",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBsb2dpbi5jb20iLCJpYXQiOjE2OTM4MzEzNjcsImV4cCI6MTY5MzgzMjgwN30.tCuLiwrCfvzQJ54y7p01Md2p6mFV3OMVag2utWSAYoY"
+											}
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": "http://localhost:8081/hms/api/v1/staff/staffAddress/8",
+										"description": "This endpoint allows you to delete all addresses for a particluar staff"
+									},
+									"response": [
+										{
+											"id": "7b2025d5-d402-4bea-8569-3b12bb62befe",
+											"name": "Delete all address by  satffId",
+											"originalRequest": {
+												"method": "DELETE",
+												"header": [],
+												"url": "http://localhost:8081/hms/api/v1/staff/staffAddress/8"
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Mon, 04 Sep 2023 12:43:58 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"OK\",\n    \"message\": \"Staff Address deleted Successfully\"\n}"
+										}
+									]
+								},
+								{
+									"name": "Delete Staff",
+									"id": "f3afc3b8-a7c0-4578-93f4-c08b11ee73ff",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBsb2dpbi5jb20iLCJpYXQiOjE2OTM4MzEzNjcsImV4cCI6MTY5MzgzMjgwN30.tCuLiwrCfvzQJ54y7p01Md2p6mFV3OMVag2utWSAYoY"
+											}
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": "http://localhost:8081/hms/api/v1/staff/deleteStaff/10",
+										"description": "This endpoint allows you to delete a staff from the database."
+									},
+									"response": [
+										{
+											"id": "c294cc58-75eb-4d91-97ec-0364b23d8d17",
+											"name": "Delete Staff",
+											"originalRequest": {
+												"method": "DELETE",
+												"header": [],
+												"url": "http://localhost:8081/hms/api/v1/staff/deleteStaff/10"
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Mon, 04 Sep 2023 12:49:19 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"OK\",\n    \"message\": \"Staff Deleted Successfully\"\n}"
+										}
+									]
+								}
+							],
+							"id": "9964e053-fc77-47fc-8b42-32068bef15f8",
+							"description": "This module consist of all activities related to staff management in the Hospital Management System."
+						},
+						{
+							"name": "patient",
+							"item": [
+								{
+									"name": "Create a new patient file",
+									"id": "1f087dc3-4b31-474e-91db-a64752362c3d",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtaW1pQGdtYWlsLmNvbSIsImlhdCI6MTY5NDExNDE1MSwiZXhwIjoxNjk0MTE1NTkxfQ.Sn_nqjhFdoXGv2hAVkf9sdqMzgQoe4S6CMCgH4fj4Qg"
+											}
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"firstname\": \"Israel\",\r\n  \"lastname\": \"Oni\",\r\n  \"email\": \"oniokikijesu04@gmail.com\",\r\n  \"gender\": \"Male\",\r\n  \"dateOfBirth\": \"27/10/2001\",\r\n  \"phoneNumber\": \"08136793904\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "http://localhost:8081/hms/api/v1/patient",
+										"description": "This endpoint allows you to create a new patient file by providing necessary details about the patient."
+									},
+									"response": [
+										{
+											"id": "08693297-754c-4874-b0f4-543b66208341",
+											"name": "Create a new patient file",
+											"originalRequest": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n  \"firstname\": \"Israel\",\r\n  \"lastname\": \"Oni\",\r\n  \"email\": \"oniokikijesu04@gmail.com\",\r\n  \"gender\": \"Male\",\r\n  \"dateOfBirth\": \"27/10/2001\",\r\n  \"phoneNumber\": \"08136793904\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": "http://localhost:8081/hms/api/v1/patient"
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Thu, 07 Sep 2023 19:17:26 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"CREATED\",\n    \"message\": \"Patient Bio Created Successfully\"\n}"
+										},
+										{
+											"id": "9738b3e0-20b1-45f3-8650-18f188ef8194",
+											"name": "Empty field response",
+											"originalRequest": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n  \"firstname\": \"Israel\",\r\n  \"lastname\": \"\",\r\n  \"email\": \"okikijesu04@gmail.com\",\r\n  \"gender\": \"Male\",\r\n  \"dateOfBirth\": \"27/10/2001\",\r\n  \"phoneNumber\": \"08136793904\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": "http://localhost:8081/hms/api/v1/patient"
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Thu, 14 Sep 2023 22:04:40 GMT"
+												},
+												{
+													"key": "Connection",
+													"value": "close"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"BAD_REQUEST\",\n    \"message\": \"One or more field is empty or equals 'string'\"\n}"
+										},
+										{
+											"id": "30662eb0-ba56-4d03-a7e6-57172f818d78",
+											"name": "User/Email already exist response",
+											"originalRequest": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n  \"firstname\": \"Israel\",\r\n  \"lastname\": \"Oni\",\r\n  \"email\": \"oniokikijesu04@gmail.com\",\r\n  \"gender\": \"Male\",\r\n  \"dateOfBirth\": \"27/10/2001\",\r\n  \"phoneNumber\": \"08136793904\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": "http://localhost:8081/hms/api/v1/patient"
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Thu, 14 Sep 2023 22:10:33 GMT"
+												},
+												{
+													"key": "Connection",
+													"value": "close"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"BAD_REQUEST\",\n    \"message\": \"User/Email already exist\"\n}"
+										},
+										{
+											"id": "dab92159-3c6e-435f-a043-668e80947747",
+											"name": "Invalid email response",
+											"originalRequest": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n  \"firstname\": \"Israel\",\r\n  \"lastname\": \"Oni\",\r\n  \"email\": \"oniokikijesu04@gmailcom\",\r\n  \"gender\": \"Male\",\r\n  \"dateOfBirth\": \"27/10/2001\",\r\n  \"phoneNumber\": \"08136793904\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": "http://localhost:8081/hms/api/v1/patient"
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Thu, 14 Sep 2023 22:11:17 GMT"
+												},
+												{
+													"key": "Connection",
+													"value": "close"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"BAD_REQUEST\",\n    \"message\": \"provide correct email format\"\n}"
+										}
+									]
+								},
+								{
+									"name": "Add patient's contact address",
+									"id": "12f959fc-758e-4b70-a902-01424c568cc3",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtaW1pQGdtYWlsLmNvbSIsImlhdCI6MTY5NDExNDU4MCwiZXhwIjoxNjk0MTE2MDIwfQ.m7Yj5RCg_itm-oiTaLSttCOqOgm4qbDDz3OupsGT2r8"
+											}
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"address\": \"Phase 3, Zone 4, Back of Police Station\",\r\n  \"nextOfKin\": \"Oni Emmanuel\",\r\n  \"nextOfKinPhoneNumber\": \"08184098023\",\r\n  \"nextOfKinAddress\": \"Plot 3, Bowen quaters, Olupanna Iwo.\",\r\n  \"nextOfKinRelationship\": \"Brother\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "http://localhost:8081/hms/api/v1/patient/address/2",
+										"description": "This endpoint allows you to add contact address for a patient."
+									},
+									"response": [
+										{
+											"id": "222f01d3-d80c-46ed-b906-2d810491650f",
+											"name": "Add patient's contact address",
+											"originalRequest": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n  \"address\": \"Phase 3, Zone 4, Back of Police Station\",\r\n  \"nextOfKin\": \"Oni Emmanuel\",\r\n  \"nextOfKinPhoneNumber\": \"08184098023\",\r\n  \"nextOfKinAddress\": \"Plot 3, Bowen quaters, Olupanna Iwo.\",\r\n  \"nextOfKinRelationship\": \"Brother\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": "http://localhost:8081/hms/api/v1/patient/address/2"
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Thu, 07 Sep 2023 19:23:18 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"CREATED\",\n    \"message\": \"Patient Address Successfully added\"\n}"
+										}
+									]
+								},
+								{
+									"name": "Fetch all patient",
+									"id": "c3b5d74c-c820-4c21-924d-993098a9fcb7",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtaW1pQGdtYWlsLmNvbSIsImlhdCI6MTY5NDExNTA5MCwiZXhwIjoxNjk0MTE2NTMwfQ.bNIIJ9cS1ZcrTcSLDcMoxGQITYdR9rmM12xqnQW9fxo"
+											}
+										},
+										"method": "GET",
+										"header": [],
+										"url": "http://localhost:8081/hms/api/v1/patient/",
+										"description": "This endpoint provides a list of all registered patient"
+									},
+									"response": [
+										{
+											"id": "4650c3aa-465d-4bab-912c-fc071ec07a31",
+											"name": "Fetch all patient",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": "http://localhost:8081/hms/api/v1/patient/"
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Thu, 07 Sep 2023 19:31:50 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"OK\",\n    \"data\": [\n        {\n            \"id\": 1,\n            \"firstname\": \"Israel\",\n            \"lastname\": \"Oni\",\n            \"email\": \"oniokikijesu@gmail.com\",\n            \"dateOfBirth\": \"27/10/2001\",\n            \"phoneNumber\": \"08136793904\",\n            \"gender\": \"Male\"\n        },\n        {\n            \"id\": 2,\n            \"firstname\": \"Israel\",\n            \"lastname\": \"Oni\",\n            \"email\": \"oniokikijesu04@gmail.com\",\n            \"dateOfBirth\": \"27/10/2001\",\n            \"phoneNumber\": \"08136793904\",\n            \"gender\": \"Male\"\n        }\n    ],\n    \"message\": \"Successful\"\n}"
+										}
+									]
+								},
+								{
+									"name": "Fetch a patient's data",
+									"id": "2f994531-cf08-4e93-aa5c-652414b10744",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtaW1pQGdtYWlsLmNvbSIsImlhdCI6MTY5NDExNTA5MCwiZXhwIjoxNjk0MTE2NTMwfQ.bNIIJ9cS1ZcrTcSLDcMoxGQITYdR9rmM12xqnQW9fxo"
+											}
+										},
+										"method": "GET",
+										"header": [],
+										"url": "http://localhost:8081/hms/api/v1/patient/1",
+										"description": "This endpoint returns a patient's details by providing the patient's unique id"
+									},
+									"response": [
+										{
+											"id": "55858672-187d-43d9-b69f-b513ef4d2921",
+											"name": "Fetch a patient's data",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": "http://localhost:8081/hms/api/v1/patient/1"
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Thu, 07 Sep 2023 19:34:39 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"OK\",\n    \"data\": {\n        \"id\": 1,\n        \"firstname\": \"Israel\",\n        \"lastname\": \"Oni\",\n        \"email\": \"oniokikijesu@gmail.com\",\n        \"dateOfBirth\": \"27/10/2001\",\n        \"phoneNumber\": \"08136793904\",\n        \"gender\": \"Male\"\n    },\n    \"message\": \"Successful\"\n}"
+										},
+										{
+											"id": "c2590271-bb31-44cc-bb42-b8ac02d4242d",
+											"name": "Patient not found response",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": "http://localhost:8081/hms/api/v1/patient/25"
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Thu, 14 Sep 2023 22:13:21 GMT"
+												},
+												{
+													"key": "Connection",
+													"value": "close"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"NOT_FOUND\",\n    \"message\": \"Patient not found\"\n}"
+										}
+									]
+								},
+								{
+									"name": "Fetch patient's contact address",
+									"id": "aaf4ec42-c46a-4e6b-8556-4404e6d75c29",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtaW1pQGdtYWlsLmNvbSIsImlhdCI6MTY5NDExNTg0MywiZXhwIjoxNjk0MTE3MjgzfQ.7JW5CocKSco7iL93fAPsEd0JpOGuJ_0z1n-5OSemLJg"
+											}
+										},
+										"method": "GET",
+										"header": [],
+										"url": "http://localhost:8081/hms/api/v1/patient/address/2",
+										"description": "This endpoint returns the contact address of a patient."
+									},
+									"response": [
+										{
+											"id": "cefa2787-9f7e-4c25-872c-23c59ce397ca",
+											"name": "Fetch patient's contact address",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": "http://localhost:8081/hms/api/v1/patient/address/2"
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Thu, 07 Sep 2023 19:58:21 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"FOUND\",\n    \"data\": [\n        {\n            \"address\": \"Phase 3, Zone 4, Back of Police Station\",\n            \"nextOfKin\": \"Plot 3, Bowen quaters, Olupanna Iwo.\",\n            \"nextOfKinPhoneNumber\": \"08184098023\",\n            \"nextOfKinAddress\": \"Plot 3, Bowen quaters, Olupanna Iwo.\",\n            \"nextOfKinRelationship\": \"Brother\"\n        }\n    ],\n    \"message\": \"Patient Addresses found\"\n}"
+										},
+										{
+											"id": "14e2eedf-189e-4ff4-a76c-f576ad3325aa",
+											"name": "Address not found response",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": "http://localhost:8081/hms/api/v1/patient/address/8"
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Thu, 14 Sep 2023 22:14:05 GMT"
+												},
+												{
+													"key": "Connection",
+													"value": "close"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"NOT_FOUND\",\n    \"message\": \"Address not found \"\n}"
+										}
+									]
+								},
+								{
+									"name": "Update a patient's bio data",
+									"id": "e6e743de-4a5c-466a-bca8-97a111c89e61",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtaW1pQGdtYWlsLmNvbSIsImlhdCI6MTY5NDExNjg5MiwiZXhwIjoxNjk0MTE4MzMyfQ.-VWhOwltTlEwbw80KwBpBS5m1qpPagJuZuZBdlo4XlM"
+											}
+										},
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"dateOfBirth\": \"27/10/2000\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "http://localhost:8081/hms/api/v1/patient/1",
+										"description": "This endpoint allows you to update/edit a patient bio data"
+									},
+									"response": [
+										{
+											"id": "28bf89dd-ca64-4445-b91d-ae389bb4e9ec",
+											"name": "Update a patient's bio data",
+											"originalRequest": {
+												"method": "PUT",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n  \"dateOfBirth\": \"27/10/2000\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": "http://localhost:8081/hms/api/v1/patient/1"
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Thu, 07 Sep 2023 20:02:42 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"OK\",\n    \"message\": \"Patient Bio Updated successfully\"\n}"
+										}
+									]
+								},
+								{
+									"name": "Update a patient's contact address",
+									"id": "f8842206-9374-466f-bfc1-cfe4bdb83bf9",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtaW1pQGdtYWlsLmNvbSIsImlhdCI6MTY5NDExNzMwOCwiZXhwIjoxNjk0MTE4NzQ4fQ.mj0wX1JYiUeMeCqaFi-eoXt5oLb2dNS6GURl1wtHqhc"
+											}
+										},
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"address\": \"Black mosque, Mega screen\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://localhost:8081/hms/api/v1/patient/address/1?addressId=1",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8081",
+											"path": [
+												"hms",
+												"api",
+												"v1",
+												"patient",
+												"address",
+												"1"
+											],
+											"query": [
+												{
+													"key": "addressId",
+													"value": "1",
+													"type": "text"
+												}
+											]
+										},
+										"description": "This endpoint allows you to edit/update a patient's contact address"
+									},
+									"response": [
+										{
+											"id": "64c49153-2ca8-4e08-b564-24a7340cc788",
+											"name": "Update a patient's contact address",
+											"originalRequest": {
+												"method": "PUT",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n  \"address\": \"Black mosque, Mega screen\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "http://localhost:8081/hms/api/v1/patient/address/1?addressId=1",
+													"protocol": "http",
+													"host": [
+														"localhost"
+													],
+													"port": "8081",
+													"path": [
+														"hms",
+														"api",
+														"v1",
+														"patient",
+														"address",
+														"1"
+													],
+													"query": [
+														{
+															"key": "addressId",
+															"value": "1"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Thu, 07 Sep 2023 20:16:12 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"OK\",\n    \"message\": \"Successfully Updated Patient Address\"\n}"
+										}
+									]
+								},
+								{
+									"name": "Delete Address",
+									"id": "3dacb828-1ffb-45d5-af78-d4ca7f9eef8b",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtaW1pQGdtYWlsLmNvbSIsImlhdCI6MTY5NDE2MzMzMiwiZXhwIjoxNjk0MTY0NzcyfQ.YCUvSrxRlIBxpIFpGLaHvi3lQVuuROJcMDAtBKSyNCg"
+											}
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": "http://localhost:8081/hms/api/v1/patient/address/1",
+										"description": "This endpoint allows you to delete a patient's contact address by providing the address' unique id"
+									},
+									"response": [
+										{
+											"id": "8ac6ac1f-4767-43f7-ac5d-a1180359f0f8",
+											"name": "Delete Address",
+											"originalRequest": {
+												"method": "DELETE",
+												"header": [],
+												"url": "http://localhost:8081/hms/api/v1/patient/address/1"
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Fri, 08 Sep 2023 09:01:51 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"OK\",\n    \"message\": \"Patient Address Successfully deleted\"\n}"
+										},
+										{
+											"id": "5f5f5a42-0910-4be6-a142-84209ccbe0cb",
+											"name": "Address not found response",
+											"originalRequest": {
+												"method": "DELETE",
+												"header": [],
+												"url": "http://localhost:8081/hms/api/v1/patient/address/9"
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Thu, 14 Sep 2023 22:20:42 GMT"
+												},
+												{
+													"key": "Connection",
+													"value": "close"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"NOT_FOUND\",\n    \"message\": \"Address not found \"\n}"
+										}
+									]
+								},
+								{
+									"name": "Delete Patient's Address",
+									"id": "b6e935ba-65f3-4539-93a8-b23bdd70f992",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtaW1pQGdtYWlsLmNvbSIsImlhdCI6MTY5NDE2MzMzMiwiZXhwIjoxNjk0MTY0NzcyfQ.YCUvSrxRlIBxpIFpGLaHvi3lQVuuROJcMDAtBKSyNCg"
+											}
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": "http://localhost:8081/hms/api/v1/patient/deletePatientAddress/2",
+										"description": "This endpoint allows you to delete all contact address associated with a patient by providing the patient's unique id"
+									},
+									"response": [
+										{
+											"id": "2bae527e-0afc-4a60-9ee0-7462bbc002d3",
+											"name": "New Request",
+											"originalRequest": {
+												"method": "DELETE",
+												"header": [],
+												"url": "http://localhost:8081/hms/api/v1/patient/deletePatientAddress/2"
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Fri, 08 Sep 2023 09:03:22 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"OK\",\n    \"message\": \"Patient Contact Address Successfully deleted\"\n}"
+										},
+										{
+											"id": "5ed0fdb3-ec2e-4eb4-a05a-1e9ac15c12c1",
+											"name": "Patient not found response",
+											"originalRequest": {
+												"method": "DELETE",
+												"header": [],
+												"url": "http://localhost:8081/hms/api/v1/patient/deletePatientAddress/8"
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Thu, 14 Sep 2023 22:21:17 GMT"
+												},
+												{
+													"key": "Connection",
+													"value": "close"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"NOT_FOUND\",\n    \"message\": \"Patient not found \"\n}"
+										}
+									]
+								}
+							],
+							"id": "cb028c44-3859-42b6-8827-dfc6e80945ad",
+							"description": "This folder contains all endpoint that allows you to carry out various activities on a patient"
+						},
+						{
+							"name": "Request to see a doctor",
+							"item": [
+								{
+									"name": "Create Request",
+									"id": "8e594fd5-052d-4062-9e06-0af874a176c4",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"patientEmail\": \"oniokikijesu04@gmail.com\",\r\n  \"reason\": \"Documenting API in postman\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "localhost:8081/hms/api/v1/seeADoctor/createRequest",
+										"description": "This endpoint allows a patient to make a request to see a doctor. The patient will be sent a confirmation email on submit of the request."
+									},
+									"response": [
+										{
+											"id": "9f712a8c-6dc8-403b-bf67-669120c2ddf5",
+											"name": "Create Request",
+											"originalRequest": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n  \"patientEmail\": \"oniokikijesu04@gmail.com\",\r\n  \"reason\": \"Documenting API in postman\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": "localhost:8081/hms/api/v1/seeADoctor/createRequest"
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Fri, 08 Sep 2023 21:44:55 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"CREATED\",\n    \"data\": {\n        \"id\": 1,\n        \"patientBio\": {\n            \"id\": 2,\n            \"firstname\": \"Israel\",\n            \"lastname\": \"Oni\",\n            \"email\": \"oniokikijesu04@gmail.com\",\n            \"dateOfBirth\": \"27/10/2001\",\n            \"phoneNumber\": \"08136793904\",\n            \"gender\": \"Male\",\n            \"role\": \"PATIENT\",\n            \"contactAddress\": [],\n            \"medicalHistory\": [],\n            \"medicalRecord\": [],\n            \"createdAt\": \"2023-09-07T19:17:26.925+00:00\",\n            \"modifiedAt\": \"2023-09-07T19:17:26.925+00:00\"\n        },\n        \"reason\": \"Documenting API in postman\",\n        \"status\": \"PENDING\",\n        \"createdAt\": \"2023-09-08T21:44:51.532+00:00\",\n        \"modifiedAt\": \"2023-09-08T21:44:51.532+00:00\"\n    },\n    \"message\": \"Request Created Successfully\"\n}"
+										},
+										{
+											"id": "b249f720-1e64-4302-9f5d-306968aa9aab",
+											"name": "Patient doesn't exist response",
+											"originalRequest": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n  \"patientEmail\": \"oniokikijesu0@gmail.com\",\r\n  \"reason\": \"Documenting API in postman\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": "localhost:8081/hms/api/v1/seeADoctor/createRequest"
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Thu, 14 Sep 2023 22:22:10 GMT"
+												},
+												{
+													"key": "Connection",
+													"value": "close"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"NOT_FOUND\",\n    \"message\": \"Patient doesn't exist oniokikijesu0@gmail.com\"\n}"
+										},
+										{
+											"id": "5c2b0118-289a-4a98-a674-8c312f6d7efd",
+											"name": "Empty field response",
+											"originalRequest": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n  \"patientEmail\": \"oniokikijesu0@gmail.com\",\r\n  \"reason\": \"\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": "localhost:8081/hms/api/v1/seeADoctor/createRequest"
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Thu, 14 Sep 2023 22:25:39 GMT"
+												},
+												{
+													"key": "Connection",
+													"value": "close"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"BAD_REQUEST\",\n    \"message\": \"One or more field is empty or equals 'string'\"\n}"
+										}
+									]
+								},
+								{
+									"name": "Fetch all request",
+									"id": "f65d761d-7645-44fa-bde5-eefe24a49d38",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtaW1pQGdtYWlsLmNvbSIsImlhdCI6MTY5NDIwOTY3NCwiZXhwIjoxNjk0MjExMTE0fQ.fzWjSMJrNDoAQNgz4VhqHv1-CBoBj2OTNgnQVYge-yU"
+											}
+										},
+										"method": "GET",
+										"header": [],
+										"url": "localhost:8081/hms/api/v1/seeADoctor",
+										"description": "This endpoint returns the list of all requests"
+									},
+									"response": [
+										{
+											"id": "ee207666-9102-4f59-8d19-c84a533d74d4",
+											"name": "Fetch all request",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": "localhost:8081/hms/api/v1/seeADoctor"
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Fri, 08 Sep 2023 21:48:15 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"OK\",\n    \"data\": [\n        {\n            \"id\": 1,\n            \"patientName\": \"Israel Oni\",\n            \"patientEmail\": \"oniokikijesu04@gmail.com\",\n            \"reason\": \"Documenting API in postman\",\n            \"status\": \"PENDING\",\n            \"dateRequested\": \"2023-09-08T21:44:51.532+00:00\"\n        }\n    ],\n    \"message\": \"Successful\"\n}"
+										}
+									]
+								},
+								{
+									"name": "Get request by Id",
+									"id": "1b4e51a5-4d80-4e80-968d-40f304a1b752",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtaW1pQGdtYWlsLmNvbSIsImlhdCI6MTY5NDIwOTY3NCwiZXhwIjoxNjk0MjExMTE0fQ.fzWjSMJrNDoAQNgz4VhqHv1-CBoBj2OTNgnQVYge-yU"
+											}
+										},
+										"method": "GET",
+										"header": [],
+										"url": "http://localhost:8081/hms/api/v1/seeADoctor/request/1",
+										"description": "This endpoint returns the detail about a request by providing the request Id"
+									},
+									"response": [
+										{
+											"id": "0c67aafc-98e8-49b4-9569-dc7e200c8192",
+											"name": "Get request by Id",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": "http://localhost:8081/hms/api/v1/seeADoctor/request/1"
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Fri, 08 Sep 2023 21:52:36 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"FOUND\",\n    \"data\": {\n        \"id\": 1,\n        \"patientName\": \"Israel Oni\",\n        \"patientEmail\": \"oniokikijesu04@gmail.com\",\n        \"reason\": \"Documenting API in postman\",\n        \"status\": \"PENDING\",\n        \"dateRequested\": \"2023-09-08T21:44:51.532+00:00\"\n    },\n    \"message\": \"Request Found\"\n}"
+										},
+										{
+											"id": "b484849d-a697-4da8-aa5a-172eece7aa66",
+											"name": "Request not found response",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": "http://localhost:8081/hms/api/v1/seeADoctor/request/1"
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Thu, 14 Sep 2023 22:26:25 GMT"
+												},
+												{
+													"key": "Connection",
+													"value": "close"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"NOT_FOUND\",\n    \"message\": \"Request not found\"\n}"
+										}
+									]
+								},
+								{
+									"name": "Get request by status",
+									"id": "05abb6d5-6a9b-4aec-bb52-662b38666725",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtaW1pQGdtYWlsLmNvbSIsImlhdCI6MTY5NDIxMDA3NCwiZXhwIjoxNjk0MjExNTE0fQ.Mfly-P8jU548kI7zyKUsDYQOci3bUeAVtSak45wp1XA"
+											}
+										},
+										"method": "GET",
+										"header": [],
+										"url": "http://localhost:8081/hms/api/v1/seeADoctor/requestStatus/pending",
+										"description": "This endpoint returns the details of a request by providing the status of the request. Possible status includes pending, fixed etc."
+									},
+									"response": [
+										{
+											"id": "05995ad9-b26c-4b07-b1dd-b0564edbb430",
+											"name": "Get request by status",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": "http://localhost:8081/hms/api/v1/seeADoctor/requestStatus/pending"
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Fri, 08 Sep 2023 21:56:23 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"OK\",\n    \"data\": [\n        {\n            \"id\": 1,\n            \"patientName\": \"Israel Oni\",\n            \"patientEmail\": \"oniokikijesu04@gmail.com\",\n            \"reason\": \"Documenting API in postman\",\n            \"status\": \"PENDING\",\n            \"dateRequested\": \"2023-09-08T21:44:51.532+00:00\"\n        }\n    ],\n    \"message\": \"Successful\"\n}"
+										}
+									]
+								},
+								{
+									"name": "Get Request by patient Id",
+									"id": "e2cefee8-e1af-46a0-a156-9092b1df35c7",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtaW1pQGdtYWlsLmNvbSIsImlhdCI6MTY5NDIxMDA3NCwiZXhwIjoxNjk0MjExNTE0fQ.Mfly-P8jU548kI7zyKUsDYQOci3bUeAVtSak45wp1XA"
+											}
+										},
+										"method": "GET",
+										"header": [],
+										"url": "http://localhost:8081/hms/api/v1/seeADoctor/patient/2",
+										"description": "This endpoint returns all request made by a patient by proving the patient's id"
+									},
+									"response": [
+										{
+											"id": "01e2f2ff-a94f-42a6-9a39-21803946f7ca",
+											"name": "Get Request by patient Id",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": "http://localhost:8081/hms/api/v1/seeADoctor/patient/2"
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Fri, 08 Sep 2023 21:57:55 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"OK\",\n    \"data\": [\n        {\n            \"reason\": \"Documenting API in postman\",\n            \"status\": \"PENDING\",\n            \"dateRequested\": \"2023-09-08T21:44:51.532+00:00\"\n        }\n    ],\n    \"message\": \"Suucessful\"\n}"
+										},
+										{
+											"id": "603a7693-d047-48f3-acef-80b1c7b8d173",
+											"name": "Patient doesn't exist repsonse",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": "http://localhost:8081/hms/api/v1/seeADoctor/patient/8"
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Thu, 14 Sep 2023 22:34:49 GMT"
+												},
+												{
+													"key": "Connection",
+													"value": "close"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"NOT_FOUND\",\n    \"message\": \"Patient doesn't exist 8\"\n}"
+										}
+									]
+								},
+								{
+									"name": "Delete Request",
+									"id": "adc681e8-6fc3-4561-9c63-419841e957d3",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtaW1pQGdtYWlsLmNvbSIsImlhdCI6MTY5NDIxMDA3NCwiZXhwIjoxNjk0MjExNTE0fQ.Mfly-P8jU548kI7zyKUsDYQOci3bUeAVtSak45wp1XA"
+											}
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": "http://localhost:8081/hms/api/v1/seeADoctor/request/1",
+										"description": "This endpoint allows you to delete a request by providing the request Id"
+									},
+									"response": [
+										{
+											"id": "28962a07-9895-4136-9d81-8c45cbb2b846",
+											"name": "Delete Request",
+											"originalRequest": {
+												"method": "DELETE",
+												"header": [],
+												"url": "http://localhost:8081/hms/api/v1/seeADoctor/request/1"
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Fri, 08 Sep 2023 22:10:34 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"OK\",\n    \"message\": \"Request Deleted Successfully\"\n}"
+										},
+										{
+											"id": "ff027974-532b-4428-a298-cfc0ddacf22d",
+											"name": "Request not found response",
+											"originalRequest": {
+												"method": "DELETE",
+												"header": [],
+												"url": "http://localhost:8081/hms/api/v1/seeADoctor/request/1"
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Thu, 14 Sep 2023 22:35:20 GMT"
+												},
+												{
+													"key": "Connection",
+													"value": "close"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"NOT_FOUND\",\n    \"message\": \"Request not found\"\n}"
+										}
+									]
+								},
+								{
+									"name": "Delete a patient's request",
+									"id": "c18153c2-e9c2-4dc8-9ee9-51890dfdd2b9",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtaW1pQGdtYWlsLmNvbSIsImlhdCI6MTY5NDIxMDA3NCwiZXhwIjoxNjk0MjExNTE0fQ.Mfly-P8jU548kI7zyKUsDYQOci3bUeAVtSak45wp1XA"
+											}
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": "http://localhost:8081/hms/api/v1/seeADoctor/patient/2",
+										"description": "This endpoint allows you to delete all request made by a patient by providing the patient's Id"
+									},
+									"response": [
+										{
+											"id": "c803f5ef-34ba-4b88-a7ef-858b39cc6504",
+											"name": "Delete a patient's request",
+											"originalRequest": {
+												"method": "DELETE",
+												"header": [],
+												"url": "http://localhost:8081/hms/api/v1/seeADoctor/patient/2"
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Fri, 08 Sep 2023 22:11:09 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"OK\",\n    \"message\": \"Patient Requests Deleted Successfully\"\n}"
+										}
+									]
+								}
+							],
+							"id": "72a77c8a-c132-4a79-af30-3b90cce50123"
+						},
+						{
+							"name": "Appointment",
+							"item": [
+								{
+									"name": "Create an Appointment",
+									"id": "87a0fe27-3721-4848-91e1-329b7d6327b1",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBsb2dpbi5jb20iLCJpYXQiOjE2OTQ1OTU5MDMsImV4cCI6MTY5NDU5NzM0M30.0SEaMsOWzQRev4te3jUt_24UDQ9cwmCxddryznNfzr0"
+											}
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"date\": \"2023-09-13\",\r\n  \"time\": \"10:30\",\r\n  \"patientId\": \"1\",\r\n  \"staffId\": \"4\",\r\n  \"description\": \"Testng the appointment endpoint\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "http://localhost:8081/hms/api/v1/seeADoctor/appointment/create",
+										"description": "This endpoint allows you to create an appointment between a patient and a doctor. Both the patient and the doctor will receive a notification email on submit of this request."
+									},
+									"response": [
+										{
+											"id": "241588f7-3753-4afa-a3e5-a2c46f9cc3a2",
+											"name": "Create an Appointment",
+											"originalRequest": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n  \"date\": \"2023-09-13\",\r\n  \"time\": \"10:30\",\r\n  \"patientId\": \"1\",\r\n  \"staffId\": \"4\",\r\n  \"description\": \"Testng the appointment endpoint\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": "http://localhost:8081/hms/api/v1/seeADoctor/appointment/create"
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Wed, 13 Sep 2023 09:06:58 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"CREATED\",\n    \"message\": \"Appointment Created Successfully\"\n}"
+										},
+										{
+											"id": "1e72a9ca-d125-4c5a-9f4b-425fa0ba71f3",
+											"name": "Empty field response",
+											"originalRequest": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n  \"date\": \"2023-09-13\",\r\n  \"time\": \"10:30\",\r\n  \"patientId\": \"\",\r\n  \"staffId\": \"4\",\r\n  \"description\": \"Testng the appointment endpoint\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": "http://localhost:8081/hms/api/v1/seeADoctor/appointment/create"
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Thu, 14 Sep 2023 22:40:31 GMT"
+												},
+												{
+													"key": "Connection",
+													"value": "close"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"BAD_REQUEST\",\n    \"message\": \"One or more field is empty or equals 'string'\"\n}"
+										},
+										{
+											"id": "438ee00b-eed3-4356-a010-98bc7432f423",
+											"name": "Invalid date or time response",
+											"originalRequest": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n  \"date\": \"2023-09-13\",\r\n  \"time\": \"10:30\",\r\n  \"patientId\": \"1\",\r\n  \"staffId\": \"4\",\r\n  \"description\": \"Testng the appointment endpoint\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": "http://localhost:8081/hms/api/v1/seeADoctor/appointment/create"
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Thu, 14 Sep 2023 22:41:02 GMT"
+												},
+												{
+													"key": "Connection",
+													"value": "close"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"NOT_FOUND\",\n    \"message\": \"[Invalid date or time]\"\n}"
+										},
+										{
+											"id": "7e9fa553-3c19-4ff5-b4c6-86a55d8bc4b1",
+											"name": "Staff is not free response",
+											"originalRequest": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n  \"date\": \"2023-09-15\",\r\n  \"time\": \"10:30\",\r\n  \"patientId\": \"1\",\r\n  \"staffId\": \"4\",\r\n  \"description\": \"Testng the appointment endpoint\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": "http://localhost:8081/hms/api/v1/seeADoctor/appointment/create"
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Thu, 14 Sep 2023 22:42:20 GMT"
+												},
+												{
+													"key": "Connection",
+													"value": "close"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"NOT_FOUND\",\n    \"message\": \"[Staff is not free for the scheduled time]\"\n}"
+										}
+									]
+								},
+								{
+									"name": "Create appointment based on request",
+									"id": "635e198b-7ab1-4a85-9458-17bca10185f7",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBsb2dpbi5jb20iLCJpYXQiOjE2OTQ1OTYzMDMsImV4cCI6MTY5NDU5Nzc0M30.SVW0MQ3zDrtjVj9yBWVO5J7OTd2q7YRtQ6VVPbtsZ_o"
+											}
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"date\": \"2023-09-13\",\r\n  \"time\": \"10:50\",\r\n  \"patientId\": \"2\",\r\n  \"staffId\": \"4\",\r\n  \"description\": \"Tesing the endpoint to create an appointment based on a patient's request to see a doctor\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "http://localhost:8081/hms/api/v1/seeADoctor/appointment/create/3",
+										"description": "This endpoint allows you to create an appointment based on a patient's request to see the doctor. Both the patient and the doctor will receive a notification email on submit of this request."
+									},
+									"response": [
+										{
+											"id": "29082556-e853-4ec0-9d5d-7b764338bea3",
+											"name": "Create appointment based on request",
+											"originalRequest": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n  \"date\": \"2023-09-13\",\r\n  \"time\": \"10:50\",\r\n  \"patientId\": \"2\",\r\n  \"staffId\": \"4\",\r\n  \"description\": \"Tesing the endpoint to create an appointment based on a patient's request to see a doctor\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": "http://localhost:8081/hms/api/v1/seeADoctor/appointment/create/3"
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Wed, 13 Sep 2023 09:15:25 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"CREATED\",\n    \"message\": \"Appointment Created Successfully\"\n}"
+										}
+									]
+								},
+								{
+									"name": "View all appointment",
+									"id": "d6c7f7f6-5e5a-4e95-b255-d0c12a9cc5ea",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBsb2dpbi5jb20iLCJpYXQiOjE2OTQ1OTY2MTgsImV4cCI6MTY5NDU5ODA1OH0.C4yKinw8y_52wm1YDx1XtHcXxwmCIAPUvyC-cMc_5to"
+											}
+										},
+										"method": "GET",
+										"header": [],
+										"url": "http://localhost:8081/hms/api/v1/seeADoctor/appointment",
+										"description": "This endpoint returns the list of all appointment"
+									},
+									"response": [
+										{
+											"id": "7bf8ead6-c948-479c-9750-870538812e54",
+											"name": "View all appointment",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": "http://localhost:8081/hms/api/v1/seeADoctor/appointment/"
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Wed, 13 Sep 2023 09:18:02 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"OK\",\n    \"data\": [\n        {\n            \"id\": 1,\n            \"date\": \"2023-09-13\",\n            \"time\": \"10:30:00\",\n            \"patientName\": \"Israel Oni\",\n            \"doctorName\": \"Abraham Peter\",\n            \"status\": \"PENDING\",\n            \"description\": \"Testng the appointment endpoint\"\n        },\n        {\n            \"id\": 2,\n            \"date\": \"2023-09-13\",\n            \"time\": \"10:50:00\",\n            \"patientName\": \"Israel Oni\",\n            \"doctorName\": \"Abraham Peter\",\n            \"status\": \"PENDING\",\n            \"description\": \"Tesing the endpoint to create an appointment based on a patient's request to see a doctor\"\n        }\n    ],\n    \"message\": \"Successful\"\n}"
+										}
+									]
+								},
+								{
+									"name": "Get appointmentByID",
+									"id": "a2820064-8555-4ade-ae67-55632bc6375a",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBsb2dpbi5jb20iLCJpYXQiOjE2OTQ1OTY2MTgsImV4cCI6MTY5NDU5ODA1OH0.C4yKinw8y_52wm1YDx1XtHcXxwmCIAPUvyC-cMc_5to"
+											}
+										},
+										"method": "GET",
+										"header": [],
+										"url": "http://localhost:8081/hms/api/v1/seeADoctor/appointment/1",
+										"description": "This endpoint returns the detail of an appointment by providing the appointment ID"
+									},
+									"response": [
+										{
+											"id": "722e2bfe-4176-4153-8927-4ea381b24cb3",
+											"name": "Get appointmentByID",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": "http://localhost:8081/hms/api/v1/seeADoctor/appointment/1"
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Wed, 13 Sep 2023 09:19:58 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"FOUND\",\n    \"data\": {\n        \"id\": 1,\n        \"date\": \"2023-09-13\",\n        \"time\": \"10:30:00\",\n        \"patientName\": \"Israel Oni\",\n        \"doctorName\": \"Abraham Peter\",\n        \"status\": \"PENDING\",\n        \"description\": \"Testng the appointment endpoint\"\n    },\n    \"message\": \"Successful\"\n}"
+										},
+										{
+											"id": "26b8c987-806d-464e-a52e-e0273ac2073e",
+											"name": "Appointment not found response",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": "http://localhost:8081/hms/api/v1/seeADoctor/appointment/5"
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Thu, 14 Sep 2023 22:43:37 GMT"
+												},
+												{
+													"key": "Connection",
+													"value": "close"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"NOT_FOUND\",\n    \"message\": \"Appointment not found\"\n}"
+										}
+									]
+								},
+								{
+									"name": "Get appointment by Date",
+									"id": "a847c796-c90d-4331-bcf6-ba6325c7d734",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "GET",
+										"header": [],
+										"description": "This endpoint returns the list of all appointment for a particular date"
+									},
+									"response": [
+										{
+											"id": "f0408566-018a-4327-abe6-ec26a4074204",
+											"name": "Get appointment by Date",
+											"originalRequest": {
+												"method": "GET",
+												"header": []
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Wed, 13 Sep 2023 09:22:07 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"OK\",\n    \"data\": [\n        {\n            \"id\": 1,\n            \"date\": \"2023-09-13\",\n            \"time\": \"10:30:00\",\n            \"patientName\": \"Israel Oni\",\n            \"doctorName\": \"Abraham Peter\",\n            \"status\": \"PENDING\",\n            \"description\": \"Testng the appointment endpoint\"\n        },\n        {\n            \"id\": 2,\n            \"date\": \"2023-09-13\",\n            \"time\": \"10:50:00\",\n            \"patientName\": \"Israel Oni\",\n            \"doctorName\": \"Abraham Peter\",\n            \"status\": \"PENDING\",\n            \"description\": \"Tesing the endpoint to create an appointment based on a patient's request to see a doctor\"\n        }\n    ],\n    \"message\": \"Successful\"\n}"
+										}
+									]
+								},
+								{
+									"name": "Get appointment by staffID",
+									"id": "10133e84-7045-4e10-a903-a1c02608595b",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBsb2dpbi5jb20iLCJpYXQiOjE2OTQ1OTY2MTgsImV4cCI6MTY5NDU5ODA1OH0.C4yKinw8y_52wm1YDx1XtHcXxwmCIAPUvyC-cMc_5to"
+											}
+										},
+										"method": "GET",
+										"header": [],
+										"url": "http://localhost:8081/hms/api/v1/seeADoctor/appointment/staffAppointment/4",
+										"description": "This endpoint returns all appointment for a particular staff"
+									},
+									"response": [
+										{
+											"id": "7c7f5d3d-495e-4977-81bb-e466a24a9ba9",
+											"name": "Get appointment by staffID",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": "http://localhost:8081/hms/api/v1/seeADoctor/appointment/staffAppointment/4"
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Wed, 13 Sep 2023 09:24:52 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"OK\",\n    \"data\": [\n        {\n            \"id\": 1,\n            \"date\": \"2023-09-13\",\n            \"time\": \"10:30:00\",\n            \"patientName\": \"Israel Oni\",\n            \"doctorName\": \"Abraham Peter\",\n            \"status\": \"PENDING\",\n            \"description\": \"Testng the appointment endpoint\"\n        },\n        {\n            \"id\": 2,\n            \"date\": \"2023-09-13\",\n            \"time\": \"10:50:00\",\n            \"patientName\": \"Israel Oni\",\n            \"doctorName\": \"Abraham Peter\",\n            \"status\": \"PENDING\",\n            \"description\": \"Tesing the endpoint to create an appointment based on a patient's request to see a doctor\"\n        }\n    ],\n    \"message\": \"Successful\"\n}"
+										}
+									]
+								},
+								{
+									"name": "Get appointment by patient ID",
+									"id": "28893adc-a59e-4ebf-8e63-cc70e30f4180",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBsb2dpbi5jb20iLCJpYXQiOjE2OTQ1OTY2MTgsImV4cCI6MTY5NDU5ODA1OH0.C4yKinw8y_52wm1YDx1XtHcXxwmCIAPUvyC-cMc_5to"
+											}
+										},
+										"method": "GET",
+										"header": [],
+										"url": "http://localhost:8081/hms/api/v1/seeADoctor/appointment/patientAppointment/1",
+										"description": "This endpoint returns all appointment for a patient"
+									},
+									"response": [
+										{
+											"id": "200c684c-ae5e-4e9e-a830-fcf0a95801f9",
+											"name": "Get appointment by patient ID",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": "http://localhost:8081/hms/api/v1/seeADoctor/appointment/patientAppointment/1"
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Wed, 13 Sep 2023 09:25:32 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"OK\",\n    \"data\": [\n        {\n            \"id\": 1,\n            \"date\": \"2023-09-13\",\n            \"time\": \"10:30:00\",\n            \"patientName\": \"Israel Oni\",\n            \"doctorName\": \"Abraham Peter\",\n            \"status\": \"PENDING\",\n            \"description\": \"Testng the appointment endpoint\"\n        }\n    ],\n    \"message\": \"Successful\"\n}"
+										}
+									]
+								},
+								{
+									"name": "Reschedule an appointment",
+									"id": "f87d46de-7961-4ff7-b04b-efb6517cb18b",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBsb2dpbi5jb20iLCJpYXQiOjE2OTQ1OTY2MTgsImV4cCI6MTY5NDU5ODA1OH0.C4yKinw8y_52wm1YDx1XtHcXxwmCIAPUvyC-cMc_5to"
+											}
+										},
+										"method": "PUT",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8081/hms/api/v1/seeADoctor/appointment/reschedule/2?date=2023-09-14&time=08:00",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8081",
+											"path": [
+												"hms",
+												"api",
+												"v1",
+												"seeADoctor",
+												"appointment",
+												"reschedule",
+												"2"
+											],
+											"query": [
+												{
+													"key": "date",
+													"value": "2023-09-14",
+													"type": "text"
+												},
+												{
+													"key": "time",
+													"value": "08:00",
+													"type": "text"
+												}
+											]
+										},
+										"description": "This endpoint allows you to reschedule an appointment. Both the patient and the doctor will receive a notification email on submit of this request."
+									},
+									"response": [
+										{
+											"id": "2208a9ea-3b65-4ff6-9511-6a9b383333ae",
+											"name": "Reschedule an appointment",
+											"originalRequest": {
+												"method": "PUT",
+												"header": [],
+												"url": {
+													"raw": "http://localhost:8081/hms/api/v1/seeADoctor/appointment/reschedule/2?date=2023-09-14&time=08:00",
+													"protocol": "http",
+													"host": [
+														"localhost"
+													],
+													"port": "8081",
+													"path": [
+														"hms",
+														"api",
+														"v1",
+														"seeADoctor",
+														"appointment",
+														"reschedule",
+														"2"
+													],
+													"query": [
+														{
+															"key": "date",
+															"value": "2023-09-14"
+														},
+														{
+															"key": "time",
+															"value": "08:00"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Wed, 13 Sep 2023 09:28:21 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"OK\",\n    \"message\": \"Appointment Rescheduled Successfully\"\n}"
+										}
+									]
+								},
+								{
+									"name": "Update appointment status",
+									"id": "e6ce188b-71f9-4a76-9d39-00e96598a805",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBsb2dpbi5jb20iLCJpYXQiOjE2OTQ1OTY2MTgsImV4cCI6MTY5NDU5ODA1OH0.C4yKinw8y_52wm1YDx1XtHcXxwmCIAPUvyC-cMc_5to"
+											}
+										},
+										"method": "PUT",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8081/hms/api/v1/seeADoctor/appointment/updateStatus/1?status=completed",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8081",
+											"path": [
+												"hms",
+												"api",
+												"v1",
+												"seeADoctor",
+												"appointment",
+												"updateStatus",
+												"1"
+											],
+											"query": [
+												{
+													"key": "status",
+													"value": "completed",
+													"type": "text"
+												}
+											]
+										},
+										"description": "This endpoint allows you to update an appointment status. Possible status includes completed, expired, pending etc."
+									},
+									"response": [
+										{
+											"id": "5a825abb-af33-4f9c-98e4-8b59ff49dca8",
+											"name": "Update appointment status",
+											"originalRequest": {
+												"method": "PUT",
+												"header": [],
+												"url": {
+													"raw": "http://localhost:8081/hms/api/v1/seeADoctor/appointment/updateStatus/1?status=completed",
+													"protocol": "http",
+													"host": [
+														"localhost"
+													],
+													"port": "8081",
+													"path": [
+														"hms",
+														"api",
+														"v1",
+														"seeADoctor",
+														"appointment",
+														"updateStatus",
+														"1"
+													],
+													"query": [
+														{
+															"key": "status",
+															"value": "completed"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Wed, 13 Sep 2023 09:31:11 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"OK\",\n    \"message\": \"Appointment status updated successfully\"\n}"
+										}
+									]
+								},
+								{
+									"name": "Update Appointment",
+									"id": "2199c3ff-fcf4-4bac-b741-563c81a7cd2e",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBsb2dpbi5jb20iLCJpYXQiOjE2OTQ1OTY2MTgsImV4cCI6MTY5NDU5ODA1OH0.C4yKinw8y_52wm1YDx1XtHcXxwmCIAPUvyC-cMc_5to"
+											}
+										},
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"date\": \"2023-09-13\",\r\n  \"time\": \"14:00\",\r\n  \"patientId\": \"1\",\r\n  \"staffId\": \"2\",\r\n  \"description\": \"Updating an appointment\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "http://localhost:8081/hms/api/v1/seeADoctor/appointment/update/2",
+										"description": "This endpoint allows you to update the details of an appointment"
+									},
+									"response": [
+										{
+											"id": "9ea9ea5e-5a6a-421f-af83-3efea1a46910",
+											"name": "Update Appointment",
+											"originalRequest": {
+												"method": "PUT",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n  \"date\": \"2023-09-13\",\r\n  \"time\": \"14:00\",\r\n  \"patientId\": \"1\",\r\n  \"staffId\": \"2\",\r\n  \"description\": \"Updating an appointment\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": "http://localhost:8081/hms/api/v1/seeADoctor/appointment/update/2"
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Wed, 13 Sep 2023 09:33:18 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"OK\",\n    \"message\": \"Appointment updated successfully\"\n}"
+										}
+									]
+								},
+								{
+									"name": "Delete an appointment",
+									"id": "286ab636-7e54-4e93-86ce-0f2032de2fd3",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBsb2dpbi5jb20iLCJpYXQiOjE2OTQ1OTY2MTgsImV4cCI6MTY5NDU5ODA1OH0.C4yKinw8y_52wm1YDx1XtHcXxwmCIAPUvyC-cMc_5to"
+											}
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": "http://localhost:8081/hms/api/v1/seeADoctor/appointment/delete/2",
+										"description": "This endpoint allows you to delete an appointment"
+									},
+									"response": [
+										{
+											"id": "69f4cd94-ca98-407d-88b9-5481b0fc3e75",
+											"name": "Delete an appointment",
+											"originalRequest": {
+												"method": "DELETE",
+												"header": [],
+												"url": "http://localhost:8081/hms/api/v1/seeADoctor/appointment/delete/2"
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Wed, 13 Sep 2023 09:34:31 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"OK\",\n    \"message\": \"Appointment deleted successfully\"\n}"
+										}
+									]
+								}
+							],
+							"id": "6e265c41-d083-43f8-a2e6-eef1f569676c"
+						}
+					],
+					"id": "cc36823f-59f3-41e2-83e5-f6f49a9e68d2"
+				}
+			],
+			"id": "a17438e0-4e01-4b44-9f4b-36d393738bd9"
+		}
+	]
+}
