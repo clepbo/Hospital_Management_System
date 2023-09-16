@@ -3781,7 +3781,7 @@
 											}
 										},
 										"url": "http://localhost:8081/hms/api/v1/seeADoctor/appointment/create",
-										"description": "This endpoint allows you to create an appointment between a patient and a doctor. Both the patient and the doctor will receive a notification email on submit of this request."
+										"description": "💼 Appointment Module:\n\nThis module provides you with different endpoints that allow you to do the following:\n\n👉 Schedule an appointment between a patient and a doctor\n\n👉 Reschedule an appointment\n\n👉 Update appointment status when they expire\n\n👉 Manage scheduled appointment\n\n👉 Cancel or update an appointment\n\n📢 Notification Service:\n\nThis endpoint performs the following operations:\n\n👉 Send a confirmation mail to the patient/user when they request to see a doctor\n\n👉 Send a notification to both the patient and doctor when an appointment is scheduled\n\n👉 Send a notification to both the patient and doctor when an appointment is rescheduled\n\n👉 Send a reminder notification to both the patient and doctor 24 hours before their scheduled appointments."
 									},
 									"response": [
 										{
