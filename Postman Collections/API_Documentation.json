@@ -1570,7 +1570,7 @@
 								}
 							],
 							"id": "9964e053-fc77-47fc-8b42-32068bef15f8",
-							"description": "StartFragment\n\nThis module contains different endpoints that allow you to perform the following operations:\n\n👉 Create a new Staff profile\n\n👉 Assign a role to a staff\n\n👉 Manage Staff\n\n👉 Update staff information\n\n👉 Delete staff information from the database"
+							"description": "This module contains different endpoints that allow you to perform the following operations:\n\n👉 Create a new Staff profile\n\n👉 Assign a role to a staff\n\n👉 Manage Staff\n\n👉 Update staff information\n\n👉 Delete staff information from the database"
 						},
 						{
 							"name": "patient",
