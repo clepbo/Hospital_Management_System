@@ -1600,7 +1600,7 @@
 											}
 										},
 										"url": "http://localhost:8081/hms/api/v1/patient",
-										"description": "This endpoint allows you to create a new patient file by providing necessary details about the patient."
+										"description": "StartFragment\n\nThis module provides you with various endpoint that allows you to perform the following:\n\n👉 Create a new patient profile\n\n👉 Manage patients information\n\n👉 Allows patient to request to see a doctor\n\n👉 Add contact address/information for a patient\n\n👉 Delete a patient's profile"
 									},
 									"response": [
 										{
