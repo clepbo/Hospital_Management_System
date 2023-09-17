@@ -1567,6 +1567,18 @@
 											"body": "{\n    \"status\": \"OK\",\n    \"message\": \"Staff Deleted Successfully\"\n}"
 										}
 									]
+								},
+								{
+									"name": "New Request",
+									"id": "afeafdf4-cb89-4c6d-9677-640c4f91f2a9",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "GET",
+										"header": []
+									},
+									"response": []
 								}
 							],
 							"id": "9964e053-fc77-47fc-8b42-32068bef15f8",
