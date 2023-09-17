@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "1f4e5713-9d53-41a6-9fda-f20f9cb91891",
 		"name": "Hospital Management System",
-		"description": "The Hospital Management System API is a robust and flexible software interface designed to enhance the operational efficiency of healthcare institutions. It empowers hospitals, clinics, and medical facilities by providing seamless integration with a wide range of functions and features. Key components of this API include patient management, appointment scheduling, medical records digitization, and report generation. By streamlining administrative tasks and centralizing patient data, the Hospital Management System API not only simplifies the day-to-day operations of healthcare providers but also improves the overall quality of patient care. It represents a significant step toward modernizing healthcare delivery and ensuring that healthcare professionals can focus on what truly matters: the well-being of their patients.",
+		"description": "The Hospital Management System API is a robust and flexible software interface designed to enhance the operational efficiency of healthcare institutions. It empowers hospitals, clinics, and medical facilities by providing seamless integration with a wide range of functions and features. Key components of this API include patient management, appointment scheduling, medical records digitization, and report generation. By streamlining administrative tasks and centralizing patient data, the Hospital Management System API not only simplifies the day-to-day operations of healthcare providers but also improves the overall quality of patient care. It represents a significant step toward modernizing healthcare delivery and ensuring that healthcare professionals can focus on what truly matters: the well-being of their patients.\n\n**Technologies Used:**\n\nIn the development of our advanced system, we harnessed the capabilities of a carefully curated technology stack, including:\n\n👉 Java: version 17 - The heart of our project, Java 17 provided the foundation for our application's logic and functionality.\n\n👉 Spring Boot: version 3.1.1 - Spring Boot served as the framework that streamlined our development process, allowing us to create robust and efficient applications with ease.\n\n👉 Spring Security and JWT Security - Security is paramount, and Spring Security combined with JWT (JSON Web Tokens) ensured airtight user authentication and authorization based on different roles and permission.\n\n👉 MySQL - For data storage and management, MySQL was our trusted relational database management system.\n\n👉 Swagger UI and Postman - We adopted Swagger UI for clear and interactive API documentation, while Postman played a crucial role in thorough API testing and validation.\n\nThis carefully selected technology stack empowered us to create a high-performing and secure system that meets the demands of modern healthcare management.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
 	},
 	"item": [
@@ -1567,10 +1567,22 @@
 											"body": "{\n    \"status\": \"OK\",\n    \"message\": \"Staff Deleted Successfully\"\n}"
 										}
 									]
+								},
+								{
+									"name": "Add Staff Profile picture",
+									"id": "afeafdf4-cb89-4c6d-9677-640c4f91f2a9",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "GET",
+										"header": []
+									},
+									"response": []
 								}
 							],
 							"id": "9964e053-fc77-47fc-8b42-32068bef15f8",
-							"description": "This module consist of all activities related to staff management in the Hospital Management System."
+							"description": "This module contains different endpoints that allow you to perform the following operations:\n\n👉 Create a new Staff profile\n\n👉 Assign a role to a staff\n\n👉 Manage Staff\n\n👉 Update staff information\n\n👉 Delete staff information from the database"
 						},
 						{
 							"name": "patient",
@@ -1600,7 +1612,7 @@
 											}
 										},
 										"url": "http://localhost:8081/hms/api/v1/patient",
-										"description": "This endpoint allows you to create a new patient file by providing necessary details about the patient."
+										"description": "This module provides you with various endpoint that allows you to perform the following:\n\n👉 Create a new patient profile\n\n👉 Manage patients information\n\n👉 Allows patient to request to see a doctor\n\n👉 Add contact address/information for a patient\n\n👉 Delete a patient's profile"
 									},
 									"response": [
 										{
@@ -3781,7 +3793,7 @@
 											}
 										},
 										"url": "http://localhost:8081/hms/api/v1/seeADoctor/appointment/create",
-										"description": "This endpoint allows you to create an appointment between a patient and a doctor. Both the patient and the doctor will receive a notification email on submit of this request."
+										"description": "💼 Appointment Module:\n\nThis module provides you with different endpoints that allow you to do the following:\n\n👉 Schedule an appointment between a patient and a doctor\n\n👉 Reschedule an appointment\n\n👉 Update appointment status when they expire\n\n👉 Manage scheduled appointment\n\n👉 Cancel or update an appointment\n\n📢 Notification Service:\n\nThis endpoint performs the following operations:\n\n👉 Send a confirmation mail to the patient/user when they request to see a doctor\n\n👉 Send a notification to both the patient and doctor when an appointment is scheduled\n\n👉 Send a notification to both the patient and doctor when an appointment is rescheduled\n\n👉 Send a reminder notification to both the patient and doctor 24 hours before their scheduled appointments."
 									},
 									"response": [
 										{
