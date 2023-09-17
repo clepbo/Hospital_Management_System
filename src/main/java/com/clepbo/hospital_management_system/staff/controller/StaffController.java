@@ -1,6 +1,7 @@
 package com.clepbo.hospital_management_system.staff.controller;
 
 import com.clepbo.hospital_management_system.staff.dto.*;
+import com.clepbo.hospital_management_system.staff.service.IStaffProfilePictureService;
 import com.clepbo.hospital_management_system.staff.service.IStaffService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -8,6 +9,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 import static org.springframework.data.domain.Sort.Direction.DESC;
 
@@ -17,6 +21,7 @@ import static org.springframework.data.domain.Sort.Direction.DESC;
 @Tag(name = "staff", description = "Hospital Management System Staff Module")
 public class StaffController {
     private final IStaffService staffService;
+    private final IStaffProfilePictureService profilePictureService;
 
     //Add new staff
     @Operation(summary = "Create a New Staff Entity", description = "Provide necessary information about a staff to add them to the hospital system", tags = { "staff" })
@@ -94,6 +99,13 @@ public class StaffController {
     @PreAuthorize("hasAuthority('admin:delete')")
     public ResponseEntity<CustomResponse> deleteStaffById(@PathVariable("staffId") Long staffId){
         return staffService.deleteStaff(staffId);
+    }
+
+    @Operation(summary = "Upload staff's profile picture", description = "Upload staff's profile picture", tags = { "staff" })
+    @PostMapping("/profilePicture/upload/{staffId}")
+    @PreAuthorize("hasAuthority('admin:create')")
+    public ResponseEntity<CustomResponse> uploadProfilePicture(@PathVariable("staffId") Long staffId, @RequestBody MultipartFile file) throws IOException {
+        return profilePictureService.addProfilePicture(staffId, file);
     }
 
 }

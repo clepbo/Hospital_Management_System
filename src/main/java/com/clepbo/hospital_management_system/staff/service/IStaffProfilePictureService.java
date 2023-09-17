@@ -5,9 +5,10 @@ import com.clepbo.hospital_management_system.staff.dto.StaffBioDataRequestDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+
 public interface IStaffProfilePictureService {
-    ResponseEntity<CustomResponse> addProfilePicture(Long staffId, MultipartFile file);
+    ResponseEntity<CustomResponse> addProfilePicture(Long staffId, MultipartFile file) throws IOException;
     ResponseEntity<CustomResponse> getProfilePictureById(Long id);
-    ResponseEntity<CustomResponse> updateProfilePicture(Long staffId, Long id, MultipartFile file);
     ResponseEntity<CustomResponse> deleteProfilePicture(Long id);
 }

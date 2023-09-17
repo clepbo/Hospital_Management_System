@@ -17,7 +17,7 @@ public class StaffProfilePicture {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String fileName;
-    private byte [] fileData;
+    private String fileType;
     private String filePath;
     @OneToOne
     @JoinColumn(name = "staffId")
