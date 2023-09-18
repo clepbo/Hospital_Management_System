@@ -1869,14 +1869,15 @@
 									]
 								},
 								{
-									"name": "New Request",
+									"name": "Get profile picture by Staff id",
 									"id": "847eb8db-fb34-4731-9740-7c502b05e18d",
 									"protocolProfileBehavior": {
 										"disableBodyPruning": true
 									},
 									"request": {
 										"method": "GET",
-										"header": []
+										"header": [],
+										"url": "http://localhost:8081/hms/api/v1/staff/profilePicture/view/pp/14"
 									},
 									"response": []
 								}
