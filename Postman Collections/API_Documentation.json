@@ -1735,6 +1735,18 @@
 											"body": "{\n    \"status\": \"BAD_REQUEST\",\n    \"message\": \"Invalid file type\"\n}"
 										}
 									]
+								},
+								{
+									"name": "New Request",
+									"id": "0f009749-90e2-4075-ac7b-4eb7073acb3b",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "GET",
+										"header": []
+									},
+									"response": []
 								}
 							],
 							"id": "9964e053-fc77-47fc-8b42-32068bef15f8",
