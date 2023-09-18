@@ -2017,7 +2017,69 @@
 										"header": [],
 										"url": "http://localhost:8081/hms/api/v1/staff/profilePicture/delete/6"
 									},
-									"response": []
+									"response": [
+										{
+											"id": "189950b8-fa94-4a40-aafe-7e16e727dd3b",
+											"name": "Delete staff profile picture",
+											"originalRequest": {
+												"method": "DELETE",
+												"header": [],
+												"url": "http://localhost:8081/hms/api/v1/staff/profilePicture/delete/6"
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Mon, 18 Sep 2023 12:37:38 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"OK\",\n    \"message\": \"Profile Picture deleted successfully!\"\n}"
+										}
+									]
 								}
 							],
 							"id": "9964e053-fc77-47fc-8b42-32068bef15f8",
