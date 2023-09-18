@@ -1747,7 +1747,69 @@
 										"header": [],
 										"url": "http://localhost:8081/hms/api/v1/staff/profilePicture/view/3"
 									},
-									"response": []
+									"response": [
+										{
+											"id": "61a51ef7-106f-434c-ba0d-5819daf6a4fb",
+											"name": "New Request",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": "http://localhost:8081/hms/api/v1/staff/profilePicture/view/3"
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Mon, 18 Sep 2023 12:18:58 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"FOUND\",\n    \"data\": {\n        \"filepath\": \"C:/Users/Israel Oni/IdeaProjects/Hospital Management System/src/main/resources/static/staffProfilePictures/samuel2.jpg\"\n    },\n    \"message\": \"Profile Picture found!\"\n}"
+										}
+									]
 								}
 							],
 							"id": "9964e053-fc77-47fc-8b42-32068bef15f8",
