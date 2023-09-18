@@ -1882,7 +1882,7 @@
 									"response": [
 										{
 											"id": "12f28310-70c2-461c-b5cc-94978bddbbd2",
-											"name": "New Request",
+											"name": "Get profile picture by Staff id",
 											"originalRequest": {
 												"method": "GET",
 												"header": [],
