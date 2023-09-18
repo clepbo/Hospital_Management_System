@@ -1750,7 +1750,7 @@
 									"response": [
 										{
 											"id": "61a51ef7-106f-434c-ba0d-5819daf6a4fb",
-											"name": "New Request",
+											"name": "Get profile picture by ID",
 											"originalRequest": {
 												"method": "GET",
 												"header": [],
