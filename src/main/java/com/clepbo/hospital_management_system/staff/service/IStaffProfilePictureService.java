@@ -10,5 +10,6 @@ import java.io.IOException;
 public interface IStaffProfilePictureService {
     ResponseEntity<CustomResponse> addProfilePicture(Long staffId, MultipartFile file) throws IOException;
     ResponseEntity<CustomResponse> getProfilePictureById(Long id);
+    ResponseEntity<CustomResponse> getProfilePictureByStaffId(Long staffId);
     ResponseEntity<CustomResponse> deleteProfilePicture(Long id);
 }

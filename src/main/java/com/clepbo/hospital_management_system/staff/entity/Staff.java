@@ -9,6 +9,7 @@ import org.hibernate.annotations.NaturalId;
 
 import java.sql.Timestamp;
 import java.util.Calendar;
+import java.util.List;
 
 @Entity
 @Data
@@ -38,6 +39,10 @@ public class Staff {
     private Roles roles;
     @Column(nullable = true)
     private Double salary;
+    @OneToMany(mappedBy = "staff", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<StaffAddress> addresses;
+    @OneToOne(mappedBy = "staff", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private StaffProfilePicture profilePicture;
     private Timestamp createdAt;
     private Timestamp modifiedAt;
 

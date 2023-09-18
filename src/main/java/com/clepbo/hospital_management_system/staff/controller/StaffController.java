@@ -108,4 +108,23 @@ public class StaffController {
         return profilePictureService.addProfilePicture(staffId, file);
     }
 
+    @Operation(summary = "Get a Staff profile picture", description = "Get a Staff profile picture", tags = { "staff" })
+    @GetMapping("/profilePicture/view/{id}")
+    public ResponseEntity<CustomResponse> getProfilePicture (@PathVariable Long id){
+        return profilePictureService.getProfilePictureById(id);
+    }
+
+    @Operation(summary = "Get a Staff profile picture", description = "Get a Staff profile picture by providing the staff uniques Id", tags = { "staff" })
+    @GetMapping("/profilePicture/view/pp/{staffId}")
+    public ResponseEntity<CustomResponse> getProfilePictureByStaffId (@PathVariable Long staffId){
+        return profilePictureService.getProfilePictureByStaffId(staffId);
+    }
+
+    @Operation(summary = "Delete a staff profile picture", description = "Delete a staff profile picture", tags = { "staff" })
+    @DeleteMapping("/profilePicture/delete/{id}")
+    @PreAuthorize("hasAuthority('admin:delete')")
+    public ResponseEntity<CustomResponse> deleteProfilePicture(@PathVariable("id") Long id){
+        return profilePictureService.deleteProfilePicture(id);
+    }
+
 }

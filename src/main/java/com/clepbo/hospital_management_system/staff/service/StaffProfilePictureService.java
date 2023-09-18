@@ -1,7 +1,7 @@
 package com.clepbo.hospital_management_system.staff.service;
 
 import com.clepbo.hospital_management_system.staff.dto.CustomResponse;
-import com.clepbo.hospital_management_system.staff.dto.StaffBioDataRequestDto;
+import com.clepbo.hospital_management_system.staff.dto.StaffProfilePictureResponseDTO;
 import com.clepbo.hospital_management_system.staff.entity.Staff;
 import com.clepbo.hospital_management_system.staff.entity.StaffProfilePicture;
 import com.clepbo.hospital_management_system.staff.repository.IStaffProfilePictureRepository;
@@ -15,14 +15,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -32,7 +30,7 @@ public class StaffProfilePictureService implements IStaffProfilePictureService{
 
     private final IStaffProfilePictureRepository repository;
     private final IStaffRepository staffRepository;
-    private final static String FILE_PATH = "src/main/resources/static/staffProfilePictures/";
+    private final static String FILE_PATH = "C:/Users/Israel Oni/IdeaProjects/Hospital Management System/src/main/resources/static/staffProfilePictures/";
 
     @Override
     public ResponseEntity<CustomResponse> addProfilePicture(Long staffId, MultipartFile file) throws IOException {
@@ -93,12 +91,47 @@ public class StaffProfilePictureService implements IStaffProfilePictureService{
 
     @Override
     public ResponseEntity<CustomResponse> getProfilePictureById(Long id) {
-        return null;
+        Optional<StaffProfilePicture> profilePictureOptional = repository.findById(id);
+        if(profilePictureOptional.isEmpty()){
+            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_FOUND.name(), "Profile picture not found!"));
+        }
+
+        StaffProfilePicture profilePicture = profilePictureOptional.get();
+        StaffProfilePictureResponseDTO responseDTO = StaffProfilePictureResponseDTO.builder()
+                .filepath(profilePicture.getFilePath())
+                .build();
+
+        return ResponseEntity.ok(new CustomResponse(HttpStatus.FOUND.name(), responseDTO, "Profile Picture found!"));
+    }
+
+    @Override
+    public ResponseEntity<CustomResponse> getProfilePictureByStaffId(Long staffId) {
+        Optional<Staff> staffOptional = staffRepository.findById(staffId);
+        Optional<StaffProfilePicture> staffProfilePictureOptional = repository.findStaffProfilePictureByStaff_Id(staffId);
+        if(staffOptional.isEmpty()){
+            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_FOUND.name(), "Staff not found!"));
+        }
+        if(staffProfilePictureOptional.isEmpty()){
+            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_FOUND.name(), "Staff profile picture not found!"));
+        }
+
+        StaffProfilePicture profilePicture = staffProfilePictureOptional.get();
+        StaffProfilePictureResponseDTO responseDTO = StaffProfilePictureResponseDTO.builder()
+                .filepath(profilePicture.getFilePath())
+                .build();
+
+        return ResponseEntity.ok(new CustomResponse(HttpStatus.FOUND.name(), responseDTO, "Profile Picture found!"));
     }
 
     @Override
     public ResponseEntity<CustomResponse> deleteProfilePicture(Long id) {
-        return null;
+        Optional<StaffProfilePicture> profilePictureOptional = repository.findById(id);
+        if(profilePictureOptional.isEmpty()){
+            return ResponseEntity.badRequest().body(new CustomResponse(HttpStatus.NOT_FOUND.name(), "Profile picture not found!"));
+        }
+
+        repository.deleteById(id);
+        return ResponseEntity.ok(new CustomResponse(HttpStatus.OK.name(), "Profile Picture deleted successfully!"));
     }
 
     public static BufferedImage compressImage(MultipartFile multipartFile) throws IOException {

@@ -37,7 +37,8 @@ public class WebSecurityConfig {
             "api/v1/staff/authenticate",
             "/swagger-ui/index.html",
             "/hms/swagger-ui/index.html",
-            "/api/v1/seeADoctor/createRequest"
+            "/api/v1/seeADoctor/createRequest",
+            "api/v1/staff/profilePicture/view/**"
 
     };
     @Bean
