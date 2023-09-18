@@ -1811,7 +1811,7 @@
 										},
 										{
 											"id": "0dfcabed-0c0e-44a2-932d-c22d4aa595fa",
-											"name": "New Request",
+											"name": "Profile picture not found response",
 											"originalRequest": {
 												"method": "GET",
 												"header": [],
