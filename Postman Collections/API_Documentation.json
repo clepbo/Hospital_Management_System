@@ -1575,8 +1575,25 @@
 										"disableBodyPruning": true
 									},
 									"request": {
-										"method": "GET",
-										"header": []
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBsb2dpbi5jb20iLCJpYXQiOjE2OTQ5MTgxNTYsImV4cCI6MTY5NDkxOTU5Nn0.LY5uCH9gTTWfz0nXvaYs66uciRaJxkiEDu_IU-OPc8s"
+											}
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "file",
+													"type": "file",
+													"src": "/C:/Users/Israel Oni/Desktop/Church Files/welcome.jpg"
+												}
+											]
+										},
+										"url": "http://localhost:8081/hms/api/v1/staff/profilePicture/upload/2"
 									},
 									"response": []
 								}
