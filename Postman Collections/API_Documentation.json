@@ -1999,6 +1999,18 @@
 											"body": "{\n    \"status\": \"NOT_FOUND\",\n    \"message\": \"Staff not found!\"\n}"
 										}
 									]
+								},
+								{
+									"name": "New Request",
+									"id": "25341ee0-f661-4212-9f3a-7193679a607f",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "GET",
+										"header": []
+									},
+									"response": []
 								}
 							],
 							"id": "9964e053-fc77-47fc-8b42-32068bef15f8",
