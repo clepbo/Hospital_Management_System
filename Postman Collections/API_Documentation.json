@@ -1669,7 +1669,7 @@
 										},
 										{
 											"id": "20664617-12d1-4627-9d68-87abfad572f5",
-											"name": "Add Staff Profile picture",
+											"name": "Invalid file type response",
 											"originalRequest": {
 												"method": "POST",
 												"header": [],
