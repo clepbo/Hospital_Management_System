@@ -1575,10 +1575,511 @@
 										"disableBodyPruning": true
 									},
 									"request": {
-										"method": "GET",
-										"header": []
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBsb2dpbi5jb20iLCJpYXQiOjE2OTQ5MTgxNTYsImV4cCI6MTY5NDkxOTU5Nn0.LY5uCH9gTTWfz0nXvaYs66uciRaJxkiEDu_IU-OPc8s"
+											}
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "file",
+													"type": "file",
+													"src": "/C:/Users/Israel Oni/Desktop/Church Files/welcome.jpg"
+												}
+											]
+										},
+										"url": "http://localhost:8081/hms/api/v1/staff/profilePicture/upload/2"
 									},
-									"response": []
+									"response": [
+										{
+											"id": "6a28e972-3f5e-433c-b454-aeb76db8ceaf",
+											"name": "Add Staff Profile picture",
+											"originalRequest": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "formdata",
+													"formdata": [
+														{
+															"key": "file",
+															"type": "file",
+															"src": "/C:/Users/Israel Oni/Desktop/Church Files/welcome.jpg"
+														}
+													]
+												},
+												"url": "http://localhost:8081/hms/api/v1/staff/profilePicture/upload/2"
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Mon, 18 Sep 2023 11:40:16 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"OK\",\n    \"data\": {\n        \"id\": 3,\n        \"fileName\": \"samuel2\",\n        \"fileType\": \"jpg\",\n        \"filePath\": \"src/main/resources/static/staffProfilePictures/samuel2.jpg\",\n        \"staff\": {\n            \"id\": 2,\n            \"firstName\": \"Miracle\",\n            \"lastName\": \"Samuel\",\n            \"email\": \"mimi@gmail.com\",\n            \"password\": \"$2a$10$mc7K/f8BUyL0MPnxx3O98.EfFOrnhVjVptQ2Iq2p.dNhpuvWq6lHe\",\n            \"gender\": null,\n            \"dateOfBirth\": null,\n            \"phoneNumber\": null,\n            \"status\": null,\n            \"roles\": \"RECEPTIONIST\",\n            \"salary\": null,\n            \"createdAt\": \"2023-08-30T11:44:14.687+00:00\",\n            \"modifiedAt\": \"2023-08-30T11:44:14.687+00:00\",\n            \"enabled\": false\n        }\n    },\n    \"message\": \"File uploaded successfully\"\n}"
+										},
+										{
+											"id": "20664617-12d1-4627-9d68-87abfad572f5",
+											"name": "Invalid file type response",
+											"originalRequest": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "formdata",
+													"formdata": [
+														{
+															"key": "file",
+															"type": "file",
+															"src": "/C:/Users/Israel Oni/Documents/Ozor Chidi Joy - (18283020).pdf"
+														}
+													]
+												},
+												"url": "http://localhost:8081/hms/api/v1/staff/profilePicture/upload/2"
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Mon, 18 Sep 2023 11:45:46 GMT"
+												},
+												{
+													"key": "Connection",
+													"value": "close"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"BAD_REQUEST\",\n    \"message\": \"Invalid file type\"\n}"
+										}
+									]
+								},
+								{
+									"name": "Get profile picture by ID",
+									"id": "0f009749-90e2-4075-ac7b-4eb7073acb3b",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": "http://localhost:8081/hms/api/v1/staff/profilePicture/view/3"
+									},
+									"response": [
+										{
+											"id": "61a51ef7-106f-434c-ba0d-5819daf6a4fb",
+											"name": "Get profile picture by ID",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": "http://localhost:8081/hms/api/v1/staff/profilePicture/view/3"
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Mon, 18 Sep 2023 12:18:58 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"FOUND\",\n    \"data\": {\n        \"filepath\": \"C:/Users/Israel Oni/IdeaProjects/Hospital Management System/src/main/resources/static/staffProfilePictures/samuel2.jpg\"\n    },\n    \"message\": \"Profile Picture found!\"\n}"
+										},
+										{
+											"id": "0dfcabed-0c0e-44a2-932d-c22d4aa595fa",
+											"name": "Profile picture not found response",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": "http://localhost:8081/hms/api/v1/staff/profilePicture/view/5"
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Mon, 18 Sep 2023 12:20:37 GMT"
+												},
+												{
+													"key": "Connection",
+													"value": "close"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"NOT_FOUND\",\n    \"message\": \"Profile picture not found!\"\n}"
+										}
+									]
+								},
+								{
+									"name": "Get profile picture by Staff id",
+									"id": "847eb8db-fb34-4731-9740-7c502b05e18d",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": "http://localhost:8081/hms/api/v1/staff/profilePicture/view/pp/14"
+									},
+									"response": [
+										{
+											"id": "12f28310-70c2-461c-b5cc-94978bddbbd2",
+											"name": "Get profile picture by Staff id",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": "http://localhost:8081/hms/api/v1/staff/profilePicture/view/pp/14"
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Mon, 18 Sep 2023 12:35:38 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"FOUND\",\n    \"data\": {\n        \"filepath\": \"C:/Users/Israel Oni/IdeaProjects/Hospital Management System/src/main/resources/static/staffProfilePictures/isanybody14.jpg\"\n    },\n    \"message\": \"Profile Picture found!\"\n}"
+										},
+										{
+											"id": "556178ec-7ad0-458e-bea9-e57eba788ba2",
+											"name": "Staff not found response",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": "http://localhost:8081/hms/api/v1/staff/profilePicture/view/pp/15"
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Mon, 18 Sep 2023 12:36:22 GMT"
+												},
+												{
+													"key": "Connection",
+													"value": "close"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"NOT_FOUND\",\n    \"message\": \"Staff not found!\"\n}"
+										}
+									]
+								},
+								{
+									"name": "Delete staff profile picture",
+									"id": "25341ee0-f661-4212-9f3a-7193679a607f",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBsb2dpbi5jb20iLCJpYXQiOjE2OTUwNDA2MzksImV4cCI6MTY5NTA0MjA3OX0.JKR48UVRV1FbK9J2jiURETCz6oPVF3ypK6EsTdJ9-10"
+											}
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": "http://localhost:8081/hms/api/v1/staff/profilePicture/delete/6"
+									},
+									"response": [
+										{
+											"id": "189950b8-fa94-4a40-aafe-7e16e727dd3b",
+											"name": "Delete staff profile picture",
+											"originalRequest": {
+												"method": "DELETE",
+												"header": [],
+												"url": "http://localhost:8081/hms/api/v1/staff/profilePicture/delete/6"
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Mon, 18 Sep 2023 12:37:38 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"OK\",\n    \"message\": \"Profile Picture deleted successfully!\"\n}"
+										}
+									]
 								}
 							],
 							"id": "9964e053-fc77-47fc-8b42-32068bef15f8",
