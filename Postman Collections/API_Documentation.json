@@ -3568,7 +3568,69 @@
 										"header": [],
 										"url": "http://localhost:8081/hms/api/v1/patient/profilePicture/view/pp/2"
 									},
-									"response": []
+									"response": [
+										{
+											"id": "99fa7bc9-f1ed-4691-9154-08918748e8cd",
+											"name": "Get profile picture by patient Id",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": "http://localhost:8081/hms/api/v1/patient/profilePicture/view/pp/2"
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Sat, 30 Sep 2023 05:12:09 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"FOUND\",\n    \"data\": {\n        \"filepath\": \"C:/Users/Israel Oni/IdeaProjects/Hospital Management System/src/main/resources/static/patientProfilePictures/oni2.jpg\"\n    },\n    \"message\": \"Profile Picture found!\"\n}"
+										}
+									]
 								}
 							],
 							"id": "cb028c44-3859-42b6-8827-dfc6e80945ad",
