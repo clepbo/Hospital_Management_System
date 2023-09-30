@@ -1,7 +1,6 @@
 package com.clepbo.hospital_management_system.patient.entity;
 
 import com.clepbo.hospital_management_system.staff.entity.Roles;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -54,6 +53,9 @@ public class PatientBio {
 
     @OneToMany(mappedBy = "patientBio", orphanRemoval = true)
     private List<PatientMedicalRecord> medicalRecord;
+
+    @OneToOne(mappedBy = "patientBio", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private PatientProfilePicture profilePicture;
 
     private Timestamp createdAt;
     private Timestamp modifiedAt;

@@ -4,6 +4,7 @@ import com.clepbo.hospital_management_system.patient.dto.PatientAddressDTO;
 import com.clepbo.hospital_management_system.patient.dto.PatientBioRequestDTO;
 import com.clepbo.hospital_management_system.patient.service.IPatientBioService;
 import com.clepbo.hospital_management_system.patient.service.IPatientContactAddress;
+import com.clepbo.hospital_management_system.patient.service.IPatientProfilePictureService;
 import com.clepbo.hospital_management_system.staff.dto.CustomResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -11,6 +12,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 public class PatientController {
     private final IPatientBioService patientBioService;
     private final IPatientContactAddress contactAddress;
-
+    private final IPatientProfilePictureService profilePictureService;
 
     @Operation(summary = "Create a New Patient File", description = "Provide necessary information about a patient to open a file for them", tags = { "patient" })
     @PostMapping("")
@@ -83,5 +87,31 @@ public class PatientController {
     @PreAuthorize("hasAnyAuthority('admin:delete', 'receptionist:delete')")
     public ResponseEntity<CustomResponse> deleteALlPatientAddress(@PathVariable("patientId") Long patientId){
         return contactAddress.deleteAllPatientAddressByPatientId(patientId);
+    }
+
+    @Operation(summary = "Upload patient's profile picture", description = "Upload patient's profile picture", tags = { "patient" })
+    @PostMapping("/profilePicture/upload/{patientId}")
+    @PreAuthorize("hasAnyAuthority('admin:create', 'receptionist:create')")
+    public ResponseEntity<CustomResponse> uploadProfilePicture(@PathVariable("patientId") Long patientId, @RequestBody MultipartFile file) throws IOException {
+        return profilePictureService.addProfilePicture(patientId, file);
+    }
+
+    @Operation(summary = "Get a patient profile picture", description = "Get a patient profile picture", tags = { "patient" })
+    @GetMapping("/profilePicture/view/{id}")
+    public ResponseEntity<CustomResponse> getProfilePicture (@PathVariable Long id){
+        return profilePictureService.getProfilePictureById(id);
+    }
+
+    @Operation(summary = "Get a patient profile picture", description = "Get a patient profile picture by providing the patient unique Id", tags = { "patient" })
+    @GetMapping("/profilePicture/view/pp/{patientId}")
+    public ResponseEntity<CustomResponse> getProfilePictureByStaffId (@PathVariable Long patientId){
+        return profilePictureService.getProfilePictureByPatientId(patientId);
+    }
+
+    @Operation(summary = "Delete a patient profile picture", description = "Delete a patient profile picture", tags = { "patient" })
+    @DeleteMapping("/profilePicture/delete/{id}")
+    @PreAuthorize("hasAnyAuthority('admin:delete', 'receptionist:delete')")
+    public ResponseEntity<CustomResponse> deleteProfilePicture(@PathVariable("id") Long id){
+        return profilePictureService.deleteProfilePicture(id);
     }
 }
