@@ -3631,6 +3631,18 @@
 											"body": "{\n    \"status\": \"FOUND\",\n    \"data\": {\n        \"filepath\": \"C:/Users/Israel Oni/IdeaProjects/Hospital Management System/src/main/resources/static/patientProfilePictures/oni2.jpg\"\n    },\n    \"message\": \"Profile Picture found!\"\n}"
 										}
 									]
+								},
+								{
+									"name": "New Request",
+									"id": "ac06e36e-c13f-4888-8d63-0f4add887e3b",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "GET",
+										"header": []
+									},
+									"response": []
 								}
 							],
 							"id": "cb028c44-3859-42b6-8827-dfc6e80945ad",
