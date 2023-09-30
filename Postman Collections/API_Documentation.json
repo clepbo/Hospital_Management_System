@@ -3552,7 +3552,7 @@
 									]
 								},
 								{
-									"name": "New Request",
+									"name": "Get profile picture by patient Id",
 									"id": "df6b559c-f043-4a2b-95f0-0e78278a62c7",
 									"protocolProfileBehavior": {
 										"disableBodyPruning": true
