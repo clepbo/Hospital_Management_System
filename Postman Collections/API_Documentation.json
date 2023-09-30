@@ -3366,6 +3366,590 @@
 											"body": "{\n    \"status\": \"NOT_FOUND\",\n    \"message\": \"Patient not found \"\n}"
 										}
 									]
+								},
+								{
+									"name": "Add patient profile picture",
+									"id": "0bf4a707-c245-458a-b4a3-a83c37e0f61a",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtaW1pQGdtYWlsLmNvbSIsImlhdCI6MTY5NjA1MDE1NSwiZXhwIjoxNjk2MDUxNTk1fQ.ux24SSGZeRFz5RsDnY4dKbe4RGTrkXzOtqmS08XrXRY"
+											}
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "file",
+													"type": "file",
+													"fileNotInWorkingDirectoryWarning": "This file isn't in your working directory. Teammates you share this request with won't be able to use this file. To make collaboration easier you can setup your working directory in Settings.",
+													"src": "/C:/Users/Israel Oni/Pictures/fyb edited/20210802_105513.jpg"
+												}
+											]
+										},
+										"url": "http://localhost:8081/hms/api/v1/patient/profilePicture/upload/2"
+									},
+									"response": [
+										{
+											"id": "5f8ee981-ce42-4ccf-a3e7-35d8669aafd7",
+											"name": "Add patient profile picture",
+											"originalRequest": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "formdata",
+													"formdata": [
+														{
+															"key": "file",
+															"type": "file",
+															"fileNotInWorkingDirectoryWarning": "This file isn't in your working directory. Teammates you share this request with won't be able to use this file. To make collaboration easier you can setup your working directory in Settings.",
+															"src": "/C:/Users/Israel Oni/Pictures/fyb edited/20210802_105513.jpg"
+														}
+													]
+												},
+												"url": "http://localhost:8081/hms/api/v1/patient/profilePicture/upload/2"
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Sat, 30 Sep 2023 05:07:10 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"OK\",\n    \"data\": {\n        \"id\": 1,\n        \"fileName\": \"oni2\",\n        \"fileType\": \"jpg\",\n        \"filePath\": \"C:/Users/Israel Oni/IdeaProjects/Hospital Management System/src/main/resources/static/patientProfilePictures/oni2.jpg\",\n        \"patientBio\": {\n            \"id\": 2,\n            \"firstname\": \"Israel\",\n            \"lastname\": \"Oni\",\n            \"email\": \"oniokikijesu04@gmail.com\",\n            \"dateOfBirth\": \"27/10/2001\",\n            \"phoneNumber\": \"08136793904\",\n            \"gender\": \"Male\",\n            \"role\": \"PATIENT\",\n            \"contactAddress\": [],\n            \"medicalHistory\": [],\n            \"medicalRecord\": [],\n            \"profilePicture\": null,\n            \"createdAt\": \"2023-09-07T19:17:26.925+00:00\",\n            \"modifiedAt\": \"2023-09-07T19:17:26.925+00:00\"\n        }\n    },\n    \"message\": \"File uploaded successfully\"\n}"
+										},
+										{
+											"id": "3b5f7285-3bc3-4d47-a484-e57c13a01b58",
+											"name": "Invalid file format response",
+											"originalRequest": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "formdata",
+													"formdata": [
+														{
+															"key": "file",
+															"type": "file",
+															"src": "/C:/Users/Israel Oni/Documents/Man O' War.pdf"
+														}
+													]
+												},
+												"url": "http://localhost:8081/hms/api/v1/patient/profilePicture/upload/2"
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Sat, 30 Sep 2023 05:16:18 GMT"
+												},
+												{
+													"key": "Connection",
+													"value": "close"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"BAD_REQUEST\",\n    \"message\": \"Invalid file type\"\n}"
+										}
+									]
+								},
+								{
+									"name": "Get profile picture by Id",
+									"id": "e0bc5b8d-4e18-4eea-96f1-da1008dd512f",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtaW1pQGdtYWlsLmNvbSIsImlhdCI6MTY5NjA1MDE1NSwiZXhwIjoxNjk2MDUxNTk1fQ.ux24SSGZeRFz5RsDnY4dKbe4RGTrkXzOtqmS08XrXRY"
+											}
+										},
+										"method": "GET",
+										"header": [],
+										"url": "http://localhost:8081/hms/api/v1/patient/profilePicture/view/1"
+									},
+									"response": [
+										{
+											"id": "11ed635c-ceca-4a87-8bcc-5c733fb90aaf",
+											"name": "Get profile picture by Id",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": "http://localhost:8081/hms/api/v1/patient/profilePicture/view/1"
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Sat, 30 Sep 2023 05:09:36 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"FOUND\",\n    \"data\": {\n        \"filepath\": \"C:/Users/Israel Oni/IdeaProjects/Hospital Management System/src/main/resources/static/patientProfilePictures/oni2.jpg\"\n    },\n    \"message\": \"Profile Picture found!\"\n}"
+										},
+										{
+											"id": "a20b4872-318a-4862-9912-af62e94faded",
+											"name": "Profile picture not found response",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": "http://localhost:8081/hms/api/v1/patient/profilePicture/view/1"
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Sat, 30 Sep 2023 05:15:41 GMT"
+												},
+												{
+													"key": "Connection",
+													"value": "close"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"NOT_FOUND\",\n    \"message\": \"Profile picture not found!\"\n}"
+										}
+									]
+								},
+								{
+									"name": "Get profile picture by patient Id",
+									"id": "df6b559c-f043-4a2b-95f0-0e78278a62c7",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtaW1pQGdtYWlsLmNvbSIsImlhdCI6MTY5NjA1MDE1NSwiZXhwIjoxNjk2MDUxNTk1fQ.ux24SSGZeRFz5RsDnY4dKbe4RGTrkXzOtqmS08XrXRY"
+											}
+										},
+										"method": "GET",
+										"header": [],
+										"url": "http://localhost:8081/hms/api/v1/patient/profilePicture/view/pp/2"
+									},
+									"response": [
+										{
+											"id": "99fa7bc9-f1ed-4691-9154-08918748e8cd",
+											"name": "Get profile picture by patient Id",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": "http://localhost:8081/hms/api/v1/patient/profilePicture/view/pp/2"
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Sat, 30 Sep 2023 05:12:09 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"FOUND\",\n    \"data\": {\n        \"filepath\": \"C:/Users/Israel Oni/IdeaProjects/Hospital Management System/src/main/resources/static/patientProfilePictures/oni2.jpg\"\n    },\n    \"message\": \"Profile Picture found!\"\n}"
+										},
+										{
+											"id": "f2636c14-aba1-475c-b2b6-cf2e1538a090",
+											"name": "Profile picture not found response",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": "http://localhost:8081/hms/api/v1/patient/profilePicture/view/pp/2"
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Sat, 30 Sep 2023 05:15:08 GMT"
+												},
+												{
+													"key": "Connection",
+													"value": "close"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"NOT_FOUND\",\n    \"message\": \"Patient profile picture not found!\"\n}"
+										}
+									]
+								},
+								{
+									"name": "Delete patient profile picture",
+									"id": "ac06e36e-c13f-4888-8d63-0f4add887e3b",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtaW1pQGdtYWlsLmNvbSIsImlhdCI6MTY5NjA1MDE1NSwiZXhwIjoxNjk2MDUxNTk1fQ.ux24SSGZeRFz5RsDnY4dKbe4RGTrkXzOtqmS08XrXRY"
+											}
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": "http://localhost:8081/hms/api/v1/patient/profilePicture/delete/1"
+									},
+									"response": [
+										{
+											"id": "7ce196d5-bc72-4fa6-a827-e4f7d3a5aac5",
+											"name": "Profile picture not found response",
+											"originalRequest": {
+												"method": "DELETE",
+												"header": [],
+												"url": "http://localhost:8081/hms/api/v1/patient/profilePicture/delete/6"
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Sat, 30 Sep 2023 05:14:07 GMT"
+												},
+												{
+													"key": "Connection",
+													"value": "close"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"NOT_FOUND\",\n    \"message\": \"Profile picture not found!\"\n}"
+										},
+										{
+											"id": "4f9c6733-c223-4943-8bf5-131347958390",
+											"name": "Delete patient profile picture",
+											"originalRequest": {
+												"method": "DELETE",
+												"header": [],
+												"url": "http://localhost:8081/hms/api/v1/patient/profilePicture/delete/1"
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Sat, 30 Sep 2023 05:14:43 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"OK\",\n    \"message\": \"Profile Picture deleted successfully!\"\n}"
+										}
+									]
 								}
 							],
 							"id": "cb028c44-3859-42b6-8827-dfc6e80945ad",
