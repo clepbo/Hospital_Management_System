@@ -3551,7 +3551,7 @@
 										},
 										{
 											"id": "a20b4872-318a-4862-9912-af62e94faded",
-											"name": "Get profile picture by Id",
+											"name": "Profile picture not found response",
 											"originalRequest": {
 												"method": "GET",
 												"header": [],
