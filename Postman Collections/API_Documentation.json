@@ -3470,7 +3470,7 @@
 										},
 										{
 											"id": "3b5f7285-3bc3-4d47-a484-e57c13a01b58",
-											"name": "Add patient profile picture",
+											"name": "Invalid file format response",
 											"originalRequest": {
 												"method": "POST",
 												"header": [],
