@@ -3469,6 +3469,18 @@
 											"body": "{\n    \"status\": \"OK\",\n    \"data\": {\n        \"id\": 1,\n        \"fileName\": \"oni2\",\n        \"fileType\": \"jpg\",\n        \"filePath\": \"C:/Users/Israel Oni/IdeaProjects/Hospital Management System/src/main/resources/static/patientProfilePictures/oni2.jpg\",\n        \"patientBio\": {\n            \"id\": 2,\n            \"firstname\": \"Israel\",\n            \"lastname\": \"Oni\",\n            \"email\": \"oniokikijesu04@gmail.com\",\n            \"dateOfBirth\": \"27/10/2001\",\n            \"phoneNumber\": \"08136793904\",\n            \"gender\": \"Male\",\n            \"role\": \"PATIENT\",\n            \"contactAddress\": [],\n            \"medicalHistory\": [],\n            \"medicalRecord\": [],\n            \"profilePicture\": null,\n            \"createdAt\": \"2023-09-07T19:17:26.925+00:00\",\n            \"modifiedAt\": \"2023-09-07T19:17:26.925+00:00\"\n        }\n    },\n    \"message\": \"File uploaded successfully\"\n}"
 										}
 									]
+								},
+								{
+									"name": "New Request",
+									"id": "e0bc5b8d-4e18-4eea-96f1-da1008dd512f",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "GET",
+										"header": []
+									},
+									"response": []
 								}
 							],
 							"id": "cb028c44-3859-42b6-8827-dfc6e80945ad",
