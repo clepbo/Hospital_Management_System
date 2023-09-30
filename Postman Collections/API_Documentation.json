@@ -3471,7 +3471,7 @@
 									]
 								},
 								{
-									"name": "New Request",
+									"name": "Get profile picture by Id",
 									"id": "e0bc5b8d-4e18-4eea-96f1-da1008dd512f",
 									"protocolProfileBehavior": {
 										"disableBodyPruning": true
