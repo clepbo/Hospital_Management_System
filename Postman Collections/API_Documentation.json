@@ -3646,7 +3646,7 @@
 									"response": [
 										{
 											"id": "7ce196d5-bc72-4fa6-a827-e4f7d3a5aac5",
-											"name": "Delete patient profile picture",
+											"name": "Profile picture not found response",
 											"originalRequest": {
 												"method": "DELETE",
 												"header": [],
