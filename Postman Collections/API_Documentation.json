@@ -3368,7 +3368,7 @@
 									]
 								},
 								{
-									"name": "New Request",
+									"name": "Add patient profile picture",
 									"id": "0bf4a707-c245-458a-b4a3-a83c37e0f61a",
 									"protocolProfileBehavior": {
 										"disableBodyPruning": true
