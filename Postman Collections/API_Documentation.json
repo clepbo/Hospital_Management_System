@@ -3639,8 +3639,9 @@
 										"disableBodyPruning": true
 									},
 									"request": {
-										"method": "GET",
-										"header": []
+										"method": "DELETE",
+										"header": [],
+										"url": "http://localhost:8081/hms/api/v1/patient/profilePicture/delete/6"
 									},
 									"response": []
 								}
