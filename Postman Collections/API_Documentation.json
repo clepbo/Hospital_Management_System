@@ -3633,7 +3633,7 @@
 									]
 								},
 								{
-									"name": "New Request",
+									"name": "Delete patient profile picture",
 									"id": "ac06e36e-c13f-4888-8d63-0f4add887e3b",
 									"protocolProfileBehavior": {
 										"disableBodyPruning": true
