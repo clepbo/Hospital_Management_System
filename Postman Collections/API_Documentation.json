@@ -3374,8 +3374,26 @@
 										"disableBodyPruning": true
 									},
 									"request": {
-										"method": "GET",
-										"header": []
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtaW1pQGdtYWlsLmNvbSIsImlhdCI6MTY5NjA1MDE1NSwiZXhwIjoxNjk2MDUxNTk1fQ.ux24SSGZeRFz5RsDnY4dKbe4RGTrkXzOtqmS08XrXRY"
+											}
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "file",
+													"type": "file",
+													"fileNotInWorkingDirectoryWarning": "This file isn't in your working directory. Teammates you share this request with won't be able to use this file. To make collaboration easier you can setup your working directory in Settings.",
+													"src": "/C:/Users/Israel Oni/Pictures/fyb edited/20210802_105513.jpg"
+												}
+											]
+										},
+										"url": "http://localhost:8081/hms/api/v1/patient/profilePicture/upload/2"
 									},
 									"response": []
 								}
