@@ -3395,7 +3395,80 @@
 										},
 										"url": "http://localhost:8081/hms/api/v1/patient/profilePicture/upload/2"
 									},
-									"response": []
+									"response": [
+										{
+											"id": "5f8ee981-ce42-4ccf-a3e7-35d8669aafd7",
+											"name": "Add patient profile picture",
+											"originalRequest": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "formdata",
+													"formdata": [
+														{
+															"key": "file",
+															"type": "file",
+															"fileNotInWorkingDirectoryWarning": "This file isn't in your working directory. Teammates you share this request with won't be able to use this file. To make collaboration easier you can setup your working directory in Settings.",
+															"src": "/C:/Users/Israel Oni/Pictures/fyb edited/20210802_105513.jpg"
+														}
+													]
+												},
+												"url": "http://localhost:8081/hms/api/v1/patient/profilePicture/upload/2"
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Sat, 30 Sep 2023 05:07:10 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"OK\",\n    \"data\": {\n        \"id\": 1,\n        \"fileName\": \"oni2\",\n        \"fileType\": \"jpg\",\n        \"filePath\": \"C:/Users/Israel Oni/IdeaProjects/Hospital Management System/src/main/resources/static/patientProfilePictures/oni2.jpg\",\n        \"patientBio\": {\n            \"id\": 2,\n            \"firstname\": \"Israel\",\n            \"lastname\": \"Oni\",\n            \"email\": \"oniokikijesu04@gmail.com\",\n            \"dateOfBirth\": \"27/10/2001\",\n            \"phoneNumber\": \"08136793904\",\n            \"gender\": \"Male\",\n            \"role\": \"PATIENT\",\n            \"contactAddress\": [],\n            \"medicalHistory\": [],\n            \"medicalRecord\": [],\n            \"profilePicture\": null,\n            \"createdAt\": \"2023-09-07T19:17:26.925+00:00\",\n            \"modifiedAt\": \"2023-09-07T19:17:26.925+00:00\"\n        }\n    },\n    \"message\": \"File uploaded successfully\"\n}"
+										}
+									]
 								}
 							],
 							"id": "cb028c44-3859-42b6-8827-dfc6e80945ad",
