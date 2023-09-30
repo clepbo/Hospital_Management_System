@@ -3629,6 +3629,63 @@
 											"cookie": [],
 											"responseTime": null,
 											"body": "{\n    \"status\": \"FOUND\",\n    \"data\": {\n        \"filepath\": \"C:/Users/Israel Oni/IdeaProjects/Hospital Management System/src/main/resources/static/patientProfilePictures/oni2.jpg\"\n    },\n    \"message\": \"Profile Picture found!\"\n}"
+										},
+										{
+											"id": "f2636c14-aba1-475c-b2b6-cf2e1538a090",
+											"name": "Get profile picture by patient Id",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": "http://localhost:8081/hms/api/v1/patient/profilePicture/view/pp/2"
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Sat, 30 Sep 2023 05:15:08 GMT"
+												},
+												{
+													"key": "Connection",
+													"value": "close"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"NOT_FOUND\",\n    \"message\": \"Patient profile picture not found!\"\n}"
 										}
 									]
 								},
