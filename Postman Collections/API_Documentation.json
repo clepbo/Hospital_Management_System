@@ -3632,7 +3632,7 @@
 										},
 										{
 											"id": "f2636c14-aba1-475c-b2b6-cf2e1538a090",
-											"name": "Get profile picture by patient Id",
+											"name": "Profile picture not found response",
 											"originalRequest": {
 												"method": "GET",
 												"header": [],
