@@ -3366,6 +3366,18 @@
 											"body": "{\n    \"status\": \"NOT_FOUND\",\n    \"message\": \"Patient not found \"\n}"
 										}
 									]
+								},
+								{
+									"name": "New Request",
+									"id": "0bf4a707-c245-458a-b4a3-a83c37e0f61a",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "GET",
+										"header": []
+									},
+									"response": []
 								}
 							],
 							"id": "cb028c44-3859-42b6-8827-dfc6e80945ad",
