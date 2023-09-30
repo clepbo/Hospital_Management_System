@@ -3706,6 +3706,67 @@
 											"cookie": [],
 											"responseTime": null,
 											"body": "{\n    \"status\": \"NOT_FOUND\",\n    \"message\": \"Profile picture not found!\"\n}"
+										},
+										{
+											"id": "4f9c6733-c223-4943-8bf5-131347958390",
+											"name": "Delete patient profile picture",
+											"originalRequest": {
+												"method": "DELETE",
+												"header": [],
+												"url": "http://localhost:8081/hms/api/v1/patient/profilePicture/delete/1"
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Sat, 30 Sep 2023 05:14:43 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"responseTime": null,
+											"body": "{\n    \"status\": \"OK\",\n    \"message\": \"Profile Picture deleted successfully!\"\n}"
 										}
 									]
 								}
