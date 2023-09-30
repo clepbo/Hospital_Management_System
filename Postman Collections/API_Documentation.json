@@ -3477,8 +3477,15 @@
 										"disableBodyPruning": true
 									},
 									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtaW1pQGdtYWlsLmNvbSIsImlhdCI6MTY5NjA1MDE1NSwiZXhwIjoxNjk2MDUxNTk1fQ.ux24SSGZeRFz5RsDnY4dKbe4RGTrkXzOtqmS08XrXRY"
+											}
+										},
 										"method": "GET",
-										"header": []
+										"header": [],
+										"url": "http://localhost:8081/hms/api/v1/patient/profilePicture/view/1"
 									},
 									"response": []
 								}
