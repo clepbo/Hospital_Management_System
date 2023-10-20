@@ -12,4 +12,5 @@ public interface IRequestToSeeADoctorRepository extends JpaRepository<RequestToS
     Page<RequestToSeeADoctor> findRequestToSeeADoctorByPatientBio_Id(Long patientId, Pageable pageable);
     Page<RequestToSeeADoctor> findRequestToSeeADoctorByStatus(Status status, Pageable pageable);
     List<RequestToSeeADoctor> findRequestToSeeADoctorByPatientBio_Id(Long patientId);
+    List<RequestToSeeADoctor> findRequestToSeeADoctorByStatus(Status status);
 }
